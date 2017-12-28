@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path=""
+         docBase="cashregister"
+         reloadable="true"
+         crossContext="true">
+
+    <Resource name="jdbc/cashregister"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxTotal="100"
+              maxIdle="30"
+              maxWaitMillis="10000"
+              username="root"
+              password="root"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3366/cashregister?autoReconnect=true&amp;useSSL=false"
+    />
+</Context>

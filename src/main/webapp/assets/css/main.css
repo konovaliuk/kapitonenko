@@ -1,0 +1,199 @@
+body {
+    background-color: #1c4359;
+}
+
+.page-header:before {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.alert {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+}
+
+.alert.alert-danger {
+    background-color: rgba(217, 13, 30, 0.8);
+}
+
+.alert .message-body {
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+
+.alert .message-body .list-unstyled {
+    margin-bottom: 0;
+}
+
+.alert .message-body .list-unstyled li {
+    margin-bottom: 6px;
+}
+
+.alert .message-body .list-unstyled li:last-child {
+    margin-bottom: 0;
+}
+
+.btn-primary {
+    background-color: #8cc21f;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:focus,
+.btn-primary.active:hover {
+    background-color: #afe639;
+}
+
+.btn-lg {
+    padding: 14px 48px;
+}
+
+.btn-block {
+    width: 99%;
+}
+
+.logo {
+    font-size: 3em;
+    padding-bottom: .5em;
+    color: white;
+    font-weight: 500;
+}
+
+.green {
+    color: #93ce20;
+}
+
+.login-page .footer {
+    padding: 0 0 18px;
+}
+
+.login-page .btn {
+    margin-top: 0;
+}
+
+.login-page .card-login .input-group:last-child {
+    margin-bottom: 10px;
+}
+
+.form-group.option-list {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.inner-page .page-header {
+    color: #555555;
+}
+
+.inner-page .page-header .container {
+    text-align: left;
+}
+
+.inner-page .logo {
+    font-size: 2.5em;
+    padding-bottom: 0.3em;
+}
+
+.inner-page .header {
+    padding-top: 5em;
+}
+
+[data-background-color="green"] {
+    background-color: #a4db35;
+}
+
+.nav-tabs > .nav-item > .nav-link {
+    font-weight: 600;
+}
+
+.nav-tabs > .nav-item > .nav-link:hover,
+.nav-tabs > .nav-item > .nav-link:focus {
+    border-color: #555555;
+}
+
+.nav-tabs > .nav-item > .nav-link.active {
+    background-color: #a4db35;
+    border-color: #a4db35;
+    color: white;
+}
+
+.header {
+    color: white;
+}
+
+.header .link {
+    color: white;
+}
+
+.header .link.green {
+    color: #93ce20;
+}
+
+.header .btn-link {
+    color: white;
+}
+
+.header .button-group {
+    padding-top: 1.4em;
+}
+
+.lang {
+    position: absolute;
+    top: 40px;
+    right: 15px;
+}
+
+@media (min-width: 768px) {
+    .lang {
+        right: 100px;
+    }
+}
+
+.lang li {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.lang .btn {
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    font-size: 1em;
+}
+
+.lang .btn-link {
+    padding: 5px;
+}
+
+.lang .btn-link:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+.lang li:after {
+    content: "  |  ";
+}
+
+.lang li:last-child:after {
+    content: "";
+}
+
+.lang .btn-link.active,
+.lang .btn-link.active:hover {
+    color: #93ce20;
+    background: none;
+}
+
+.form-check-input:only-child {
+    position: absolute;
+}
+
+.form-check-label {
+    padding-left: 2.4em;
+}
+
