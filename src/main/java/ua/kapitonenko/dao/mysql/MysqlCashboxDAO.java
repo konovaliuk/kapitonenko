@@ -8,6 +8,7 @@ import ua.kapitonenko.dao.tables.CashboxesTable;
 import ua.kapitonenko.domain.Cashbox;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class MysqlCashboxDAO extends BaseDAO<Cashbox> implements CashboxDAO {
 	
@@ -53,6 +54,10 @@ public class MysqlCashboxDAO extends BaseDAO<Cashbox> implements CashboxDAO {
 		return getRow(getSelectOneNotDeletedQuery(),
 				ps -> ps.setLong(1, id),
 				getResultSetExtractor());
+	}
+	
+	public List<Cashbox> findAll() {
+		return getList(getSelectAllNotDeletedQuery(), getResultSetExtractor());
 	}
 	
 	@Override

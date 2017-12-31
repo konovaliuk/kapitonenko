@@ -1,4 +1,4 @@
-package ua.kapitonenko.Exceptions;
+package ua.kapitonenko.exceptions;
 
 public class NotFoundException extends CashregisterException {
 	public NotFoundException(String message) {

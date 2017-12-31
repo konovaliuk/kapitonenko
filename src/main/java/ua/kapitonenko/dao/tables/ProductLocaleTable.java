@@ -5,5 +5,6 @@ public class ProductLocaleTable {
 	public static final String ID = "id";
 	public static final String PRODUCT_ID = "product_id";
 	public static final String LOCALE = "locale";
-	public static final String PRODUCT_NAME = "name";
+	public static final String PROP_NAME = "property_name";
+	public static final String PROP_VALUE = "property_value";
 }

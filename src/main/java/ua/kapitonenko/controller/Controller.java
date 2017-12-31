@@ -1,12 +1,12 @@
 package ua.kapitonenko.controller;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Exceptions.MethodNotAllowedException;
-import ua.kapitonenko.Exceptions.NotFoundException;
 import ua.kapitonenko.controller.commands.ActionCommand;
 import ua.kapitonenko.controller.helpers.RequestHelper;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
+import ua.kapitonenko.exceptions.MethodNotAllowedException;
+import ua.kapitonenko.exceptions.NotFoundException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,6 +32,8 @@ public class Controller extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		//LOGGER.debug(request.getSession().getAttribute(Keys.LOCALE));
+		
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		
 		try {
@@ -49,6 +51,7 @@ public class Controller extends HttpServlet {
 		} catch (MethodNotAllowedException e) {
 			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, e.getMessage());
 		} catch (ServletException | IOException e) {
+			e.printStackTrace();
 			// TODO add exception handling
 		}
 	}

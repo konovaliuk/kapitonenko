@@ -1,0 +1,164 @@
+body {
+    background-color: #1c4359;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: white;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.page-header:before {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.btn-primary {
+    background-color: #88cc00;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 15px;
+    text-transform: capitalize;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary:not([disabled]):not(.disabled).active,
+.btn-primary:not([disabled]):not(.disabled):active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:focus,
+.btn-primary.active:hover {
+    background-color: #81b31d;
+    box-shadow: none;
+}
+
+.btn-block {
+    width: 99%;
+}
+
+.logo {
+    font-size: 3em;
+    padding-bottom: .5em;
+    font-weight: 500;
+}
+
+.green {
+    color: #88cc00;
+}
+
+.login-page .card-login .input-group:last-child {
+    margin-bottom: 10px;
+}
+
+.input-group.form-group-no-border.input-lg .form-control {
+    font-size: 14px;
+    line-height: 15px;
+}
+
+.form-group.option-list {
+    margin: 15px 0 17px;
+    text-align: left;
+}
+
+.form-check-label {
+    padding-left: 1.6em;
+}
+
+.form-check {
+    margin-bottom: 0.3em;
+}
+
+.login-page .link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-top: 12px;
+}
+
+.alert {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+}
+
+.alert.alert-danger {
+    background-color: rgba(217, 23, 9, 0.8);
+}
+
+.alert .message-body {
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+
+.alert .message-body .list-unstyled {
+    margin-bottom: 0;
+}
+
+.alert .message-body .list-unstyled li {
+    margin-bottom: 6px;
+}
+
+.alert .message-body .list-unstyled li:last-child {
+    margin-bottom: 0;
+}
+
+.footer {
+    color: white;
+    font-size: 1rem;
+    text-align: left;
+    padding-bottom: 9px;
+}
+
+.lang ul {
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.lang li {
+    display: inline-block;
+}
+
+.lang .btn-link {
+    color: white;
+    text-transform: uppercase;
+    line-height: 1.5;
+    margin: 0;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+}
+
+.lang .btn-link:hover,
+.lang .btn-link:focus,
+.lang .btn-link:active
+{
+    text-decoration: underline;
+    color: white;
+}
+
+.lang .btn-link.active,
+.lang .btn-link.active:hover {
+    color: #88cc00;
+    background: none;
+}
+
+.lang li:after {
+    content: "  |  ";
+}
+
+.lang li:last-child:after,
+.lang li:first-child:after {
+    content: "";
+}
+
+.lang .btn-link.active,
+.lang .btn-link.active:hover {
+    color: #88cc00;
+    background: none;
+}
+
+

@@ -30,4 +30,5 @@ public class MysqlUnitDAO extends BaseLocalizedDAO<Unit> implements UnitDAO {
 			return row;
 		};
 	}
+
 }

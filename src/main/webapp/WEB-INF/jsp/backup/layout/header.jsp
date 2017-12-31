@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="ua.kapitonenko.i18n.Messages" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="${sessionScope.messages}" var="msg"/>

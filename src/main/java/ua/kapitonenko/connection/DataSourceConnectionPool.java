@@ -1,6 +1,6 @@
 package ua.kapitonenko.connection;
 
-import ua.kapitonenko.Exceptions.DAOException;
+import ua.kapitonenko.exceptions.DAOException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

@@ -1,13 +1,17 @@
 package ua.kapitonenko.dao;
 
 import fixtures.BaseDAOTest;
+import fixtures.TestConnectionPool;
+import org.junit.After;
 import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.CashboxDAO;
 import ua.kapitonenko.dao.tables.CashboxesTable;
 import ua.kapitonenko.domain.Cashbox;
 
+import java.sql.Statement;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -23,6 +27,7 @@ public class CashboxDAOTest extends BaseDAOTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		super.truncateTable();
 	}
 	
 	@Test
@@ -55,9 +60,28 @@ public class CashboxDAOTest extends BaseDAOTest {
 			assertThat(dao.delete(updated, USER_ID), is(true));
 			assertThat(dao.findOne(updated.getId()), is(nullValue()));
 			
+			List<Cashbox> remaining = Collections.singletonList(entities.get(1));
+			assertThat(dao.findAll(), is(equalTo(remaining)));
+			
 		} finally {
 			connection.rollback();
 			connection.close();
+		}
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		connection = TestConnectionPool.getInstance().getConnection();
+		try (Statement statement = connection.createStatement()) {
+			statement.execute("INSERT INTO cashboxes\n" +
+					                  "(fn_number, zn_number, make)\n" +
+					                  "VALUES\n" +
+					                  "  ('default', 'default', 'default'),\n" +
+					                  "  ('1010101010', 'AT2020202020', 'КРОХА'),\n" +
+					                  "  ('0123456789', '12345678910', 'Datecs');"
+			);
+		} finally {
+			TestConnectionPool.getInstance().close(connection);
 		}
 	}
 }

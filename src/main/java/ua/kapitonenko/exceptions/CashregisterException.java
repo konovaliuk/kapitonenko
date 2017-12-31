@@ -1,4 +1,4 @@
-package ua.kapitonenko.Exceptions;
+package ua.kapitonenko.exceptions;
 
 public class CashregisterException extends RuntimeException {
 	public CashregisterException(String message) {

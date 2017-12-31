@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" isErrorPage="true" %>
 <!DOCTYPE html>
 <html>
-<%@ include file="layout/header.jsp" %>
-
+<%@ include file="includes/cover-header.jsp" %>
 <body class="login-page">
-<%@ include file="layout/alert.jsp" %>
+<%@ include file="includes/alert.jsp" %>
 
 <div class="page-header">
     <div class="container">
@@ -17,5 +16,4 @@
     </div>
 </div>
 </body>
-<%@ include file="layout/footer.jsp" %>
 </html>

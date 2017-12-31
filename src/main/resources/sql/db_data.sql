@@ -12,9 +12,21 @@ VALUES
   ('1010101010', 'AT2020202020', 'КРОХА'),
   ('0123456789', '12345678910', 'Datecs');
 
-INSERT INTO locale
+INSERT INTO units
+(name, bundle_name, bundle_key) VALUES
+  ('kilogram', 'settings', 'unit.kg'),
+  ('piece', 'settings', 'unit.pc');
+
+INSERT INTO tax_categories
+(name, bundle_name, bundle_key, rate) VALUES
+  ('1', 'settings', 'tax.1', 20),
+  ('2', 'settings', 'tax.2', 0);
+
+INSERT INTO localeId
 (name)
 VALUES
   ('en_US'),
   ('uk_UA');
+
+
 

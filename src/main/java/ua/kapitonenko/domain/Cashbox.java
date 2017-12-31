@@ -88,7 +88,7 @@ public class Cashbox extends BaseEntity {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder("Machine{")
+		return new StringBuilder("Cashbox{")
 				       .append("id=").append(getId())
 				       .append(", fnNumber=").append(fnNumber)
 				       .append(", znNumber=").append(znNumber)

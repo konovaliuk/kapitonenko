@@ -4,17 +4,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.LongValidator;
 import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.domain.Model;
-import ua.kapitonenko.i18n.MessageManager;
 
 import java.util.Set;
 import java.util.function.Supplier;
 
 public class ValidationBuilder {
-	MessageManager messageManager;
+	MessageProvider messageManager;
 	ViewHelper viewHelper;
 	boolean valid = true;
 	
-	public ValidationBuilder(MessageManager messageManager, ViewHelper viewHelper) {
+	public ValidationBuilder(MessageProvider messageManager, ViewHelper viewHelper) {
 		this.messageManager = messageManager;
 		this.viewHelper = viewHelper;
 	}

@@ -1,5 +1,6 @@
 package ua.kapitonenko.dao.mysql;
 
+import org.apache.log4j.Logger;
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.LocaleDAO;
@@ -10,6 +11,7 @@ import ua.kapitonenko.domain.Locale;
 import java.sql.Connection;
 
 public class MysqlLocaleDAO extends BaseDAO<Locale> implements LocaleDAO {
+	private static final Logger LOGGER = Logger.getLogger(MysqlLocaleDAO.class);
 	
 	public MysqlLocaleDAO(Connection connection) {
 		super(connection);
@@ -18,6 +20,14 @@ public class MysqlLocaleDAO extends BaseDAO<Locale> implements LocaleDAO {
 	@Override
 	protected String getTableName() {
 		return LocaleTable.NAME;
+	}
+	
+	protected String getSelectAllQuery() {
+		return "SELECT * FROM " + getTableName() + " ORDER BY " + LocaleTable.COLUMN_NAME;
+	}
+	
+	protected String getSelectOneQuery() {
+		return super.getSelectAllQuery() + WHERE_ID;
 	}
 	
 	@Override

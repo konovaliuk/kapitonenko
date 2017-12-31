@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
 	public User createAccount(User user) {
 		Connection connection = null;
 		try {
-			connection = pool.getConnection();
 			user.setActive(true);
 			connection = pool.getConnection();
 			UserDAO userDAO = Application.getDAOFactory().getUserDAO(connection);

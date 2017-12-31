@@ -24,9 +24,9 @@ public class LocaleFilter implements Filter {
 			session.setAttribute(Keys.LOCALE, Application.defaultLocale);
 		}
 		
-		if (session.getAttribute(Keys.LOCALE_SET) == null) {
+		if (session.getAttribute(Keys.LANGUAGES) == null) {
 			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
-			session.setAttribute(Keys.LOCALE_SET, settingsService.getLocaleMap().keySet());
+			session.setAttribute(Keys.LANGUAGES, settingsService.getSupportedLanguages());
 		}
 		chain.doFilter(request, response);
 	}

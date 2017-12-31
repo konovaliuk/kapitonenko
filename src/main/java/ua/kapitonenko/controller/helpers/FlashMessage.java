@@ -24,4 +24,13 @@ public class FlashMessage {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("FlashMessage{")
+				       .append("status=").append(status)
+				       .append(", message=").append(message)
+				       .append("}")
+				       .toString();
+	}
 }

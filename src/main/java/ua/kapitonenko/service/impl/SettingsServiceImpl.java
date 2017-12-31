@@ -3,15 +3,15 @@ package ua.kapitonenko.service.impl;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.connection.ConnectionPool;
-import ua.kapitonenko.dao.interfaces.CashboxDAO;
-import ua.kapitonenko.dao.interfaces.LocaleDAO;
-import ua.kapitonenko.dao.interfaces.UserRoleDAO;
+import ua.kapitonenko.dao.interfaces.*;
 import ua.kapitonenko.domain.*;
 import ua.kapitonenko.service.SettingsService;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SettingsServiceImpl implements SettingsService {
@@ -19,13 +19,15 @@ public class SettingsServiceImpl implements SettingsService {
 	private static SettingsServiceImpl instance = new SettingsServiceImpl();
 	private ConnectionPool pool = Application.getConnectionPool();
 	
+	private HashMap<String, Object> cache = new HashMap<>();
+	
 	private SettingsServiceImpl() {
 	}
 	
 	public static SettingsServiceImpl getInstance() {
 		return instance;
 	}
-	
+	// TODO add to cache
 	@Override
 	public Map<Long, String> getRolesMap() {
 		Connection connection = null;
@@ -35,6 +37,62 @@ public class SettingsServiceImpl implements SettingsService {
 			List<UserRole> list = roleDAO.findAll();
 			return list.stream().collect(
 					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public Map<Long, String> getTaxMap() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);
+			List<TaxCategory> list = taxCategoryDAO.findAll();
+			LOGGER.debug(list);
+			return list.stream().collect(
+					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public List<TaxCategory> getTaxCatList() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);
+			List<TaxCategory> list = taxCategoryDAO.findAll();
+			return list;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public Map<Long, String> getUnitMap() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection);
+			List<Unit> list = unitDAO.findAll();
+			//LOGGER.debug(list);
+			return list.stream().collect(
+					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public List<Unit> getUnitList() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection);
+			List<Unit> list = unitDAO.findAll();
+			return list;
 		} finally {
 			pool.close(connection);
 		}
@@ -53,16 +111,28 @@ public class SettingsServiceImpl implements SettingsService {
 	}
 	
 	@Override
-	public Map<String, String> getLocaleMap() {
+	public List<Locale> getLocaleList() {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
 			LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection);
+			
 			List<Locale> list = localeDAO.findAll();
-			return list.stream().collect(
-					Collectors.toMap(Locale::getLanguage, Locale::getName));
+
+			return list;
 		} finally {
 			pool.close(connection);
 		}
+	}
+	
+	@Override
+	public List<String> getSupportedLanguages() {
+		return getSupportedLocales().keySet().stream().sorted().collect(Collectors.toList());
+	}
+	
+	@Override
+	public Map<String, Locale> getSupportedLocales() {
+		return getLocaleList().stream()
+				       .collect(Collectors.toMap(Locale::getLanguage, Function.identity()));
 	}
 }

@@ -1,7 +1,7 @@
 package fixtures;
 
-import ua.kapitonenko.Exceptions.DAOException;
 import ua.kapitonenko.connection.ConnectionPool;
+import ua.kapitonenko.exceptions.DAOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

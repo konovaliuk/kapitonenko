@@ -1,9 +1,9 @@
 package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Exceptions.NotFoundException;
 import ua.kapitonenko.controller.commands.*;
 import ua.kapitonenko.controller.keys.Routes;
+import ua.kapitonenko.exceptions.NotFoundException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,10 +25,14 @@ public class RequestHelper {
 	
 	private void initCommands() {
 		commands.put(Routes.LOGIN, new LoginAction());
+		commands.put(Routes.LOGOUT, new LogoutAction());
 		commands.put(Routes.HOME, new HomeAction());
 		commands.put(Routes.SIGNUP, new SignUpAction());
 		commands.put(Routes.LANGUAGE, new LanguageAction());
-		
+		commands.put(Routes.PRODUCTS, new ProductListAction());
+		commands.put(Routes.PRODUCTS_CREATE, new ProductCreateAction());
+		commands.put(Routes.PRODUCTS_UPDATE, new ProductUpdateAction());
+		commands.put(Routes.PRODUCTS_DELETE, new ProductDeleteAction());
 	}
 	
 	public ActionCommand getCommand(HttpServletRequest request) throws IOException, ServletException {

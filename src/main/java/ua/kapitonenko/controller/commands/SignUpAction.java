@@ -6,7 +6,6 @@ import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.controller.helpers.ViewHelper;
-import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.domain.User;
@@ -16,7 +15,7 @@ import ua.kapitonenko.service.UserService;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-import static ua.kapitonenko.i18n.Messages.*;
+import static ua.kapitonenko.controller.keys.Keys.*;
 
 public class SignUpAction implements ActionCommand {
 	
@@ -30,12 +29,14 @@ public class SignUpAction implements ActionCommand {
 		
 		if (request.isPost()) {
 			if (loadAndValidate(request)) {
+				LOGGER.debug("validation success");
 				User user = userService.createAccount((User) request.getView().getModel());
 				if (user.isActive()) {
-					request.getSession().setFlash(Keys.ALERT_CLASS_SUCCESS,
+					LOGGER.debug("user is active");
+					request.getSession().setFlash(ALERT_CLASS_SUCCESS,
 							request.getMessageManager().registrationSuccess(LOGIN_FIRST));
 				} else {
-					request.getSession().setFlash(Keys.ALERT_CLASS_SUCCESS,
+					request.getSession().setFlash(ALERT_CLASS_SUCCESS,
 							request.getMessageManager().registrationSuccess(CONTACT_ADMIN));
 				}
 				return request.redirect(Routes.LOGIN);
@@ -57,10 +58,10 @@ public class SignUpAction implements ActionCommand {
 	
 	private boolean loadAndValidate(RequestWrapper request) {
 		
-		String username = request.get(USERNAME);
-		String password = request.get(PASSWORD);
-		String confirm = request.get(CONFIRM_PASS);
-		String role = request.get(ROLE);
+		String username = request.getParameter(USERNAME);
+		String password = request.getParameter(PASSWORD);
+		String confirm = request.getParameter(CONFIRM_PASS);
+		String role = request.getParameter(ROLE);
 		Long roleId = ValidationBuilder.parseId(role);
 		
 		User user = (User) request.getView().getModel();

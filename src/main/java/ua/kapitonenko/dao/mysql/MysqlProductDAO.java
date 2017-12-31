@@ -7,11 +7,31 @@ import ua.kapitonenko.dao.tables.ProductsTable;
 import ua.kapitonenko.domain.Product;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
-	private static final String UPDATE = "UPDATE products SET unit_id = ?, price = ?, tax_category_id = ?, quantity = ?, created_at = ?, created_by = ?, deleted_at = ?, deleted_by = ?" + WHERE_ID;
-	private static final String DELETE = "UPDATE products SET deleted_at = NOW(), deleted_by = ?" + WHERE_ID;
-	private static final String INSERT = "INSERT INTO products ( unit_id, price, tax_category_id, quantity, created_at, created_by, deleted_at, deleted_by) VALUES (?, ?, ?, ?, ?, ?, ?, ? )";
+	private static final String UPDATE = "UPDATE " +
+			                                     ProductsTable.NAME + " SET " +
+			                                     ProductsTable.UNIT + " = ?, " +
+			                                     ProductsTable.PRICE + " = ?, " +
+			                                     ProductsTable.TAX_CAT + " = ?, " +
+			                                     ProductsTable.QUANTITY + " = ? " +
+			                                     WHERE_ID;
+	private static final String DELETE = "UPDATE " +
+			                                     ProductsTable.NAME + " SET " +
+			                                     ProductsTable.DELETED_AT + " = NOW(), " +
+			                                     ProductsTable.DELETED_BY + " = ? " +
+			                                     WHERE_ID;
+	
+	private static final String INSERT = "INSERT INTO " +
+			                                     ProductsTable.NAME + " ( " +
+			                                     ProductsTable.UNIT + ", " +
+			                                     ProductsTable.PRICE + ", " +
+			                                     ProductsTable.TAX_CAT + ", " +
+			                                     ProductsTable.QUANTITY + ", " +
+			                                     ProductsTable.CREATED_AT + ", " +
+			                                     ProductsTable.CREATED_BY +
+			                                     ") VALUES (?, ?, ?, ?, NOW(), ?)";
 	
 	MysqlProductDAO(Connection connection) {
 		super(connection);
@@ -32,17 +52,24 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 		return UPDATE;
 	}
 	
+	public Product findOne(final Long id) {
+		return getRow(getSelectOneNotDeletedQuery(),
+				ps -> ps.setLong(1, id),
+				getResultSetExtractor());
+	}
+	
+	public List<Product> findAll() {
+		return getList(getSelectAllNotDeletedQuery(), getResultSetExtractor());
+	}
+	
 	@Override
 	protected PreparedStatementSetter getInsertStatementSetter(final Product entity) {
 		return ps -> {
 			ps.setLong(1, entity.getUnitId());
-			ps.setString(2, entity.getPrice());
+			ps.setBigDecimal(2, entity.getPrice());
 			ps.setLong(3, entity.getTaxCategoryId());
-			ps.setString(4, entity.getQuantity());
-			ps.setTimestamp(5, new java.sql.Timestamp(entity.getCreatedAt().getTime()));
-			ps.setLong(6, entity.getCreatedBy());
-			ps.setTimestamp(7, new java.sql.Timestamp(entity.getDeletedAt().getTime()));
-			ps.setLong(8, entity.getDeletedBy());
+			ps.setBigDecimal(4, entity.getQuantity());
+			ps.setObject(5, entity.getCreatedBy());
 		};
 	}
 	
@@ -50,14 +77,10 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	protected PreparedStatementSetter getUpdateStatementSetter(final Product entity) {
 		return ps -> {
 			ps.setLong(1, entity.getUnitId());
-			ps.setString(2, entity.getPrice());
+			ps.setBigDecimal(2, entity.getPrice());
 			ps.setLong(3, entity.getTaxCategoryId());
-			ps.setString(4, entity.getQuantity());
-			ps.setTimestamp(5, entity.getCreatedAt());
-			ps.setLong(6, entity.getCreatedBy());
-			ps.setTimestamp(7, entity.getDeletedAt());
-			ps.setLong(8, entity.getDeletedBy());
-			ps.setLong(9, entity.getId());
+			ps.setBigDecimal(4, entity.getQuantity());
+			ps.setLong(5, entity.getId());
 		};
 	}
 	
@@ -76,15 +99,15 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	protected ResultSetExtractor<Product> getResultSetExtractor() {
 		return rs -> {
 			Product row = new Product();
-			row.setId(rs.getLong("id"));
-			row.setUnitId(rs.getLong("unit_id"));
-			row.setPrice(rs.getString("price"));
-			row.setTaxCategoryId(rs.getLong("tax_category_id"));
-			row.setQuantity(rs.getString("quantity"));
-			row.setCreatedAt(rs.getTimestamp("created_at"));
-			row.setCreatedBy(rs.getLong("created_by"));
-			row.setDeletedAt(rs.getTimestamp("deleted_at"));
-			row.setDeletedBy(rs.getLong("deleted_by"));
+			row.setId(rs.getLong(ProductsTable.ID));
+			row.setUnitId(rs.getLong(ProductsTable.UNIT));
+			row.setPrice(rs.getBigDecimal(ProductsTable.PRICE));
+			row.setTaxCategoryId(rs.getLong(ProductsTable.TAX_CAT));
+			row.setQuantity(rs.getBigDecimal(ProductsTable.QUANTITY));
+			row.setCreatedAt(rs.getTimestamp(ProductsTable.CREATED_AT));
+			row.setCreatedBy(rs.getLong(ProductsTable.CREATED_BY));
+			row.setDeletedAt(rs.getTimestamp(ProductsTable.DELETED_AT));
+			row.setDeletedBy(rs.getLong(ProductsTable.DELETED_BY));
 			return row;
 		};
 	}

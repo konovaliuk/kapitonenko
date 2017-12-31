@@ -2,17 +2,16 @@ package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
-import ua.kapitonenko.Exceptions.MethodNotAllowedException;
-import ua.kapitonenko.Exceptions.NotFoundException;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.exceptions.MethodNotAllowedException;
+import ua.kapitonenko.exceptions.NotFoundException;
 import ua.kapitonenko.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 
 public class LanguageAction implements ActionCommand {
@@ -25,18 +24,15 @@ public class LanguageAction implements ActionCommand {
 			throw new MethodNotAllowedException("POST");
 		}
 		
-		String lang = request.get("l");
+		String lang = request.getParameter("l");
 		LOGGER.debug(lang);
-		Map<String, String> langLocale = settingsService.getLocaleMap();
-		Set<String> supportedLang = langLocale.keySet();
-		LOGGER.debug(supportedLang.toString());
+		List<String> supported = settingsService.getSupportedLanguages();
 		
-		
-		if (!supportedLang.contains(lang)) {
+		if (!supported.contains(lang)) {
 			throw new NotFoundException(request.getUri());
 		}
-		
-		request.getSession().set(Keys.LOCALE, langLocale.get(lang));
+		LOGGER.debug(settingsService.getSupportedLocales());
+		request.getSession().set(Keys.LOCALE, settingsService.getSupportedLocales().get(lang).getName());
 		
 		return request.goBack();
 	}

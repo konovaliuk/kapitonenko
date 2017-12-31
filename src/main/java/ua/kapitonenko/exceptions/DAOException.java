@@ -1,4 +1,4 @@
-package ua.kapitonenko.Exceptions;
+package ua.kapitonenko.exceptions;
 
 public class DAOException extends CashregisterException {
 	public DAOException(Throwable cause) {

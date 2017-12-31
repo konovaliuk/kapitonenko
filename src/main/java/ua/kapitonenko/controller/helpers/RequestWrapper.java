@@ -2,9 +2,11 @@ package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.controller.keys.Keys;
-import ua.kapitonenko.i18n.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RequestWrapper {
 	private static final Logger LOGGER = Logger.getLogger(RequestWrapper.class);
@@ -12,12 +14,15 @@ public class RequestWrapper {
 	private HttpServletRequest request;
 	private SessionWrapper sessionWrapper;
 	private ViewHelper view;
-	private MessageManager messageManager;
+	private MessageProvider messageManager;
+	
+	private AlertContainer alert;
 	
 	public RequestWrapper(HttpServletRequest request) {
 		this.request = request;
 		this.sessionWrapper = new SessionWrapper(request.getSession());
-		this.messageManager = MessageManager.getInstance(sessionWrapper.getLocale());
+		this.messageManager = MessageProvider.get(sessionWrapper.getLocale());
+		initAlert();
 	}
 	
 	public SessionWrapper getSession() {
@@ -36,10 +41,19 @@ public class RequestWrapper {
 	
 	public ResponseParams goBack() {
 		String referer = request.getHeader("referer");
+		
+		if (referer == null) {
+			return goHome();
+		}
+		
 		String[] parts = referer.split("/");
-		referer = "/" + parts[parts.length - 1];
-		LOGGER.debug(referer);
+		referer = String.format("/%s", parts[3]);
+		
 		return new ResponseParams(referer, true);
+	}
+	
+	public ResponseParams goHome() {
+		return new ResponseParams("/", true);
 	}
 	
 	public boolean isPost() {
@@ -52,21 +66,65 @@ public class RequestWrapper {
 	
 	public void setView(ViewHelper view) {
 		this.view = view;
+		FlashMessage flash = sessionWrapper.getFlash();
+		if (flash != null) {
+			this.view.addMessage(flash.getMessage());
+			this.view.setMessageType(flash.getStatus());
+			sessionWrapper.removeFlash();
+		}
 	}
 	
-	public String get(String key) {
+	public String getParameter(String key) {
 		return request.getParameter(key);
 	}
 	
-	public MessageManager getMessageManager() {
+	public Map<String, String[]> getParams() {
+		return request.getParameterMap();
+	}
+	
+	public Object getAttribute(String key) {
+		return request.getAttribute(key);
+	}
+	
+	public void setAttribute(String key, Object object) {
+		request.setAttribute(key, object);
+	}
+	
+	public MessageProvider getMessageManager() {
 		return messageManager;
 	}
 	
-	public void setMessageManager(MessageManager messageManager) {
+	public void setMessageManager(MessageProvider messageManager) {
 		this.messageManager = messageManager;
 	}
 	
 	public String getUri() {
 		return request.getRequestURI();
 	}
+	
+	public String paramsToString(){
+		return request.getParameterMap().entrySet()
+				.stream()
+				.map(e -> e.getKey() + "=\"" + Arrays.toString(e.getValue()) + "\"")
+				.collect(Collectors.joining(", "));
+	}
+	
+	private void initAlert(){
+		if (request.getAttribute(Keys.ALERT) == null){
+			alert = new AlertContainer();
+			
+			FlashMessage flash = sessionWrapper.getFlash();
+			if (flash != null) {
+				alert.addMessage(flash.getMessage());
+				alert.setMessageType(flash.getStatus());
+			}
+			
+			request.setAttribute(Keys.ALERT, alert);
+		}
+	}
+	
+	public AlertContainer getAlert() {
+		return alert;
+	}
+
 }
