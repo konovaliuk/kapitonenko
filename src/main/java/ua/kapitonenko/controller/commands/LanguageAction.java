@@ -32,7 +32,9 @@ public class LanguageAction implements ActionCommand {
 			throw new NotFoundException(request.getUri());
 		}
 		LOGGER.debug(settingsService.getSupportedLocales());
+
 		request.getSession().set(Keys.LOCALE, settingsService.getSupportedLocales().get(lang).getName());
+		request.getSession().set(Keys.LOCALE_ID, settingsService.getSupportedLocales().get(lang).getId());
 		
 		return request.goBack();
 	}

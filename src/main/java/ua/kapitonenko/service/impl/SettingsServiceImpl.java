@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.dao.interfaces.*;
-import ua.kapitonenko.domain.*;
+import ua.kapitonenko.domain.entities.*;
 import ua.kapitonenko.service.SettingsService;
 
 import java.sql.Connection;
@@ -134,5 +134,32 @@ public class SettingsServiceImpl implements SettingsService {
 	public Map<String, Locale> getSupportedLocales() {
 		return getLocaleList().stream()
 				       .collect(Collectors.toMap(Locale::getLanguage, Function.identity()));
+	}
+	
+	@Override
+	public Company findCompany(Long id) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			CompanyDAO companyDAO = Application.getDAOFactory().getCompanyDAO(connection);
+			return companyDAO.findOne(id);
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public List<PaymentType> getPaymentTypes() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
+			
+			List<PaymentType> list = paymentTypeDAO.findAll();
+			
+			return list;
+		} finally {
+			pool.close(connection);
+		}
 	}
 }

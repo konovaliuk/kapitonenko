@@ -5,7 +5,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.CashboxDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.CashboxesTable;
-import ua.kapitonenko.domain.Cashbox;
+import ua.kapitonenko.domain.entities.Cashbox;
 
 import java.sql.Connection;
 import java.util.List;

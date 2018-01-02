@@ -1,6 +1,6 @@
 package ua.kapitonenko.service;
 
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.User;
 
 public interface UserService {
 	User createAccount(User user);

@@ -29,16 +29,18 @@
         <div class="card">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs pull-left">
-                    <c:set var="list" value="/products"/>
-                    <c:set var="newProd" value="/create-product"/>
-                    <c:set var="activeList" value="${action eq list ? 'active' : ''}"/>
-                    <c:set var="activeForm" value="${action eq newProd ? 'active' : ''}"/>
+                    <c:set var="productList" value="/products"/>
+                    <c:set var="productForm" value="/create-product"/>
+                    <c:set var="productListClass" value="${action eq productList ? 'active' : ''}"/>
+                    <c:set var="productFormClass" value="${action eq productForm ? 'active' : ''}"/>
                     <li class="nav-item">
-                        <a class="nav-link ${activeList}" href="${list}"><fmt:message key="${Keys.PRODUCT_LIST}"
-                                                                         bundle="${msg}"/></a>
+                        <a class="nav-link ${productListClass}" href="${productList}"><fmt:message
+                                key="${Keys.PRODUCT_LIST}"
+                                bundle="${msg}"/></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link ${activeForm}" href="${newProd}"><fmt:message key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></a>
+                        <a class="nav-link ${productFormClass}" href="${productForm}"><fmt:message
+                                key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></a>
                     </li>
                 </ul>
             </div>
@@ -58,7 +60,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.Product>"--%>
+                        <%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
                         <c:forEach var="product" items="${products}">
                             <tr>
                                 <th scope="row">${product.id}</th>

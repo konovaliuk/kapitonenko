@@ -4,7 +4,7 @@ import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.DAO;
 import ua.kapitonenko.dao.tables.BaseTable;
-import ua.kapitonenko.domain.BaseEntity;
+import ua.kapitonenko.domain.entities.BaseEntity;
 import ua.kapitonenko.exceptions.DAOException;
 
 import java.sql.Connection;
@@ -16,8 +16,8 @@ import java.util.List;
 
 public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 	protected static final String WHERE_ID = " WHERE " + BaseTable.ID + "=? ";
-	protected static final String AND_DELETED = " AND " + BaseTable.DELETED_AT + " IS NULL";
-	protected static final String WHERE_DELETED = " WHERE " + BaseTable.DELETED_AT + " IS NULL";
+	protected static final String AND_NOT_DELETED = " AND " + BaseTable.DELETED_AT + " IS NULL";
+	protected static final String WHERE_NOT_DELETED = " WHERE " + BaseTable.DELETED_AT + " IS NULL";
 	
 	private Connection connection;
 	
@@ -47,11 +47,11 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 	}
 	
 	protected String getSelectOneNotDeletedQuery() {
-		return getSelectOneQuery() + AND_DELETED;
+		return getSelectOneQuery() + AND_NOT_DELETED;
 	}
 	
 	protected String getSelectAllNotDeletedQuery() {
-		return getSelectAllQuery() + WHERE_DELETED;
+		return getSelectAllQuery() + WHERE_NOT_DELETED;
 	}
 	
 	public E findOne(final Long id) {

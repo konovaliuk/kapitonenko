@@ -7,4 +7,5 @@ public class Pages {
 	public static final String SIGNUP = BASE + "user-form.jsp";
 	public static final String PRODUCT_LIST = BASE + "product-list.jsp";
 	public static final String PRODUCT_FORM = BASE + "product-form.jsp";
+	public static final String RECEIPT_FORM = BASE + "receipt-form.jsp";
 }

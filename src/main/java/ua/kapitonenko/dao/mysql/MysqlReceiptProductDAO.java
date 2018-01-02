@@ -4,16 +4,23 @@ import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ReceiptProductDAO;
 import ua.kapitonenko.dao.tables.ReceiptProductsTable;
-import ua.kapitonenko.domain.ReceiptProduct;
+import ua.kapitonenko.domain.entities.ReceiptProduct;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class MysqlReceiptProductDAO extends BaseDAO<ReceiptProduct> implements ReceiptProductDAO {
-	private static final String UPDATE = "" + WHERE_ID;
-	private static final String INSERT = "";
+	private static final String UPDATE = "UPDATE " +
+			                                     ReceiptProductsTable.NAME + " SET " +
+			                                     ReceiptProductsTable.RECEIPT_ID + " = ?, " +
+			                                     ReceiptProductsTable.PRODUCT_ID + " = ?, " +
+			                                     ReceiptProductsTable.QUANTITY + " = ? " +
+			                                     WHERE_ID;
+	
+	private static final String INSERT = "INSERT INTO " +
+			                                     ReceiptProductsTable.NAME + " (" +
+			                                     ReceiptProductsTable.RECEIPT_ID + ", " +
+			                                     ReceiptProductsTable.PRODUCT_ID + ", " +
+			                                     ReceiptProductsTable.QUANTITY + ") VALUES (?, ?, ? )";
 	
 	MysqlReceiptProductDAO(Connection connection) {
 		super(connection);
@@ -36,24 +43,20 @@ public class MysqlReceiptProductDAO extends BaseDAO<ReceiptProduct> implements R
 	
 	@Override
 	protected PreparedStatementSetter getInsertStatementSetter(final ReceiptProduct entity) {
-		return new PreparedStatementSetter() {
-			public void prepare(PreparedStatement ps) throws SQLException {
-				ps.setLong(1, entity.getReceiptId());
-				ps.setLong(2, entity.getProductId());
-				ps.setString(3, entity.getQuantity());
-			}
+		return ps -> {
+			ps.setLong(1, entity.getReceiptId());
+			ps.setLong(2, entity.getProductId());
+			ps.setBigDecimal(3, entity.getQuantity());
 		};
 	}
 	
 	@Override
 	protected PreparedStatementSetter getUpdateStatementSetter(final ReceiptProduct entity) {
-		return new PreparedStatementSetter() {
-			public void prepare(PreparedStatement ps) throws SQLException {
-				ps.setLong(1, entity.getReceiptId());
-				ps.setLong(2, entity.getProductId());
-				ps.setString(3, entity.getQuantity());
-				ps.setLong(4, entity.getId());
-			}
+		return ps -> {
+			ps.setLong(1, entity.getReceiptId());
+			ps.setLong(2, entity.getProductId());
+			ps.setBigDecimal(3, entity.getQuantity());
+			ps.setLong(4, entity.getId());
 		};
 	}
 	
@@ -66,15 +69,13 @@ public class MysqlReceiptProductDAO extends BaseDAO<ReceiptProduct> implements R
 	
 	@Override
 	protected ResultSetExtractor<ReceiptProduct> getResultSetExtractor() {
-		return new ResultSetExtractor<ReceiptProduct>() {
-			public ReceiptProduct extract(ResultSet rs) throws SQLException {
-				ReceiptProduct row = new ReceiptProduct();
-				row.setId(rs.getLong("id"));
-				row.setReceiptId(rs.getLong("receipt_id"));
-				row.setProductId(rs.getLong("product_id"));
-				row.setQuantity(rs.getString("quantity"));
-				return row;
-			}
+		return rs -> {
+			ReceiptProduct row = new ReceiptProduct();
+			row.setId(rs.getLong(ReceiptProductsTable.ID));
+			row.setReceiptId(rs.getLong(ReceiptProductsTable.RECEIPT_ID));
+			row.setProductId(rs.getLong(ReceiptProductsTable.PRODUCT_ID));
+			row.setQuantity(rs.getBigDecimal(ReceiptProductsTable.QUANTITY));
+			return row;
 		};
 	}
 }

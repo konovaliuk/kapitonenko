@@ -5,7 +5,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.CompanyDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.CompaniesTable;
-import ua.kapitonenko.domain.Company;
+import ua.kapitonenko.domain.entities.Company;
 
 import java.sql.Connection;
 
@@ -45,7 +45,7 @@ public class MysqlCompanyDAO extends BaseDAO<Company> implements CompanyDAO {
 	}
 	
 	@Override
-	protected PreparedStatementSetter getInsertStatementSetter(final Company entity) {
+	protected PreparedStatementSetter getInsertStatementSetter(Company entity) {
 		return ps -> {
 			ps.setString(1, entity.getPnNumber());
 			ps.setString(2, entity.getBundleName());
@@ -55,7 +55,7 @@ public class MysqlCompanyDAO extends BaseDAO<Company> implements CompanyDAO {
 	}
 	
 	@Override
-	protected PreparedStatementSetter getUpdateStatementSetter(final Company entity) {
+	protected PreparedStatementSetter getUpdateStatementSetter(Company entity) {
 		return ps -> {
 			ps.setString(1, entity.getPnNumber());
 			ps.setString(2, entity.getBundleName());

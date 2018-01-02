@@ -7,7 +7,7 @@ import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.UserDAO;
 import ua.kapitonenko.dao.tables.UsersTable;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.User;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -30,15 +30,15 @@ public class UserDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void test() throws Exception {
+	public void testCRUD() throws Exception {
 		
 		connection.setAutoCommit(false);
 		
 		UserDAO dao = Application.getDAOFactory().getUserDAO(connection);
 		
 		List<User> entities = Arrays.asList(
-				new User(1L, "admin", "admin"),
-				new User(1L, "jane", "jane")
+				new User(USER_ROLE, "admin", "admin"),
+				new User(USER_ROLE, "jane", "jane")
 		);
 		
 		try {
@@ -48,7 +48,7 @@ public class UserDAOTest extends BaseDAOTest {
 			assertThat(dao.insert(entities.get(0)), is(true));
 			assertThat(entities.get(0).getId(), is(notNullValue()));
 			assertThat(dao.findOne(entities.get(0).getId()), is(equalTo(entities.get(0))));
-		
+			
 			assertThat(dao.insert(entities.get(1)), is(true));
 			assertThat(dao.findAll(), is(equalTo(entities)));
 			
@@ -56,10 +56,10 @@ public class UserDAOTest extends BaseDAOTest {
 			assertThat(dao.findByUsername(entities.get(0)), is(equalTo(entities.get(0))));
 			
 			User updated = dao.findOne(entities.get(0).getId());
-			String username = "john";
-			updated.setUsername(username);
+			final String USERNAME = "john";
+			updated.setUsername(USERNAME);
 			assertThat(dao.update(updated), is(true));
-			assertThat(dao.findOne(updated.getId()).getUsername(), is(equalTo(username)));
+			assertThat(dao.findOne(updated.getId()).getUsername(), is(equalTo(USERNAME)));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			
 			assertThat(dao.delete(updated, USER_ID), is(true));

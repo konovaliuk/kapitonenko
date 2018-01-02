@@ -2,7 +2,7 @@ package ua.kapitonenko.dao.mysql;
 
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.tables.BaseTable;
-import ua.kapitonenko.domain.BaseLocalizedEntity;
+import ua.kapitonenko.domain.entities.BaseLocalizedEntity;
 
 import java.sql.Connection;
 

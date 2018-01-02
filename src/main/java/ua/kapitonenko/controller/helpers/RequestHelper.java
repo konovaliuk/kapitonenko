@@ -31,8 +31,9 @@ public class RequestHelper {
 		commands.put(Routes.LANGUAGE, new LanguageAction());
 		commands.put(Routes.PRODUCTS, new ProductListAction());
 		commands.put(Routes.PRODUCTS_CREATE, new ProductCreateAction());
-		commands.put(Routes.PRODUCTS_UPDATE, new ProductUpdateAction());
+		commands.put(Routes.PRODUCTS_ADD, new ProductAddAction());
 		commands.put(Routes.PRODUCTS_DELETE, new ProductDeleteAction());
+		commands.put(Routes.RECEIPT_CREATE, new ReceiptCreateAction());
 	}
 	
 	public ActionCommand getCommand(HttpServletRequest request) throws IOException, ServletException {

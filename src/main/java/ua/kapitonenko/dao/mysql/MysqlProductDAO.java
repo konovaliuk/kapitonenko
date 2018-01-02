@@ -1,10 +1,12 @@
 package ua.kapitonenko.dao.mysql;
 
+import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ProductDAO;
+import ua.kapitonenko.dao.tables.ProductLocaleTable;
 import ua.kapitonenko.dao.tables.ProductsTable;
-import ua.kapitonenko.domain.Product;
+import ua.kapitonenko.domain.entities.Product;
 
 import java.sql.Connection;
 import java.util.List;
@@ -32,6 +34,19 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			                                     ProductsTable.CREATED_AT + ", " +
 			                                     ProductsTable.CREATED_BY +
 			                                     ") VALUES (?, ?, ?, ?, NOW(), ?)";
+	
+	private static final String SELECT_BY_ID_OR_NAME = "SELECT * FROM " +
+			                                                   ProductsTable.NAME + " JOIN " +
+			                                                   ProductLocaleTable.NAME + " ON " +
+			                                                   ProductsTable.NAME_ID + " = " +
+			                                                   ProductLocaleTable.NAME_PRODUCT_ID + " WHERE ( " +
+			                                                   ProductLocaleTable.PROP_NAME + " = ? AND " +
+			                                                   ProductLocaleTable.LOCALE + " = ? AND " +
+			                                                   ProductLocaleTable.PROP_VALUE + " = ? ) OR ( " +
+			                                                   ProductsTable.NAME_ID + " = ?)" +
+			                                                   AND_NOT_DELETED + " GROUP BY " +
+			                                                   ProductsTable.NAME_ID;
+	
 	
 	MysqlProductDAO(Connection connection) {
 		super(connection);
@@ -110,5 +125,16 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			row.setDeletedBy(rs.getLong(ProductsTable.DELETED_BY));
 			return row;
 		};
+	}
+	
+	@Override
+	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
+		return getList(SELECT_BY_ID_OR_NAME, ps -> {
+			ps.setString(1, Keys.PRODUCT_NAME);
+			ps.setLong(2, localeId);
+			ps.setString(3, name);
+			ps.setLong(4, productId);
+			
+		}, getResultSetExtractor());
 	}
 }

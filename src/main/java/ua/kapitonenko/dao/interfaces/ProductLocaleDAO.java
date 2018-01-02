@@ -1,7 +1,7 @@
 package ua.kapitonenko.dao.interfaces;
 
 
-import ua.kapitonenko.domain.ProductLocale;
+import ua.kapitonenko.domain.entities.ProductLocale;
 
 import java.util.List;
 

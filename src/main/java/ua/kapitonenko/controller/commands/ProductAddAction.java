@@ -6,7 +6,7 @@ import ua.kapitonenko.controller.helpers.ResponseParams;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-public class ProductUpdateAction implements ActionCommand{
+public class ProductAddAction implements ActionCommand {
 	@Override
 	public ResponseParams execute(RequestWrapper requestWrapper) throws ServletException, IOException {
 		return null;

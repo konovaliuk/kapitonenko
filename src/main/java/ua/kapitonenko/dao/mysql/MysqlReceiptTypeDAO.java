@@ -4,7 +4,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ReceiptTypeDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.ReceiptTypesTable;
-import ua.kapitonenko.domain.ReceiptType;
+import ua.kapitonenko.domain.entities.ReceiptType;
 
 import java.sql.Connection;
 

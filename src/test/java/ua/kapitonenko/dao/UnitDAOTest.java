@@ -7,7 +7,7 @@ import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.UnitDAO;
 import ua.kapitonenko.dao.tables.UnitsTable;
-import ua.kapitonenko.domain.Unit;
+import ua.kapitonenko.domain.entities.Unit;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -29,8 +29,8 @@ public class UnitDAOTest extends BaseDAOTest {
 		super.truncateTable();
 	}
 	
-	@Test
-	public void test() throws Exception {
+	@Test(expected = UnsupportedOperationException.class)
+	public void testCRUD() throws Exception {
 		
 		connection.setAutoCommit(false);
 		
@@ -50,19 +50,13 @@ public class UnitDAOTest extends BaseDAOTest {
 			assertThat(dao.findAll(), is(equalTo(entities)));
 			
 			Unit updated = entities.get(0);
-			String key = "keys";
-			updated.setBundleKey(key);
+			final String BUNDLE_KEY = "key";
+			updated.setBundleKey(BUNDLE_KEY);
 			assertThat(dao.update(updated), is(true));
-			assertThat(dao.findOne(updated.getId()).getBundleKey(), is(equalTo(key)));
+			assertThat(dao.findOne(updated.getId()).getBundleKey(), is(equalTo(BUNDLE_KEY)));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			
-			Exception exception = null;
-			try {
-				dao.delete(entities.get(1), USER_ID);
-			} catch (UnsupportedOperationException e) {
-				exception = e;
-			}
-			assertThat(exception, is(notNullValue()));
+			dao.delete(entities.get(1), USER_ID);
 			
 		} finally {
 			connection.rollback();

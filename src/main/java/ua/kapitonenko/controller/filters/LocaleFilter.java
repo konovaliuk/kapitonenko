@@ -17,11 +17,12 @@ public class LocaleFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		
-		session.setAttribute(Application.messageBundle, Application.messageBundle);
-		session.setAttribute(Application.settingsBundle, Application.settingsBundle);
+		session.setAttribute(Application.MESSAGE_BUNDLE, Application.MESSAGE_BUNDLE);
+		session.setAttribute(Application.SETTINGS_BUNDLE, Application.SETTINGS_BUNDLE);
 		
 		if (session.getAttribute(Keys.LOCALE) == null) {
-			session.setAttribute(Keys.LOCALE, Application.defaultLocale);
+			session.setAttribute(Keys.LOCALE, Application.DEFAULT_LOCALE);
+			session.setAttribute(Keys.LOCALE_ID, Application.getId(Application.DEFAULT_LOCALE));
 		}
 		
 		if (session.getAttribute(Keys.LANGUAGES) == null) {

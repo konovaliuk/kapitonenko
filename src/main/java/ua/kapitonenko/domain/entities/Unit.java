@@ -1,4 +1,4 @@
-package ua.kapitonenko.domain;
+package ua.kapitonenko.domain.entities;
 
 public class Unit extends BaseLocalizedEntity {
 	public Unit() {

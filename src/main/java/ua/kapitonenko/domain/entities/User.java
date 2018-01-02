@@ -1,4 +1,4 @@
-package ua.kapitonenko.domain;
+package ua.kapitonenko.domain.entities;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;

@@ -1,9 +1,6 @@
 package ua.kapitonenko.service.impl;
 
-import ua.kapitonenko.service.ProductService;
-import ua.kapitonenko.service.ServiceFactory;
-import ua.kapitonenko.service.SettingsService;
-import ua.kapitonenko.service.UserService;
+import ua.kapitonenko.service.*;
 
 public class ServiceFactoryImpl implements ServiceFactory {
 	@Override
@@ -19,5 +16,10 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	@Override
 	public ProductService getProductService() {
 		return ProductServiceImpl.getInstance();
+	}
+	
+	@Override
+	public ReceiptService getReceiptService() {
+		return ReceiptServiceImpl.getInstance();
 	}
 }

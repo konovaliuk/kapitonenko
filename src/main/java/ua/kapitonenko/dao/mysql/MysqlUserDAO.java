@@ -5,7 +5,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.UserDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.UsersTable;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.User;
 
 import java.sql.Connection;
 

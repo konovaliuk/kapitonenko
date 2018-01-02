@@ -5,7 +5,7 @@ import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.ProductLocaleDAO;
 import ua.kapitonenko.dao.tables.ProductLocaleTable;
-import ua.kapitonenko.domain.ProductLocale;
+import ua.kapitonenko.domain.entities.ProductLocale;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,16 +25,16 @@ public class ProductLocaleDAOTest extends BaseDAOTest {
 		super.setUp();
 	}
 	
-	@Test
-	public void test() throws Exception {
+	@Test(expected = UnsupportedOperationException.class)
+	public void testCRUD() throws Exception {
 		
 		connection.setAutoCommit(false);
 		
 		ProductLocaleDAO dao = Application.getDAOFactory().getProductLocaleDAO(connection);
 		
 		List<ProductLocale> entities = Arrays.asList(
-				new ProductLocale(1L, 1L, "name", "milk"),
-				new ProductLocale(1L, 2L, "name", "молоко")
+				new ProductLocale(PRODUCT_ID, 1L, "name", "milk"),
+				new ProductLocale(PRODUCT_ID, 2L, "name", "молоко")
 		);
 		
 		try {
@@ -46,19 +46,13 @@ public class ProductLocaleDAOTest extends BaseDAOTest {
 			assertThat(dao.findAll(), is(equalTo(entities)));
 			
 			ProductLocale updated = entities.get(0);
-			String value = "water";
-			updated.setPropertyValue(value);
+			final String VALUE = "water";
+			updated.setPropertyValue(VALUE);
 			assertThat(dao.update(updated), is(true));
-			assertThat(dao.findOne(updated.getId()).getPropertyValue(), is(equalTo(value)));
+			assertThat(dao.findOne(updated.getId()).getPropertyValue(), is(equalTo(VALUE)));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			
-			Exception exception = null;
-			try {
-				dao.delete(entities.get(1), USER_ID);
-			} catch (UnsupportedOperationException e) {
-				exception = e;
-			}
-			assertThat(exception, is(notNullValue()));
+			dao.delete(entities.get(1), USER_ID);
 			
 		} finally {
 			connection.rollback();

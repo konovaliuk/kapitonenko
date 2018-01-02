@@ -5,7 +5,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.TaxCategoryDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.TaxCategoriesTable;
-import ua.kapitonenko.domain.TaxCategory;
+import ua.kapitonenko.domain.entities.TaxCategory;
 
 import java.sql.Connection;
 

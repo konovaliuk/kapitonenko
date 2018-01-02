@@ -7,7 +7,7 @@ import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.CashboxDAO;
 import ua.kapitonenko.dao.tables.CashboxesTable;
-import ua.kapitonenko.domain.Cashbox;
+import ua.kapitonenko.domain.entities.Cashbox;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class CashboxDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void test() throws Exception {
+	public void testCRUD() throws Exception {
 		
 		connection.setAutoCommit(false);
 		
@@ -51,10 +51,10 @@ public class CashboxDAOTest extends BaseDAOTest {
 			assertThat(dao.findAll(), is(equalTo(entities)));
 			
 			Cashbox updated = entities.get(0);
-			String fnNumber = "1111111111";
-			updated.setFnNumber(fnNumber);
+			final String FN_NUMBER = "1111111111";
+			updated.setFnNumber(FN_NUMBER);
 			assertThat(dao.update(updated), is(true));
-			assertThat(dao.findOne(updated.getId()).getFnNumber(), is(equalTo(fnNumber)));
+			assertThat(dao.findOne(updated.getId()).getFnNumber(), is(equalTo(FN_NUMBER)));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			
 			assertThat(dao.delete(updated, USER_ID), is(true));
@@ -73,12 +73,12 @@ public class CashboxDAOTest extends BaseDAOTest {
 	public void tearDown() throws Exception {
 		connection = TestConnectionPool.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
-			statement.execute("INSERT INTO cashboxes\n" +
-					                  "(fn_number, zn_number, make)\n" +
-					                  "VALUES\n" +
-					                  "  ('default', 'default', 'default'),\n" +
-					                  "  ('1010101010', 'AT2020202020', 'КРОХА'),\n" +
-					                  "  ('0123456789', '12345678910', 'Datecs');"
+			statement.execute("INSERT INTO cashboxes " +
+					                  "(id, fn_number, zn_number, make) " +
+					                  "VALUES " +
+					                  "  (1, 'default', 'default', 'default'), " +
+					                  "  (2, '1010101010', 'AT2020202020', 'КРОХА'), " +
+					                  "  (3, '0123456789', '12345678910', 'Datecs');"
 			);
 		} finally {
 			TestConnectionPool.getInstance().close(connection);

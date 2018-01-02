@@ -8,7 +8,7 @@ import ua.kapitonenko.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.controller.helpers.ViewHelper;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.User;
 import ua.kapitonenko.service.SettingsService;
 import ua.kapitonenko.service.UserService;
 

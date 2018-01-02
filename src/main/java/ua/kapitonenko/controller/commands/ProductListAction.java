@@ -7,7 +7,7 @@ import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
-import ua.kapitonenko.domain.Product;
+import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.service.ProductService;
 
 import javax.servlet.ServletException;

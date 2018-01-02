@@ -1,4 +1,4 @@
-<%--@elvariable id="user" type="ua.kapitonenko.domain.User"--%>
+<%--@elvariable id="user" type="ua.kapitonenko.domain.entities.User"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>

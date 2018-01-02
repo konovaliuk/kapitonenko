@@ -11,4 +11,6 @@ public class ProductsTable {
 	public static final String CREATED_BY = "created_by";
 	public static final String DELETED_AT = "deleted_at";
 	public static final String DELETED_BY = "deleted_by";
+	public static final String NAME_ID = "products.id";
+	
 }

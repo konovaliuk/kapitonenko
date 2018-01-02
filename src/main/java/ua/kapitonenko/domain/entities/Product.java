@@ -1,13 +1,18 @@
-package ua.kapitonenko.domain;
+package ua.kapitonenko.domain.entities;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.log4j.Logger;
+import ua.kapitonenko.Application;
+import ua.kapitonenko.controller.keys.Keys;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Product extends BaseEntity {
+	private static final Logger LOGGER = Logger.getLogger(Product.class);
 	
 	private Long unitId;
 	private BigDecimal price;
@@ -23,7 +28,11 @@ public class Product extends BaseEntity {
 	private User userCreatedBy;
 	private User userDeletedBy;
 	private List<ProductLocale> names;
+	private String name;
+	private BigDecimal cost;
 	
+	
+	private Long localeId = Application.getId(Application.DEFAULT_LOCALE);
 	
 	public Product() {
 	}
@@ -35,6 +44,30 @@ public class Product extends BaseEntity {
 		this.quantity = quantity;
 		this.createdBy = createdBy;
 	}
+	
+	public Long getLocaleId() {
+		return localeId;
+	}
+	
+	public void setLocaleId(Long localeId) {
+		this.localeId = localeId;
+	}
+	
+	public String getName() {
+		if (this.name == null && names != null && !names.isEmpty()) {
+			
+			return names.stream()
+					       .filter(pl -> pl.getLocaleId().equals(localeId) && pl.getPropertyName().equals(Keys.PRODUCT_NAME))
+					       .map(ProductLocale::getPropertyValue).collect(Collectors.joining());
+		}
+		
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	
 	public TaxCategory getTaxCategory() {
 		return taxCategory;
@@ -83,6 +116,21 @@ public class Product extends BaseEntity {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+	
+	public BigDecimal getCost() {
+		
+		this.cost = price.multiply(quantity).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		return this.cost;
+	}
+	
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+	
+	public BigDecimal getTax() {
+		return getCost().movePointLeft(2).multiply(taxCategory.getRate()).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+	}
+	
 	
 	public Long getTaxCategoryId() {
 		return this.taxCategoryId;
@@ -140,6 +188,10 @@ public class Product extends BaseEntity {
 		this.names = names;
 	}
 	
+	public void addQuantity(BigDecimal q) {
+		quantity = quantity.add(q);
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -153,7 +205,6 @@ public class Product extends BaseEntity {
 				       .append(unitId, product.unitId)
 				       .append(price, product.price)
 				       .append(taxCategoryId, product.taxCategoryId)
-				       .append(quantity, product.quantity)
 				       .isEquals();
 	}
 	
@@ -164,7 +215,6 @@ public class Product extends BaseEntity {
 				       .append(unitId)
 				       .append(price)
 				       .append(taxCategoryId)
-				       .append(quantity)
 				       .toHashCode();
 	}
 	
@@ -184,5 +234,5 @@ public class Product extends BaseEntity {
 				       .toString();
 	}
 	
-
+	
 }

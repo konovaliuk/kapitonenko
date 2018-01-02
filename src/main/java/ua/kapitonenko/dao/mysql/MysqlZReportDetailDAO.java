@@ -5,7 +5,7 @@ import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ZReportDetailDAO;
 import ua.kapitonenko.dao.tables.ZReportDetailsTable;
-import ua.kapitonenko.domain.ZReportDetail;
+import ua.kapitonenko.domain.entities.ZReportDetail;
 
 import java.sql.Connection;
 

@@ -7,7 +7,7 @@ import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.Validator;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
-import ua.kapitonenko.domain.*;
+import ua.kapitonenko.domain.entities.*;
 import ua.kapitonenko.service.ProductService;
 import ua.kapitonenko.service.SettingsService;
 
@@ -27,8 +27,6 @@ public class ProductCreateAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		
-		// Read params maybe save to session
 		
 		LOGGER.debug(request.paramsToString());
 		

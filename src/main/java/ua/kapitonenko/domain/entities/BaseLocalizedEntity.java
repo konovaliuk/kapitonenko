@@ -1,4 +1,4 @@
-package ua.kapitonenko.domain;
+package ua.kapitonenko.domain.entities;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -76,7 +76,6 @@ public abstract class BaseLocalizedEntity extends BaseEntity {
 				       .append(", name=").append(name)
 				       .append(", bundleName=").append(bundleName)
 				       .append(", bundleKey=").append(bundleKey)
-				       .append("}")
 				       .toString();
 	}
 }

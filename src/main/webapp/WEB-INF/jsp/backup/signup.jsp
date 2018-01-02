@@ -10,7 +10,7 @@
     <div class="container">
         <div class="col-md-4 content-center">
             <div class="card card-login card-plain">
-                <%--@elvariable id="view" type="ua.kapitonenko.controller.helpers.ViewHelper<ua.kapitonenko.domain.User>"--%>
+                <%--@elvariable id="view" type="ua.kapitonenko.controller.helpers.ViewHelper<ua.kapitonenko.domain.entities.User>"--%>
                 <form class="form" method="POST" action="${view.action}" autocomplete="off">
                     <div class="header header-primary text-center">
                         <div class="logo">

@@ -6,4 +6,6 @@ public interface ServiceFactory {
 	SettingsService getSettingsService();
 	
 	ProductService getProductService();
+	
+	ReceiptService getReceiptService();
 }

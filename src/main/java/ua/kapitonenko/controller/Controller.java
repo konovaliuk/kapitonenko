@@ -32,8 +32,6 @@ public class Controller extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		//LOGGER.debug(request.getSession().getAttribute(Keys.LOCALE));
-		
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		
 		try {

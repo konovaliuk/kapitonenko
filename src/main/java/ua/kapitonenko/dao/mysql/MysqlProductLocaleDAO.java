@@ -4,7 +4,7 @@ import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ProductLocaleDAO;
 import ua.kapitonenko.dao.tables.ProductLocaleTable;
-import ua.kapitonenko.domain.ProductLocale;
+import ua.kapitonenko.domain.entities.ProductLocale;
 
 import java.sql.Connection;
 import java.util.List;

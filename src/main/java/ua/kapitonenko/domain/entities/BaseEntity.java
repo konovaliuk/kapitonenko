@@ -1,6 +1,10 @@
-package ua.kapitonenko.domain;
+package ua.kapitonenko.domain.entities;
 
-public abstract class BaseEntity extends Model {
+import ua.kapitonenko.domain.Model;
+
+import java.io.Serializable;
+
+public abstract class BaseEntity extends Model implements Serializable {
 	
 	private Long id;
 	

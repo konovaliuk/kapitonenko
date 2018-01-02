@@ -7,7 +7,7 @@ import org.junit.Test;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.dao.interfaces.TaxCategoryDAO;
 import ua.kapitonenko.dao.tables.TaxCategoriesTable;
-import ua.kapitonenko.domain.TaxCategory;
+import ua.kapitonenko.domain.entities.TaxCategory;
 
 import java.math.BigDecimal;
 import java.sql.Statement;
@@ -30,8 +30,8 @@ public class TaxCategoryDAOTest extends BaseDAOTest {
 		super.truncateTable();
 	}
 	
-	@Test
-	public void test() throws Exception {
+	@Test(expected = UnsupportedOperationException.class)
+	public void testCRUD() throws Exception {
 		
 		connection.setAutoCommit(false);
 		
@@ -42,8 +42,6 @@ public class TaxCategoryDAOTest extends BaseDAOTest {
 				new TaxCategory(null, "nontaxable", "settings", "tax.2", new BigDecimal("0.0"))
 		);
 		
-		
-		
 		try {
 			assertThat(dao.insert(entities.get(0)), is(true));
 			assertThat(entities.get(0).getId(), is(notNullValue()));
@@ -53,19 +51,13 @@ public class TaxCategoryDAOTest extends BaseDAOTest {
 			assertThat(dao.findAll(), is(equalTo(entities)));
 			
 			TaxCategory updated = entities.get(0);
-			String key = "keys";
-			updated.setBundleKey(key);
+			final String BUNDLE_KEY = "key";
+			updated.setBundleKey(BUNDLE_KEY);
 			assertThat(dao.update(updated), is(true));
-			assertThat(dao.findOne(updated.getId()).getBundleKey(), is(equalTo(key)));
+			assertThat(dao.findOne(updated.getId()).getBundleKey(), is(equalTo(BUNDLE_KEY)));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			
-			Exception exception = null;
-			try {
-				dao.delete(entities.get(1), USER_ID);
-			} catch (UnsupportedOperationException e) {
-				exception = e;
-			}
-			assertThat(exception, is(notNullValue()));
+			dao.delete(entities.get(1), USER_ID);
 			
 		} finally {
 			connection.rollback();

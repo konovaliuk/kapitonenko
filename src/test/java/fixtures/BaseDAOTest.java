@@ -8,6 +8,16 @@ import java.sql.Statement;
 
 public abstract class BaseDAOTest {
 	protected static final Long USER_ID = 1L;
+	protected static final Long UNIT_1 = 1L;
+	protected static final Long UNIT_2 = 2L;
+	protected static final Long TAX_1 = 1L;
+	protected static final Long TAX_2 = 2L;
+	protected static final Long PRODUCT_ID = 1L;
+	protected static final Long USER_ROLE = 1L;
+	protected static final Long PAYMENT = 1L;
+	protected static final Long CASHBOX = 1L;
+	protected static final Long RECEIPT_TYPE = 1L;
+	protected static final Long RECEIPT_ID = 1L;
 	
 	protected Connection connection;
 	

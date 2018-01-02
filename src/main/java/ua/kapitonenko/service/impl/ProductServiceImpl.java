@@ -5,8 +5,8 @@ import ua.kapitonenko.Application;
 import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.dao.interfaces.*;
-import ua.kapitonenko.domain.Product;
-import ua.kapitonenko.domain.ProductLocale;
+import ua.kapitonenko.domain.entities.Product;
+import ua.kapitonenko.domain.entities.ProductLocale;
 import ua.kapitonenko.exceptions.DAOException;
 import ua.kapitonenko.service.ProductService;
 
@@ -58,28 +58,47 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public List<Product> getProductsList() {
-		Connection connection = null;
+		Connection connection = pool.getConnection();
 		try {
-			connection = pool.getConnection();
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
-			ProductLocaleDAO productLocaleDAO = Application.getDAOFactory().getProductLocaleDAO(connection);
-			TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);
-			UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection);
-			LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection);
-			
 			List<Product> products = productDAO.findAll();
 			products.forEach(product -> {
-				List<ProductLocale> lang = productLocaleDAO.findByProductAndKey(product.getId(), Keys.PRODUCT_NAME);
-				lang.forEach(pl -> pl.setLocale(localeDAO.findOne(pl.getLocaleId())));
-				product.setNames(lang);
-				product.setTaxCategory(taxCategoryDAO.findOne(product.getTaxCategoryId()));
-				product.setUnit(unitDAO.findOne(product.getUnitId()));
+				setReferences(product, connection);
 			});
 			
 			return products;
 		} finally {
 			pool.close(connection);
 		}
+	}
+	
+	@Override
+	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
+		Connection connection = pool.getConnection();
+		try {
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			List<Product> products = productDAO.findByIdOrName(localeId, productId, name);
+			products.forEach(product -> {
+				setReferences(product, connection);
+			});
+			
+			return products;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	private void setReferences(Product product, Connection connection) {
+		ProductLocaleDAO productLocaleDAO = Application.getDAOFactory().getProductLocaleDAO(connection);
+		TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);
+		UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection);
+		LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection);
+		
+		List<ProductLocale> lang = productLocaleDAO.findByProductAndKey(product.getId(), Keys.PRODUCT_NAME);
+		lang.forEach(pl -> pl.setLocale(localeDAO.findOne(pl.getLocaleId())));
+		product.setNames(lang);
+		product.setTaxCategory(taxCategoryDAO.findOne(product.getTaxCategoryId()));
+		product.setUnit(unitDAO.findOne(product.getUnitId()));
 	}
 	
 }

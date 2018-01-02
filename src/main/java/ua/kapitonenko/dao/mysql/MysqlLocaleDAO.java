@@ -6,7 +6,7 @@ import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.LocaleDAO;
 import ua.kapitonenko.dao.tables.BaseTable;
 import ua.kapitonenko.dao.tables.LocaleTable;
-import ua.kapitonenko.domain.Locale;
+import ua.kapitonenko.domain.entities.Locale;
 
 import java.sql.Connection;
 

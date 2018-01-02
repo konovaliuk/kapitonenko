@@ -7,11 +7,29 @@ import ua.kapitonenko.dao.mysql.MysqlDaoFactory;
 import ua.kapitonenko.service.ServiceFactory;
 import ua.kapitonenko.service.impl.ServiceFactoryImpl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Application {
 	
-	public static String defaultLocale = "en_US";
-	public static String messageBundle = "messages";
-	public static String settingsBundle = "settings";
+	public static final String DEFAULT_LOCALE = "en_US";
+	public static final String MESSAGE_BUNDLE = "messages";
+	public static final String SETTINGS_BUNDLE = "settings";
+	
+	public static final String RECEIPT_TYPE_FISCAL = "receipt.fiscal";
+	public static final String RECEIPT_TYPE_RETURN = "receipt.return";
+	public static final String PAYMENT_TYPE_UNDEFINED = "payment.undefined";
+	public static final String COMPANY = "company";
+	
+	private static Map<String, Long> ids = new HashMap<>();
+	
+	static {
+		ids.put(RECEIPT_TYPE_FISCAL, 1L);
+		ids.put(RECEIPT_TYPE_RETURN, 2L);
+		ids.put(PAYMENT_TYPE_UNDEFINED, 1L);
+		ids.put(COMPANY, 1L);
+		ids.put(DEFAULT_LOCALE, 1L);
+	}
 	
 	public static DAOFactory getDAOFactory() {
 		return new MysqlDaoFactory();
@@ -24,4 +42,9 @@ public class Application {
 	public static ConnectionPool getConnectionPool() {
 		return DataSourceConnectionPool.getInstance();
 	}
+	
+	public static Long getId(String key) {
+		return ids.get(key);
+	}
+	
 }

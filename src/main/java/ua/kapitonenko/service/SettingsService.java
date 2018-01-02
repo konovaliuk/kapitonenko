@@ -1,9 +1,6 @@
 package ua.kapitonenko.service;
 
-import ua.kapitonenko.domain.Cashbox;
-import ua.kapitonenko.domain.Locale;
-import ua.kapitonenko.domain.TaxCategory;
-import ua.kapitonenko.domain.Unit;
+import ua.kapitonenko.domain.entities.*;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +23,8 @@ public interface SettingsService {
 	List<String> getSupportedLanguages();
 	
 	Map<String, Locale> getSupportedLocales();
+	
+	Company findCompany(Long id);
+	
+	List<PaymentType> getPaymentTypes();
 }

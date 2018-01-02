@@ -82,6 +82,12 @@ button, input, optgroup, select, textarea {
     position: absolute;
     z-index: 100;
     width: 100%;
+    font-size: 16px;
+}
+
+.alert .close {
+    padding-top: 8px;
+    cursor: pointer;
 }
 
 .alert.alert-danger {

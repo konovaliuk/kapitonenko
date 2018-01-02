@@ -3,7 +3,7 @@ package ua.kapitonenko.service.impl;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.dao.interfaces.UserDAO;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.User;
 import ua.kapitonenko.service.UserService;
 
 import java.sql.Connection;

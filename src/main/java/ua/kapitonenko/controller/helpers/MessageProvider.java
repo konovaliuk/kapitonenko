@@ -12,7 +12,7 @@ import static ua.kapitonenko.controller.keys.Keys.*;
 
 public class MessageProvider {
 	private static final Logger LOGGER = Logger.getLogger(MessageProvider.class);
-	private static final String BUNDLE_NAME = Application.messageBundle;
+	private static final String BUNDLE_NAME = Application.MESSAGE_BUNDLE;
 	private ResourceBundle resourceBundle;
 	private static Map<String, MessageProvider> providers = new HashMap<>();
 	private Locale locale;
@@ -35,6 +35,14 @@ public class MessageProvider {
 	
 	public String notEmptyMessage(String attribute) {
 		return String.format(getProperty(ERROR_EMPTY), getProperty(attribute));
+	}
+	
+	public String notEmptyAnyMessage(String attribute) {
+		return String.format(getProperty(ERROR_ALL_REQUIRED), getProperty(attribute));
+	}
+	
+	public String notEmptyOneMessage(String first, String second) {
+		return String.format(getProperty(ERROR_ONE_EMPTY), getProperty(first), getProperty(second));
 	}
 	
 	public String notEmptyLanguagesMessage(String attribute) {
@@ -64,5 +72,9 @@ public class MessageProvider {
 	
 	public Locale getLocale() {
 		return locale;
+	}
+	
+	public String decimalValidMessage(String label, int precision) {
+		return String.format(getProperty(ERROR_DECIMAL_FORMAT), getProperty(label), precision);
 	}
 }

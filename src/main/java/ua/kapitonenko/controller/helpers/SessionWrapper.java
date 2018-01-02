@@ -3,7 +3,9 @@ package ua.kapitonenko.controller.helpers;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.controller.keys.Keys;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.Cashbox;
+import ua.kapitonenko.domain.entities.Company;
+import ua.kapitonenko.domain.entities.User;
 
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
@@ -17,6 +19,14 @@ public class SessionWrapper {
 	
 	public SessionWrapper(HttpSession session) {
 		this.session = session;
+	}
+	
+	public void setCompany(Company company) {
+		session.setAttribute(Keys.COMPANY, company);
+	}
+	
+	public void getCompany() {
+		session.getAttribute(Keys.COMPANY);
 	}
 	
 	public void setFlash(String status, String message) {
@@ -38,6 +48,10 @@ public class SessionWrapper {
 	
 	public String getLocaleString() {
 		return (String) session.getAttribute(Keys.LOCALE);
+	}
+	
+	public Long getLocaleId() {
+		return (Long) session.getAttribute(Keys.LOCALE_ID);
 	}
 	
 	public Locale getLocale() {
@@ -65,9 +79,7 @@ public class SessionWrapper {
 	}
 	
 	public void logout(){
-		// TODO invalidate session
-		//session.invalidate();
-		session.removeAttribute(Keys.USER);
+		session.invalidate();
 	}
 	
 	public void set(String name, Object value) {
@@ -85,5 +97,16 @@ public class SessionWrapper {
 	public User getUser(){
 		return (User) session.getAttribute(Keys.USER);
 	}
-
+	
+	public Cashbox getCashbox() {
+		return (Cashbox) session.getAttribute(Keys.CASHBOX);
+	}
+	
+	public void setCashbox(Cashbox cashbox) {
+		session.setAttribute(Keys.CASHBOX, cashbox);
+	}
+	
+	public void remove(String key) {
+		session.removeAttribute(key);
+	}
 }

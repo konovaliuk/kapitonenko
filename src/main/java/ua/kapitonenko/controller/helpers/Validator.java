@@ -6,8 +6,8 @@ import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.controller.keys.Keys;
-import ua.kapitonenko.domain.BaseEntity;
 import ua.kapitonenko.domain.Model;
+import ua.kapitonenko.domain.entities.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 public class Validator {
 	private static final Logger LOGGER = Logger.getLogger(Validator.class);
 	boolean valid = true;
+	boolean allValid = true;
+	String labelAllValid;
 	private MessageProvider messageManager;
 	private AlertContainer alertContainer;
 	
@@ -41,9 +43,26 @@ public class Validator {
 		return this;
 	}
 	
+	public Validator requiredAll(Object value, String label) {
+		if (value == null) {
+			allValid = false;
+			valid = false;
+			labelAllValid = label;
+		}
+		return this;
+	}
+	
 	public Validator required(Object value, String label) {
 		if (value == null) {
 			alertContainer.addMessage(messageManager.notEmptyMessage(label));
+			valid = false;
+		}
+		return this;
+	}
+	
+	public Validator required(List<? extends Model> list, String label) {
+		if (list == null || list.isEmpty()) {
+			alertContainer.addMessage(messageManager.getProperty(label));
 			valid = false;
 		}
 		return this;
@@ -53,6 +72,15 @@ public class Validator {
 		LOGGER.debug(Arrays.toString(values));
 		if (values == null || Stream.of(values).anyMatch(StringUtils::isEmpty)) {
 			alertContainer.addMessage(messageManager.notEmptyLanguagesMessage(label));
+			valid = false;
+		}
+		return this;
+	}
+	
+	public Validator requiredOne(Long first, String firstLabel, String second, String secondLabel) {
+		if (first == null && StringUtils.isEmpty(second)) {
+			LOGGER.debug("required one");
+			alertContainer.addMessage(messageManager.notEmptyOneMessage(firstLabel, secondLabel));
 			valid = false;
 		}
 		return this;
@@ -92,6 +120,9 @@ public class Validator {
 	}
 	
 	public boolean isValid() {
+		if (!allValid) {
+			alertContainer.addMessage(messageManager.notEmptyAnyMessage(labelAllValid));
+		}
 		if (!valid) {
 			alertContainer.setMessageType(Keys.ALERT_CLASS_DANGER);
 		}
@@ -109,24 +140,23 @@ public class Validator {
 	public BigDecimal parseDecimal(String value, int precision, String label) {
 		BigDecimalValidator validator = BigDecimalValidator.getInstance();
 		BigDecimal decimal = validator.validate(value, messageManager.getLocale());
-		if (decimal == null){
-			decimal = validator.validate(value, new java.util.Locale(Application.defaultLocale));
+		if (decimal == null) {
+			decimal = validator.validate(value, new java.util.Locale(Application.DEFAULT_LOCALE));
 		}
-		
-		
 		
 		LOGGER.debug(messageManager.getLocale().toString());
 		LOGGER.debug(decimal + " " + label);
 		
-		if (decimal != null){
+		if (decimal != null) {
 			BigDecimal rounded = decimal.setScale(precision, BigDecimal.ROUND_CEILING);
-			if (decimal.compareTo(rounded) < 0){
-				alertContainer.addMessage(label + " must have " + precision + " decimal places or less");
+			if (decimal.compareTo(rounded) < 0) {
+				alertContainer.addMessage(messageManager.decimalValidMessage(label, precision));
 				valid = false;
 			}
 		}
 		
 		return decimal;
-		
 	}
+	
+	
 }

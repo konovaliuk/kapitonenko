@@ -8,7 +8,9 @@ import ua.kapitonenko.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.controller.helpers.ViewHelper;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
-import ua.kapitonenko.domain.User;
+import ua.kapitonenko.domain.entities.Cashbox;
+import ua.kapitonenko.domain.entities.Company;
+import ua.kapitonenko.domain.entities.User;
 import ua.kapitonenko.service.SettingsService;
 import ua.kapitonenko.service.UserService;
 
@@ -77,7 +79,11 @@ public class LoginAction implements ActionCommand {
 			return false;
 		}
 		
-		request.getSession().set(CASHBOX, request.getView().getSetting(CASHBOX));
+		//TODO change set cashbox
+		Cashbox cashbox = settingsService.findCashbox((Long) request.getView().getSetting(CASHBOX));
+		Company company = settingsService.findCompany(Application.getId(Application.COMPANY));
+		request.getSession().setCompany(company);
+		request.getSession().setCashbox(cashbox);
 		request.getSession().login(result);
 		return true;
 	}

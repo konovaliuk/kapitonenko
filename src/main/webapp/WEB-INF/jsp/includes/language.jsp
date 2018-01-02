@@ -2,7 +2,7 @@
 
 <footer class="footer">
     <div class="container">
-        <div class="lang">
+        <div class="lang pull-left">
             <form id="lang-form" class="form" method="POST" action="/language" autocomplete="off">
                 <ul class="list-inline">
                     <li><fmt:message key="${Keys.LANGUAGES}" bundle="${msg}"/>:</li>
@@ -17,5 +17,13 @@
                 </ul>
             </form>
         </div>
+        <%--@elvariable id="company" type="ua.kapitonenko.domain.entities.Company"--%>
+        <c:if test="${company != null}">
+            <p class="company pull-right mb-0">
+                <fmt:message key="${company.bundleKeyName}" bundle="${settings}"/>&nbsp;
+                <fmt:message key="${company.bundleKeyAddress}" bundle="${settings}"/>&nbsp;
+                <fmt:message key="${Keys.COMPANY_PN}" bundle="${msg}"/>&nbsp;${company.pnNumber}
+            </p>
+        </c:if>
     </div>
 </footer>
