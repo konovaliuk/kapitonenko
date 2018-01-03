@@ -12,6 +12,7 @@ import static ua.kapitonenko.controller.keys.Keys.*;
 
 public class MessageProvider {
 	private static final Logger LOGGER = Logger.getLogger(MessageProvider.class);
+	
 	private static final String BUNDLE_NAME = Application.MESSAGE_BUNDLE;
 	private ResourceBundle resourceBundle;
 	private static Map<String, MessageProvider> providers = new HashMap<>();

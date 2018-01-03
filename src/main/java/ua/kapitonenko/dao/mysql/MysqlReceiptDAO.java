@@ -87,6 +87,4 @@ public class MysqlReceiptDAO extends BaseDAO<Receipt> implements ReceiptDAO {
 			return row;
 		};
 	}
-	
-	
 }

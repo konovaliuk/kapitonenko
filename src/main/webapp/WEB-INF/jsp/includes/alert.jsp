@@ -1,11 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--@elvariable id="view" type="ua.kapitonenko.controller.helpers.ViewHelper"--%>
-<c:if test="${view.hasMessages}">
-    <div class="alert alert-${view.messageType} clearfix" role="alert">
+<%--@elvariable id="alert" type="ua.kapitonenko.controller.helpers.AlertContainer"--%>
+
+<c:if test="${not empty alert && alert.hasMessages}">
+    <div class="alert alert-${alert.messageType} clearfix" role="alert">
         <div class="container">
             <div class="message-body">
                 <ul class="list-unstyled">
-                    <c:forEach var="message" items="${view.messageList}">
+                    <c:forEach var="message" items="${alert.messageList}">
                         <li>${message}</li>
                     </c:forEach>
                 </ul>

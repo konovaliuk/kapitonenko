@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
-import ua.kapitonenko.controller.helpers.Validator;
+import ua.kapitonenko.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.domain.entities.*;
@@ -52,10 +52,10 @@ public class ProductCreateAction implements ActionCommand {
 			String tax = request.getParameter(PRODUCT_TAX);
 			
 			
-			Validator validator = new Validator(request.getMessageManager(), request.getAlert());
+			ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
 			
-			Long unitId = Validator.parseId(unit);
-			Long taxId = Validator.parseId(tax);
+			Long unitId = ValidationBuilder.parseId(unit);
+			Long taxId = ValidationBuilder.parseId(tax);
 			BigDecimal priceValue = validator.parseDecimal(price, 2, PRODUCT_PRICE);
 			BigDecimal quantityValue = validator.parseDecimal(quantity, 3, PRODUCT_QUANTITY);
 			
@@ -84,12 +84,11 @@ public class ProductCreateAction implements ActionCommand {
 				return request.redirect(Routes.PRODUCTS);
 			}
 		}
-		
-		request.setAttribute(ACTION, Routes.PRODUCTS_CREATE);
+
 		request.setAttribute(PRODUCT, product);
 		request.setAttribute(TAX_CAT_LIST, taxes);
 		request.setAttribute(UNIT_LIST, units);
 		
-		return request.forward(Pages.PRODUCT_FORM);
+		return request.forward(Pages.PRODUCT_FORM, Routes.PRODUCTS_CREATE);
 	}
 }

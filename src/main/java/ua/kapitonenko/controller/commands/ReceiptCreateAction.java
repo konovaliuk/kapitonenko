@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.Application;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
-import ua.kapitonenko.controller.helpers.Validator;
+import ua.kapitonenko.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
@@ -39,7 +39,7 @@ public class ReceiptCreateAction implements ActionCommand {
 		
 		if (calculator == null) {
 			LOGGER.debug("new calculator created");
-			Cashbox cashbox = request.getSession().getCashbox();
+			Cashbox cashbox = (Cashbox) request.getSession().get(CASHBOX);
 			User user = request.getSession().getUser();
 			Receipt receipt = new Receipt(null,
 					                             cashbox.getId(),
@@ -52,12 +52,12 @@ public class ReceiptCreateAction implements ActionCommand {
 			calculator.setCategories(settingsService.getTaxCatList());
 			calculator.setPaymentTypes(paymentTypes);
 			
-			receiptService.createReceipt(calculator);
+			receiptService.create(calculator);
 			request.getSession().set(R_CALCULATOR, calculator);
 		}
 		
 		calculator.setLocalId(localeId);
-		Validator validator = new Validator(request.getMessageManager(), request.getAlert());
+		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
 		
 		if (request.isPost()) {
 			
@@ -66,9 +66,9 @@ public class ReceiptCreateAction implements ActionCommand {
 			String product = request.getParameter(NEW_PRODUCT_ID);
 			String name = request.getParameter(NEW_PRODUCT_NAME);
 			String payment = request.getParameter(PAYMENT);
-			Long productId = Validator.parseId(product);
+			Long productId = ValidationBuilder.parseId(product);
 			BigDecimal quantityValue = validator.parseDecimal(quantity, 3, PRODUCT_QUANTITY);
-			Long paymentId = Validator.parseId(payment);
+			Long paymentId = ValidationBuilder.parseId(payment);
 			
 			if (paymentId != null) {
 				calculator.getReceipt().setPaymentTypeId(paymentId);
@@ -117,7 +117,7 @@ public class ReceiptCreateAction implements ActionCommand {
 				
 			} else if (command.equals(Keys.DELETE)) {
 				String toDelete = request.getParameter(PRODUCT_ID);
-				Long deleteId = Validator.parseId(toDelete);
+				Long deleteId = ValidationBuilder.parseId(toDelete);
 				if (deleteId != null) {
 					calculator.remove(deleteId);
 				}
@@ -130,24 +130,21 @@ public class ReceiptCreateAction implements ActionCommand {
 				if (valid) {
 					LOGGER.debug(valid);
 					calculator.getReceipt().setCancelled(false);
-					if (receiptService.updateReceipt(calculator)) {
+					if (receiptService.update(calculator)) {
 						request.getSession().remove(R_CALCULATOR);
 						return request.goHome();
 					}
 					
 				}
 			} else if (command.equals(Keys.CANCEL)) {
-				if (receiptService.updateReceipt(calculator)) {
+				if (receiptService.update(calculator)) {
 					request.getSession().remove(R_CALCULATOR);
 					return request.goHome();
 				}
 			}
 		}
 		
-		
-		request.setAttribute(ACTION, Routes.RECEIPT_CREATE);
-		
-		return request.forward(Pages.RECEIPT_FORM);
+		return request.forward(Pages.RECEIPT_FORM, Routes.RECEIPT_CREATE);
 	}
 }
 

@@ -19,6 +19,7 @@ public class SettingsServiceImpl implements SettingsService {
 	private static SettingsServiceImpl instance = new SettingsServiceImpl();
 	private ConnectionPool pool = Application.getConnectionPool();
 	
+	// TODO add to cache
 	private HashMap<String, Object> cache = new HashMap<>();
 	
 	private SettingsServiceImpl() {
@@ -27,16 +28,15 @@ public class SettingsServiceImpl implements SettingsService {
 	public static SettingsServiceImpl getInstance() {
 		return instance;
 	}
-	// TODO add to cache
+	
 	@Override
-	public Map<Long, String> getRolesMap() {
+	public List<UserRole> getRoleList() {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
 			UserRoleDAO roleDAO = Application.getDAOFactory().getUserRoleDAO(connection);
 			List<UserRole> list = roleDAO.findAll();
-			return list.stream().collect(
-					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
+			return list;
 		} finally {
 			pool.close(connection);
 		}
@@ -118,7 +118,7 @@ public class SettingsServiceImpl implements SettingsService {
 			LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection);
 			
 			List<Locale> list = localeDAO.findAll();
-
+			
 			return list;
 		} finally {
 			pool.close(connection);

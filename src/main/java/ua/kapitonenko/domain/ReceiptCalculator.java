@@ -1,27 +1,29 @@
 package ua.kapitonenko.domain;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.Application;
 import ua.kapitonenko.domain.entities.PaymentType;
 import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.domain.entities.Receipt;
 import ua.kapitonenko.domain.entities.TaxCategory;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReceiptCalculator {
+public class ReceiptCalculator implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger(ReceiptCalculator.class);
-	List<PaymentType> paymentTypes;
+	
 	private Receipt receipt;
 	private List<Product> products = new ArrayList<>();
 	private Long localId;
+	
+	private List<PaymentType> paymentTypes;
 	private List<TaxCategory> categories;
 	private Map<TaxCategory, BigDecimal> taxByCategory = new HashMap<>();
-	private BigDecimal totalCost;
-	private BigDecimal taxAmount;
 	
 	
 	public Receipt getReceipt() {
@@ -45,6 +47,10 @@ public class ReceiptCalculator {
 	
 	public List<Product> getProducts() {
 		return products;
+	}
+	
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 	
 	public void addProduct(Product product) {
@@ -80,17 +86,10 @@ public class ReceiptCalculator {
 		
 	}
 	
-	public void setTotalCost(BigDecimal totalCost) {
-		this.totalCost = totalCost;
-	}
-	
 	public BigDecimal getTaxAmount() {
-		return taxByCategory.values().stream()
-				       .reduce(BigDecimal.ZERO, BigDecimal::add);
-	}
-	
-	public void setTaxAmount(BigDecimal taxAmount) {
-		this.taxAmount = taxAmount;
+		return products.stream()
+				       .map(Product::getTax)
+				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
 	}
 	
 	public List<PaymentType> getPaymentTypes() {
@@ -109,6 +108,10 @@ public class ReceiptCalculator {
 			}
 		}
 		products.remove(found);
+	}
+	
+	public boolean isReturnVisible() {
+		return !receipt.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN));
 	}
 	
 	

@@ -13,8 +13,10 @@ public class Keys {
 	public static final String SAVE = "button.save";
 	public static final String ADD = "button.add";
 	public static final String CANCEL = "button.cancel";
+	public static final String CLOSE = "button.close";
 	public static final String UPDATE = "button.update";
 	public static final String DELETE = "button.delete";
+	public static final String RETURN = "button.return";
 	
 	
 	public static final String LOGIN_FIRST = "guide.login.first";
@@ -67,6 +69,7 @@ public class Keys {
 	public static final String PASSWORD = "user.password";
 	public static final String CONFIRM_PASS = "user.confirm";
 	public static final String ROLE = "user.role";
+	public static final String ROLE_LIST = "roleList";
 	
 	public static final String SUCCESS_SIGN_UP = "success.signup";
 	public static final String VIEW = "view";
@@ -75,6 +78,7 @@ public class Keys {
 	public static final String UNIT_LIST = "unitList";
 	
 	public static final String ACTION = "action";
+	public static final String LINK = "link";
 	public static final String BUTTON = "button";
 
 	public static final String ALERT = "alert";
@@ -96,6 +100,16 @@ public class Keys {
 	public static final String COMPANY = "company";
 	public static final String COMPANY_PN = "company.pn";
 	public static final String PAYMENT = "payment";
+	
+	public static final String STATUS = "status";
+	public static final String NUMBER_ARTICLES = "articles.number";
+	public static final String CREATED_AT = "created.at";
+	public static final String CANCELLED = "status.cancelled";
+	
+	public static final String NO_PAGES = "noOfPages";
+	public static final String CUR_PAGE = "currentPage";
+
+	
 
 
 

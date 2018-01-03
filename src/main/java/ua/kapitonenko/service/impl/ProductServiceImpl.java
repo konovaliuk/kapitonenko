@@ -88,6 +88,22 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 	
+	@Override
+	public List<Product> findAllByReceiptId(Long id) {
+		Connection connection = pool.getConnection();
+		try {
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			List<Product> products = productDAO.findAllByReceiptId(id);
+			products.forEach(product -> {
+				setReferences(product, connection);
+			});
+			
+			return products;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
 	private void setReferences(Product product, Connection connection) {
 		ProductLocaleDAO productLocaleDAO = Application.getDAOFactory().getProductLocaleDAO(connection);
 		TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);

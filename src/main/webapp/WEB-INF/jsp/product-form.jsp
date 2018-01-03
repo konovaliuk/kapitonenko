@@ -1,50 +1,19 @@
 <%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.controller.keys.Keys" %>
 <!DOCTYPE html>
 <html>
+
 <%@ include file="includes/inner-header.jsp" %>
 <body>
-<%--@elvariable id="alert" type="ua.kapitonenko.controller.helpers.AlertContainer"--%>
-<c:if test="${not empty alert && alert.hasMessages}">
-    <div class="alert alert-${alert.messageType} clearfix" role="alert">
-        <div class="container">
-            <div class="message-body">
-                <ul class="list-unstyled">
-                    <c:forEach var="message" items="${alert.messageList}">
-                        <li>${message}</li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </div>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">
-				<i class="now-ui-icons ui-1_simple-remove"></i>
-			</span>
-        </button>
-    </div>
-</c:if>
+<%@ include file="includes/alert.jsp" %>
 <%@ include file="includes/logout.jsp" %>
+
 <main role="main">
     <div class="container">
         <div class="card">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs pull-left">
-                    <c:set var="productList" value="/products"/>
-                    <c:set var="productForm" value="/create-product"/>
-                    <c:set var="productListClass" value="${action eq productList ? 'active' : ''}"/>
-                    <c:set var="productFormClass" value="${action eq productForm ? 'active' : ''}"/>
-                    <li class="nav-item">
-                        <a class="nav-link ${productListClass}" href="${productList}"><fmt:message
-                                key="${Keys.PRODUCT_LIST}"
-                                bundle="${msg}"/></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ${productFormClass}" href="${productForm}"><fmt:message
-                                key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></a>
-                    </li>
-                </ul>
-            </div>
+
+            <%@ include file="includes/navigation.jsp" %>
+
             <div class="card-body">
                 <h5 class="card-title"><fmt:message key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></h5>
                 <form class="form" method="POST" action="${action}" autocomplete="off">
@@ -100,7 +69,7 @@
                             <button type="submit" class="btn btn-primary btn-block"><fmt:message key="${Keys.SAVE}" bundle="${msg}"/></button>
                         </div>
                         <div class="col-xs-6 col-md-2">
-                            <button type="submit" class="btn btn-secondary btn-block"><fmt:message key="${Keys.CANCEL}"
+                            <button type="submit" class="btn btn-secondary btn-block"><fmt:message key="${Keys.CLOSE}"
                                                                                                    bundle="${msg}"/></button>
                         </div>
                     </div>
@@ -110,7 +79,6 @@
         </div>
     </div>
 </main>
-<%@ include file="includes/language.jsp" %>
 <%@ include file="includes/footer.jsp" %>
 </body>
 </html>

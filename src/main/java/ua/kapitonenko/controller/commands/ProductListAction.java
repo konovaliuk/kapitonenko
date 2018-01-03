@@ -22,7 +22,6 @@ public class ProductListAction implements ActionCommand {
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		List<Product> list = productService.getProductsList();
 		request.setAttribute(Keys.PRODUCTS, list);
-		request.setAttribute(Keys.ACTION, Routes.PRODUCTS);
-		return request.forward(Pages.PRODUCT_LIST);
+		return request.forward(Pages.PRODUCT_LIST, Routes.PRODUCTS);
 	}
 }

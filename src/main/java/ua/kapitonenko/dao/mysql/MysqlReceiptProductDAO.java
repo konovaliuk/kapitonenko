@@ -7,6 +7,7 @@ import ua.kapitonenko.dao.tables.ReceiptProductsTable;
 import ua.kapitonenko.domain.entities.ReceiptProduct;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class MysqlReceiptProductDAO extends BaseDAO<ReceiptProduct> implements ReceiptProductDAO {
 	private static final String UPDATE = "UPDATE " +
@@ -77,5 +78,15 @@ public class MysqlReceiptProductDAO extends BaseDAO<ReceiptProduct> implements R
 			row.setQuantity(rs.getBigDecimal(ReceiptProductsTable.QUANTITY));
 			return row;
 		};
+	}
+	
+	
+	@Override
+	public List<ReceiptProduct> findAllByReceiptId(Long receiptId) {
+		return getList(getSelectAllQuery() + " WHERE " + ReceiptProductsTable.RECEIPT_ID + "=?",
+				ps -> {
+					ps.setLong(1, receiptId);
+					
+				}, getResultSetExtractor());
 	}
 }

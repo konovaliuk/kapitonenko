@@ -14,14 +14,15 @@ public class LocaleFilter implements Filter {
 	private static final Logger LOGGER = Logger.getLogger(LocaleFilter.class);
 	
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		
-		session.setAttribute(Application.MESSAGE_BUNDLE, Application.MESSAGE_BUNDLE);
-		session.setAttribute(Application.SETTINGS_BUNDLE, Application.SETTINGS_BUNDLE);
+		session.setAttribute(Application.MESSAGE_BUNDLE, Application.getParam(Application.MESSAGE_BUNDLE));
+		session.setAttribute(Application.SETTINGS_BUNDLE, Application.getParam(Application.SETTINGS_BUNDLE));
 		
 		if (session.getAttribute(Keys.LOCALE) == null) {
-			session.setAttribute(Keys.LOCALE, Application.DEFAULT_LOCALE);
+			session.setAttribute(Keys.LOCALE, Application.getParam(Application.DEFAULT_LOCALE));
 			session.setAttribute(Keys.LOCALE_ID, Application.getId(Application.DEFAULT_LOCALE));
 		}
 		

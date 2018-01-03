@@ -20,12 +20,13 @@ public class UserServiceImpl implements UserService {
 		return instance;
 	}
 	
-	
 	@Override
 	public User createAccount(User user) {
 		Connection connection = null;
 		try {
-			user.setActive(true);
+			if (Application.isAutoActivationEnabled()) {
+				user.setActive(true);
+			}
 			connection = pool.getConnection();
 			UserDAO userDAO = Application.getDAOFactory().getUserDAO(connection);
 			if (userDAO.insert(user)) {
@@ -60,5 +61,4 @@ public class UserServiceImpl implements UserService {
 			pool.close(connection);
 		}
 	}
-	
 }

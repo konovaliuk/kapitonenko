@@ -68,7 +68,6 @@ public class Product extends BaseEntity {
 		this.name = name;
 	}
 	
-	
 	public TaxCategory getTaxCategory() {
 		return taxCategory;
 	}
@@ -128,7 +127,9 @@ public class Product extends BaseEntity {
 	}
 	
 	public BigDecimal getTax() {
-		return getCost().movePointLeft(2).multiply(taxCategory.getRate()).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		return getCost().movePointLeft(2)
+				       .multiply(taxCategory.getRate())
+				       .setScale(2, BigDecimal.ROUND_HALF_EVEN);
 	}
 	
 	

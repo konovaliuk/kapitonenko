@@ -12,6 +12,8 @@ public class Routes {
 	public static final String PRODUCTS_DELETE = "/delete-product";
 	public static final String RECEIPTS = "/receipts";
 	public static final String RECEIPT_CREATE = "/create-receipt";
+	public static final String RECEIPT_CANCEL = "/cancel-receipt";
+	public static final String RECEIPT_RETURN = "/return-receipt";
 	
 	public static final String HOME = "/";
 	

@@ -37,5 +37,4 @@ public class AlertContainer implements Serializable {
 	public boolean isHasMessages() {
 		return !this.messageList.isEmpty();
 	}
-	
 }

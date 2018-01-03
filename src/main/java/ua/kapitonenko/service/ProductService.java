@@ -10,4 +10,6 @@ public interface ProductService {
 	List<Product> getProductsList();
 	
 	List<Product> findByIdOrName(Long localeId, Long productId, String name);
+	
+	List<Product> findAllByReceiptId(Long id);
 }

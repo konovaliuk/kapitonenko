@@ -1,17 +1,21 @@
 package ua.kapitonenko.dao.mysql;
 
+import org.apache.log4j.Logger;
 import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ProductDAO;
 import ua.kapitonenko.dao.tables.ProductLocaleTable;
 import ua.kapitonenko.dao.tables.ProductsTable;
+import ua.kapitonenko.dao.tables.ReceiptProductsTable;
 import ua.kapitonenko.domain.entities.Product;
 
 import java.sql.Connection;
 import java.util.List;
 
 public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
+	private static final Logger LOGGER = Logger.getLogger(MysqlProductDAO.class);
+	
 	private static final String UPDATE = "UPDATE " +
 			                                     ProductsTable.NAME + " SET " +
 			                                     ProductsTable.UNIT + " = ?, " +
@@ -46,6 +50,13 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			                                                   ProductsTable.NAME_ID + " = ?)" +
 			                                                   AND_NOT_DELETED + " GROUP BY " +
 			                                                   ProductsTable.NAME_ID;
+	
+	private static final String SELECT_BY_RECEIPT_ID = "SELECT * FROM " +
+			                                                   ReceiptProductsTable.NAME + " JOIN " +
+			                                                   ProductsTable.NAME + " ON " +
+			                                                   ProductsTable.NAME_ID + " = " +
+			                                                   ReceiptProductsTable.NAME_PRODUCT_ID + " WHERE " +
+			                                                   ReceiptProductsTable.RECEIPT_ID + " = ?";
 	
 	
 	MysqlProductDAO(Connection connection) {
@@ -134,6 +145,14 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			ps.setLong(2, localeId);
 			ps.setString(3, name);
 			ps.setLong(4, productId);
+			
+		}, getResultSetExtractor());
+	}
+	
+	@Override
+	public List<Product> findAllByReceiptId(Long receiptId) {
+		return getList(SELECT_BY_RECEIPT_ID, ps -> {
+			ps.setLong(1, receiptId);
 			
 		}, getResultSetExtractor());
 	}

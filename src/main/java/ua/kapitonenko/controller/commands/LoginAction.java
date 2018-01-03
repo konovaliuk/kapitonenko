@@ -5,7 +5,6 @@ import ua.kapitonenko.Application;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.controller.helpers.ViewHelper;
 import ua.kapitonenko.controller.keys.Pages;
 import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.domain.entities.Cashbox;
@@ -27,42 +26,41 @@ public class LoginAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		init(request);
+		LOGGER.debug(request.paramsToString());
+		
+		if (!request.getSession().userIsGuest()) {
+			return request.goHome();
+		}
+		
+		request.setAttribute(LINK, Routes.SIGNUP);
+		request.setAttribute(CASHBOX, null);
+		
+		if (request.getAttribute(USER) == null) {
+			request.setAttribute(USER, new User());
+		}
 		
 		if (request.isPost()) {
 			if (loadAndValidate(request) && login(request)) {
 				return request.goHome();
 			}
 		}
-		return request.forward(Pages.SIGNUP);
+		return request.forward(Pages.SIGNUP, Routes.LOGIN);
 	}
-	
-	private void init(RequestWrapper request) {
-		ViewHelper view = new ViewHelper();
-		view.setAction(Routes.LOGIN);
-		view.setLink(Routes.SIGNUP);
-		view.putSetting(CASHBOX, null);
-		
-		User user = new User();
-		view.setModel(user);
-		request.setView(view);
-	}
+
 	
 	private boolean loadAndValidate(RequestWrapper request) {
-		ViewHelper view = request.getView();
-		
 		String username = request.getParameter(USERNAME);
 		String password = request.getParameter(PASSWORD);
 		String cashbox = request.getParameter(CASHBOX);
 		Long cashboxId = ValidationBuilder.parseId(cashbox);
 		
-		User user = (User) view.getModel();
+		User user = (User) request.getAttribute(USER);
 		user.setUsername(username);
 		user.setPassword(password);
 		
-		view.putSetting(CASHBOX, cashboxId);
+		request.setAttribute(CASHBOX, cashboxId);
 		
-		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getView());
+		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
 		return validator
 				       .required(username, USERNAME)
 				       .required(password, PASSWORD)
@@ -71,20 +69,20 @@ public class LoginAction implements ActionCommand {
 	}
 	
 	private boolean login(RequestWrapper request) {
-		User result = userService.findByLoginAndPassword((User) request.getView().getModel());
+		User result = userService.findByLoginAndPassword((User) request.getAttribute(USER));
 		
 		if (result == null) {
-			request.getView().addMessage(request.getMessageManager().getProperty(ERROR_LOGIN));
-			request.getView().setMessageType(ALERT_CLASS_DANGER);
+			request.getAlert().addMessage(request.getMessageManager().getProperty(ERROR_LOGIN));
+			request.getAlert().setMessageType(ALERT_CLASS_DANGER);
 			return false;
 		}
 		
-		//TODO change set cashbox
-		Cashbox cashbox = settingsService.findCashbox((Long) request.getView().getSetting(CASHBOX));
+		Cashbox cashbox = settingsService.findCashbox((Long) request.getAttribute(CASHBOX));
 		Company company = settingsService.findCompany(Application.getId(Application.COMPANY));
-		request.getSession().setCompany(company);
-		request.getSession().setCashbox(cashbox);
-		request.getSession().login(result);
+		request.getSession().set(COMPANY, company);
+		request.getSession().set(CASHBOX, cashbox);
+		request.getSession().set(USER, result);
+		
 		return true;
 	}
 }

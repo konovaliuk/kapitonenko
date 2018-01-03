@@ -42,6 +42,10 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 		return "SELECT * FROM " + getTableName();
 	}
 	
+	protected String getCountQuery() {
+		return "SELECT COUNT(*) count FROM " + getTableName();
+	}
+	
 	protected String getSelectOneQuery() {
 		return getSelectAllQuery() + WHERE_ID;
 	}
@@ -156,5 +160,22 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 			throw new DAOException(e);
 		}
 	}
-
+	
+	public int getCount() {
+		int result = 0;
+		try (Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(getCountQuery());
+			while (rs.next()) {
+				result = rs.getInt("count");
+			}
+			return result;
+		} catch (Exception e) {
+			throw new DAOException(e);
+		}
+	}
+	
+	@Override
+	public List<E> findAllByQuery(String query, PreparedStatementSetter pss) {
+		return getList(getSelectAllQuery() + " " + query, pss, getResultSetExtractor());
+	}
 }

@@ -13,9 +13,7 @@ public class RequestWrapper {
 	
 	private HttpServletRequest request;
 	private SessionWrapper sessionWrapper;
-	private ViewHelper view;
 	private MessageProvider messageManager;
-	
 	private AlertContainer alert;
 	
 	public RequestWrapper(HttpServletRequest request) {
@@ -29,13 +27,12 @@ public class RequestWrapper {
 		return sessionWrapper;
 	}
 	
-	public ResponseParams forward(String uri) {
-		request.setAttribute(Keys.VIEW, view);
+	public ResponseParams forward(String uri, String action) {
+		request.setAttribute(Keys.ACTION, action);
 		return new ResponseParams(uri, false);
 	}
 	
 	public ResponseParams redirect(String uri) {
-		request.setAttribute(Keys.VIEW, view);
 		return new ResponseParams(uri, true);
 	}
 	
@@ -49,6 +46,8 @@ public class RequestWrapper {
 		String[] parts = referer.split("/");
 		referer = String.format("/%s", parts[3]);
 		
+		LOGGER.debug("referer: " + referer);
+		
 		return new ResponseParams(referer, true);
 	}
 	
@@ -58,20 +57,6 @@ public class RequestWrapper {
 	
 	public boolean isPost() {
 		return request.getMethod().equals("POST");
-	}
-	
-	public ViewHelper getView() {
-		return view;
-	}
-	
-	public void setView(ViewHelper view) {
-		this.view = view;
-		FlashMessage flash = sessionWrapper.getFlash();
-		if (flash != null) {
-			this.view.addMessage(flash.getMessage());
-			this.view.setMessageType(flash.getStatus());
-			sessionWrapper.removeFlash();
-		}
 	}
 	
 	public String getParameter(String key) {
@@ -102,15 +87,15 @@ public class RequestWrapper {
 		return request.getRequestURI();
 	}
 	
-	public String paramsToString(){
+	public String paramsToString() {
 		return request.getParameterMap().entrySet()
-				.stream()
-				.map(e -> e.getKey() + "=\"" + Arrays.toString(e.getValue()) + "\"")
-				.collect(Collectors.joining(", "));
+				       .stream()
+				       .map(e -> e.getKey() + "=" + Arrays.toString(e.getValue()))
+				       .collect(Collectors.joining(", ", "request params: ", ""));
 	}
 	
-	private void initAlert(){
-		if (request.getAttribute(Keys.ALERT) == null){
+	private void initAlert() {
+		if (request.getAttribute(Keys.ALERT) == null) {
 			alert = new AlertContainer();
 			
 			FlashMessage flash = sessionWrapper.getFlash();
@@ -126,5 +111,4 @@ public class RequestWrapper {
 	public AlertContainer getAlert() {
 		return alert;
 	}
-
 }

@@ -12,9 +12,10 @@ import java.util.Map;
 
 public class Application {
 	
-	public static final String DEFAULT_LOCALE = "en_US";
+	public static final String DEFAULT_LOCALE = "default.locale";
 	public static final String MESSAGE_BUNDLE = "messages";
 	public static final String SETTINGS_BUNDLE = "settings";
+	public static final String ENCODING = "encoding";
 	
 	public static final String RECEIPT_TYPE_FISCAL = "receipt.fiscal";
 	public static final String RECEIPT_TYPE_RETURN = "receipt.return";
@@ -22,6 +23,7 @@ public class Application {
 	public static final String COMPANY = "company";
 	
 	private static Map<String, Long> ids = new HashMap<>();
+	private static Map<String, String> params = new HashMap<>();
 	
 	static {
 		ids.put(RECEIPT_TYPE_FISCAL, 1L);
@@ -29,6 +31,11 @@ public class Application {
 		ids.put(PAYMENT_TYPE_UNDEFINED, 1L);
 		ids.put(COMPANY, 1L);
 		ids.put(DEFAULT_LOCALE, 1L);
+		
+		params.put(MESSAGE_BUNDLE, "messages");
+		params.put(SETTINGS_BUNDLE, "settings");
+		params.put(DEFAULT_LOCALE, "en_US");
+		params.put(ENCODING, "UTF-8");
 	}
 	
 	public static DAOFactory getDAOFactory() {
@@ -47,4 +54,11 @@ public class Application {
 		return ids.get(key);
 	}
 	
+	public static String getParam(String key) {
+		return params.get(key);
+	}
+	
+	public static boolean isAutoActivationEnabled() {
+		return true;
+	}
 }
