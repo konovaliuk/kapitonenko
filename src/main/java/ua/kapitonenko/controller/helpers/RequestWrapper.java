@@ -1,7 +1,7 @@
 package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.config.keys.Keys;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;

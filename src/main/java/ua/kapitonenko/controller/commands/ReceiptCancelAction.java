@@ -1,7 +1,7 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.ValidationBuilder;

@@ -1,7 +1,9 @@
 <jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.domain.entities.Product"/>
 <%--@elvariable id="rcalculator" type="ua.kapitonenko.domain.ReceiptCalculator"--%>
 <%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
+<%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.domain.ReceiptCalculator>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="ua.kapitonenko.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -13,11 +15,20 @@
 <main role="main">
     <div class="container">
         <div class="card">
-
-            <%@ include file="includes/navigation.jsp" %>
-
             <div class="card-body">
-                <h5 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h5>
+                <div class="row">
+                    <div class="col-8">
+                        <h4 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h4>
+                    </div>
+                    <div class="col-2 pl-0">
+                        <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
+                            <fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></a>
+                    </div>
+                    <div class="col-2 pl-0 mb-4">
+                        <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
+                            <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="table-responsive">
                         <form class="form" method="POST" autocomplete="off" id="receipt-list-form">
@@ -60,7 +71,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.domain.ReceiptCalculator>"--%>
+
                                 <c:forEach var="calculator" items="${receipts}">
                                     <tr>
                                         <th scope="row">${calculator.receipt.id}</th>
@@ -105,13 +116,11 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
-
                         </form>
-
                     </div>
                 </div>
+                <%@ include file="includes/pager.jsp" %>
             </div>
-            <%@ include file="includes/pager.jsp" %>
         </div>
     </div>
 </main>

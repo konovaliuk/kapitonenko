@@ -1,4 +1,4 @@
-package ua.kapitonenko.controller.keys;
+package ua.kapitonenko.config.keys;
 
 public class Pages {
 	public static final String BASE = "/WEB-INF/jsp/";

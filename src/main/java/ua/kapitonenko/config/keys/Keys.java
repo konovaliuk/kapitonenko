@@ -1,4 +1,4 @@
-package ua.kapitonenko.controller.keys;
+package ua.kapitonenko.config.keys;
 
 public class Keys {
 	
@@ -17,6 +17,7 @@ public class Keys {
 	public static final String UPDATE = "button.update";
 	public static final String DELETE = "button.delete";
 	public static final String RETURN = "button.return";
+	public static final String CREATE = "button.create";
 	
 	
 	public static final String LOGIN_FIRST = "guide.login.first";
@@ -58,6 +59,7 @@ public class Keys {
 	public static final String PRODUCT_LANG_NAME = "product.lang.name";
 	public static final String PRODUCT_TAX = "product.tax";
 	public static final String PRODUCT_NEW= "product.new";
+	public static final String PRODUCT_CREATE = "product.create";
 	public static final String PRODUCT_ID = "product.id";
 	
 	public static final String NEW_PRODUCT_NAME = "new.product.name";
@@ -91,6 +93,7 @@ public class Keys {
 	public static final String RECEIPTS = "receipts";
 	public static final String RECEIPT_LIST = "receipt.list";
 	public static final String RECEIPT_NEW = "receipt.new";
+	public static final String RECEIPT_CREATE = "receipt.create";
 	public static final String RECEIPT_TYPE = "receipt.type";
 	public static final String RECEIPT_TOTAL = "receipt.total";
 	public static final String TAX_AMOUNT = "tax.amount";
@@ -108,6 +111,7 @@ public class Keys {
 	
 	public static final String NO_PAGES = "noOfPages";
 	public static final String CUR_PAGE = "currentPage";
+	public static final String PAGE = "page";
 
 	
 

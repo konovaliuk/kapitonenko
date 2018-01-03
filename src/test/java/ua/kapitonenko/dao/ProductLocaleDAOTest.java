@@ -2,7 +2,7 @@ package ua.kapitonenko.dao;
 
 import fixtures.BaseDAOTest;
 import org.junit.Test;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.dao.interfaces.ProductLocaleDAO;
 import ua.kapitonenko.dao.tables.ProductLocaleTable;
 import ua.kapitonenko.domain.entities.ProductLocale;

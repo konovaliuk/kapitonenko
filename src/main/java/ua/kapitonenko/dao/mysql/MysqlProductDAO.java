@@ -1,7 +1,7 @@
 package ua.kapitonenko.dao.mysql;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.config.keys.Keys;
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.ProductDAO;

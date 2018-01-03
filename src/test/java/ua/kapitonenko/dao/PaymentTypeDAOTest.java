@@ -4,7 +4,7 @@ import fixtures.BaseDAOTest;
 import fixtures.TestConnectionPool;
 import org.junit.After;
 import org.junit.Test;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.dao.interfaces.PaymentTypeDAO;
 import ua.kapitonenko.dao.tables.PaymentTypesTable;
 import ua.kapitonenko.domain.entities.PaymentType;

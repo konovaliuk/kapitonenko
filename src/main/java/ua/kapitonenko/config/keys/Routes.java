@@ -1,4 +1,4 @@
-package ua.kapitonenko.controller.keys;
+package ua.kapitonenko.config.keys;
 
 public class Routes {
 	

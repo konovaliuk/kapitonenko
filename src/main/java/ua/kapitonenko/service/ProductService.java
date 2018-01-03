@@ -9,7 +9,11 @@ public interface ProductService {
 	
 	List<Product> getProductsList();
 	
+	List<Product> getProductsList(int offset, int limit);
+	
 	List<Product> findByIdOrName(Long localeId, Long productId, String name);
 	
 	List<Product> findAllByReceiptId(Long id);
+	
+	int getProductsCount();
 }

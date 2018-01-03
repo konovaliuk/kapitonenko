@@ -18,10 +18,11 @@ button {
     cursor: pointer;
 }
 
-.btn-primary,
-.btn-secondary {
+/*.btn-primary,
+.btn-secondary,
+.btn-outline-secondary {
     font-weight: 700;
-}
+}*/
 
 .btn-primary {
     color: #fff;
@@ -71,6 +72,11 @@ header .brand {
     font-size: 2rem;
     line-height: 1.6rem;
     font-weight: 500;
+}
+
+header .brand a {
+    color: white;
+    text-decoration: none;
 }
 
 header .buttons {

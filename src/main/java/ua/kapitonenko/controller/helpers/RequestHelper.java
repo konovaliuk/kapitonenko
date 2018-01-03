@@ -1,8 +1,8 @@
 package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.commands.*;
-import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.exceptions.NotFoundException;
 
 import javax.servlet.ServletException;

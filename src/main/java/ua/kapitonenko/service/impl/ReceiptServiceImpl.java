@@ -1,7 +1,7 @@
 package ua.kapitonenko.service.impl;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.dao.interfaces.*;
 import ua.kapitonenko.dao.tables.ReceiptsTable;

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
-import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Keys;
 import ua.kapitonenko.domain.Model;
 import ua.kapitonenko.domain.entities.BaseEntity;
 

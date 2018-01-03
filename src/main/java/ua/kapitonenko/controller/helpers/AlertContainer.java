@@ -2,7 +2,7 @@ package ua.kapitonenko.controller.helpers;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.config.keys.Keys;
 
 import java.io.Serializable;
 import java.util.ArrayList;

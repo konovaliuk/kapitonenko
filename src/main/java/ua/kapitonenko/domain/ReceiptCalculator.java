@@ -1,7 +1,7 @@
 package ua.kapitonenko.domain;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.domain.entities.PaymentType;
 import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.domain.entities.Receipt;

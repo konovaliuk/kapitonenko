@@ -1,12 +1,12 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Pages;
+import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.controller.keys.Pages;
-import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.domain.entities.User;
 import ua.kapitonenko.domain.entities.UserRole;
 import ua.kapitonenko.service.SettingsService;
@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 
-import static ua.kapitonenko.controller.keys.Keys.*;
+import static ua.kapitonenko.config.keys.Keys.*;
 
 public class SignUpAction implements ActionCommand {
 	

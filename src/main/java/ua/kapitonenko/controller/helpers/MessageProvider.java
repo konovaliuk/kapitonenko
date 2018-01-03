@@ -1,14 +1,14 @@
 package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static ua.kapitonenko.controller.keys.Keys.*;
+import static ua.kapitonenko.config.keys.Keys.*;
 
 public class MessageProvider {
 	private static final Logger LOGGER = Logger.getLogger(MessageProvider.class);

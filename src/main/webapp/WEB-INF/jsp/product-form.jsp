@@ -1,5 +1,6 @@
 <%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="ua.kapitonenko.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -11,11 +12,8 @@
 <main role="main">
     <div class="container">
         <div class="card">
-
-            <%@ include file="includes/navigation.jsp" %>
-
             <div class="card-body">
-                <h5 class="card-title"><fmt:message key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></h5>
+                <h5 class="card-title mb-4"><fmt:message key="${Keys.PRODUCT_NEW}" bundle="${msg}"/></h5>
                 <form class="form" method="POST" action="${action}" autocomplete="off">
                     <div class="form-group">
                         <label><fmt:message key="${Keys.PRODUCT_NAME}" bundle="${msg}"/></label>

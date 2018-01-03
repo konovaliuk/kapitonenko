@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="ua.kapitonenko.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -10,11 +12,20 @@
 <main role="main">
     <div class="container">
         <div class="card">
-
-            <%@ include file="includes/navigation.jsp" %>
-
             <div class="card-body">
-                <h5 class="card-title mb-3"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h5>
+                <div class="row">
+                    <div class="col-8">
+                        <h4 class="card-title"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h4>
+                    </div>
+                    <div class="col-2 pl-0">
+                        <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
+                            <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
+                    </div>
+                    <div class="col-2 pl-0 mb-4">
+                        <a class="btn btn-primary btn-block" href="/create-product" role="button">
+                            <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -31,12 +42,12 @@
                                         key="${Keys.PRODUCT_PRICE}" bundle="${msg}"/></th>
                                 <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.PRODUCT_TAX}"
                                                                                                bundle="${msg}"/></th>
-                                <th scope="col" width="180px" class="text-center"><fmt:message key="${Keys.ACTION}"
+                                <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.ACTION}"
                                                                                                bundle="${msg}"/></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
+
                             <c:forEach var="product" items="${products}">
                                 <tr>
                                     <th scope="row">${product.id}</th>
@@ -52,22 +63,18 @@
                                                                          bundle="${settings}"/></td>
                                     <td class="text-center">
                                         <form action="/delete-product" method="POST" role="form">
-                                            <a href="/update-product?id=${product.id}" class="btn btn-link ">
-                                                <fmt:message key="${Keys.UPDATE}" bundle="${msg}"/></a>
-
                                             <input type="hidden" name="id" value="${product.id}">
                                             <button type="submit" class="btn btn-link"><fmt:message key="${Keys.DELETE}"
                                                                                                     bundle="${msg}"/></button>
                                         </form>
-
                                     </td>
                                 </tr>
                             </c:forEach>
-
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <%@ include file="includes/pager.jsp" %>
             </div>
         </div>
     </div>

@@ -1,10 +1,10 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Keys;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
-import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.exceptions.NotFoundException;
 import ua.kapitonenko.service.SettingsService;
@@ -25,13 +25,11 @@ public class LanguageAction implements ActionCommand {
 		}
 		
 		String lang = request.getParameter("l");
-		LOGGER.debug(lang);
 		List<String> supported = settingsService.getSupportedLanguages();
 		
 		if (!supported.contains(lang)) {
 			throw new NotFoundException(request.getUri());
 		}
-		LOGGER.debug(settingsService.getSupportedLocales());
 
 		request.getSession().set(Keys.LOCALE, settingsService.getSupportedLocales().get(lang).getName());
 		request.getSession().set(Keys.LOCALE_ID, settingsService.getSupportedLocales().get(lang).getId());

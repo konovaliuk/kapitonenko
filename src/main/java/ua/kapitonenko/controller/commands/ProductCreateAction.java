@@ -1,12 +1,12 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Pages;
+import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
 import ua.kapitonenko.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.controller.keys.Pages;
-import ua.kapitonenko.controller.keys.Routes;
 import ua.kapitonenko.domain.entities.*;
 import ua.kapitonenko.service.ProductService;
 import ua.kapitonenko.service.SettingsService;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.kapitonenko.controller.keys.Keys.*;
+import static ua.kapitonenko.config.keys.Keys.*;
 
 public class ProductCreateAction implements ActionCommand {
 	private static final Logger LOGGER = Logger.getLogger(ProductCreateAction.class);

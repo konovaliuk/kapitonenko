@@ -1,9 +1,9 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
-import ua.kapitonenko.controller.keys.Routes;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -18,6 +18,6 @@ public class HomeAction implements ActionCommand {
 			return request.redirect(Routes.LOGIN);
 		}
 		
-		return request.redirect(Routes.PRODUCTS_CREATE);
+		return request.redirect(Routes.PRODUCTS);
 	}
 }

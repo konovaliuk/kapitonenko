@@ -4,7 +4,7 @@ import fixtures.BaseDAOTest;
 import fixtures.TestConnectionPool;
 import org.junit.After;
 import org.junit.Test;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.dao.interfaces.TaxCategoryDAO;
 import ua.kapitonenko.dao.tables.TaxCategoriesTable;
 import ua.kapitonenko.domain.entities.TaxCategory;

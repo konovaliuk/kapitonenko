@@ -1,4 +1,4 @@
-package ua.kapitonenko;
+package ua.kapitonenko.config;
 
 import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.connection.DataSourceConnectionPool;
@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Application {
-	
 	public static final String DEFAULT_LOCALE = "default.locale";
 	public static final String MESSAGE_BUNDLE = "messages";
 	public static final String SETTINGS_BUNDLE = "settings";
@@ -24,6 +23,7 @@ public class Application {
 	
 	private static Map<String, Long> ids = new HashMap<>();
 	private static Map<String, String> params = new HashMap<>();
+	private static final int RECORDS_PER_PAGE = 3;
 	
 	static {
 		ids.put(RECEIPT_TYPE_FISCAL, 1L);
@@ -60,5 +60,9 @@ public class Application {
 	
 	public static boolean isAutoActivationEnabled() {
 		return true;
+	}
+	
+	public static int recordsPerPage() {
+		return RECORDS_PER_PAGE;
 	}
 }

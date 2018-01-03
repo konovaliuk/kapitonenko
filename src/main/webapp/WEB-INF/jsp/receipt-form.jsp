@@ -1,7 +1,9 @@
 <jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.domain.entities.Product"/>
 <%--@elvariable id="rcalculator" type="ua.kapitonenko.domain.ReceiptCalculator"--%>
 <%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
+<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="ua.kapitonenko.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -13,9 +15,6 @@
 <main role="main">
     <div class="container">
         <div class="card">
-
-            <%@ include file="includes/navigation.jsp" %>
-
             <div class="card-body">
                 <h5 class="card-title mb-4">
                     <fmt:message key="${rcalculator.receipt.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
@@ -49,7 +48,8 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th scope="col" width="50px"><fmt:message key="${Keys.ID}" bundle="${msg}"/></th>
+                                        <th scope="col" width="50px"><fmt:message key="${Keys.ID}"
+                                                                                  bundle="${msg}"/></th>
 
                                         <th scope="col" width="250px"><fmt:message key="${Keys.PRODUCT}"
                                                                                    bundle="${msg}"/></th>
@@ -76,7 +76,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
+
 
                                     <c:forEach var="product" items="${rcalculator.products}">
                                         <tr>
@@ -106,7 +106,8 @@
                                                                                  bundle="${settings}"/></td>
 
                                             <td class="text-center">
-                                                <fmt:message key="${product.taxCategory.bundleKey}" bundle="${settings}"/>
+                                                <fmt:message key="${product.taxCategory.bundleKey}"
+                                                             bundle="${settings}"/>
                                             </td>
 
                                             <td class="text-right">${product.price}</td>

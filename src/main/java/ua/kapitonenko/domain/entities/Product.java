@@ -3,8 +3,8 @@ package ua.kapitonenko.domain.entities;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
-import ua.kapitonenko.controller.keys.Keys;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Keys;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

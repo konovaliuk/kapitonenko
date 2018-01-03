@@ -1,7 +1,7 @@
 package ua.kapitonenko.controller.filters;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
 
 import javax.servlet.*;
 import java.io.IOException;

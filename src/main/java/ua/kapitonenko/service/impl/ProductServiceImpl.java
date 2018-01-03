@@ -1,10 +1,11 @@
 package ua.kapitonenko.service.impl;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.Application;
+import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Keys;
 import ua.kapitonenko.connection.ConnectionPool;
-import ua.kapitonenko.controller.keys.Keys;
 import ua.kapitonenko.dao.interfaces.*;
+import ua.kapitonenko.dao.tables.ProductsTable;
 import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.domain.entities.ProductLocale;
 import ua.kapitonenko.exceptions.DAOException;
@@ -73,6 +74,26 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
+	public List<Product> getProductsList(int offset, int limit) {
+		Connection connection = pool.getConnection();
+		try {
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			List<Product> products = productDAO.findAllByQuery("ORDER BY ? LIMIT ? OFFSET ?", ps -> {
+				ps.setString(1, ProductsTable.ID);
+				ps.setInt(3, offset);
+				ps.setInt(2, limit);
+			});
+			products.forEach(product -> {
+				setReferences(product, connection);
+			});
+			
+			return products;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
 	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
 		Connection connection = pool.getConnection();
 		try {
@@ -115,6 +136,18 @@ public class ProductServiceImpl implements ProductService {
 		product.setNames(lang);
 		product.setTaxCategory(taxCategoryDAO.findOne(product.getTaxCategoryId()));
 		product.setUnit(unitDAO.findOne(product.getUnitId()));
+	}
+	
+	@Override
+	public int getProductsCount() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			return productDAO.getCount();
+		} finally {
+			pool.close(connection);
+		}
 	}
 	
 }
