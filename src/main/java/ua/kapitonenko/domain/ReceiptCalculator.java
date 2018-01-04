@@ -2,7 +2,6 @@ package ua.kapitonenko.domain;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.config.Application;
-import ua.kapitonenko.domain.entities.PaymentType;
 import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.domain.entities.Receipt;
 import ua.kapitonenko.domain.entities.TaxCategory;
@@ -14,17 +13,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReceiptCalculator implements Serializable {
+public class ReceiptCalculator extends Model implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger(ReceiptCalculator.class);
 	
 	private Receipt receipt;
 	private List<Product> products = new ArrayList<>();
 	private Long localId;
-	
-	private List<PaymentType> paymentTypes;
+
 	private List<TaxCategory> categories;
 	private Map<TaxCategory, BigDecimal> taxByCategory = new HashMap<>();
 	
+	public ReceiptCalculator() {
+	}
+	
+	public ReceiptCalculator(Receipt receipt) {
+		this.receipt = receipt;
+	}
 	
 	public Receipt getReceipt() {
 		return receipt;
@@ -90,14 +94,6 @@ public class ReceiptCalculator implements Serializable {
 		return products.stream()
 				       .map(Product::getTax)
 				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
-	}
-	
-	public List<PaymentType> getPaymentTypes() {
-		return paymentTypes;
-	}
-	
-	public void setPaymentTypes(List<PaymentType> paymentTypes) {
-		this.paymentTypes = paymentTypes;
 	}
 	
 	public void remove(Long productId) {

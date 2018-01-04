@@ -139,8 +139,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 			
 			list.forEach(receipt -> {
 				setReferences(receipt, connection);
-				ReceiptCalculator calculator = new ReceiptCalculator();
-				calculator.setReceipt(receipt);
+				ReceiptCalculator calculator = new ReceiptCalculator(receipt);
 				calculator.setProducts(productService.findAllByReceiptId(receipt.getId()));
 				calculatorList.add(calculator);
 			});

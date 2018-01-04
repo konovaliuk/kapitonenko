@@ -45,12 +45,18 @@ public class RequestHelper {
 		String key = request.getUri();
 		LOGGER.debug(request.getMethod() + ":" + key);
 		ActionCommand command = commands.get(key);
+		
 		if (command == null) {
 			throw new NotFoundException(key);
 		}
 		User user = request.getSession().getUser();
-		if ((user == null && !Application.guestAllowed(key)) ||
-				    (user != null && !Application.allowed(user.getUserRoleId(), key))) {
+		
+		if (user == null && !Application.guestAllowed(key)) {
+			
+			return commands.get(Routes.HOME);
+			
+		} else if (user != null && !Application.allowed(user.getUserRoleId(), key)) {
+			
 			throw new ForbiddenException(key);
 		}
 		return command;

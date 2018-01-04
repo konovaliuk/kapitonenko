@@ -1,4 +1,4 @@
-package ua.kapitonenko.tablib;
+package ua.kapitonenko.taglib;
 
 import ua.kapitonenko.config.Application;
 import ua.kapitonenko.config.keys.Keys;

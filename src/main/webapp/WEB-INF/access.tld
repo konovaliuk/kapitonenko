@@ -8,7 +8,7 @@
 
     <tag>
         <name>can</name>
-        <tag-class>ua.kapitonenko.tablib.AccessTag</tag-class>
+        <tag-class>ua.kapitonenko.taglib.AccessTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>route</name>

@@ -75,9 +75,8 @@
                                                 bundle="${msg}"/></th>
                                     </tr>
                                     </thead>
+
                                     <tbody>
-
-
                                     <c:forEach var="product" items="${rcalculator.products}">
                                         <tr>
                                             <th scope="row">${product.id}</th>
@@ -89,14 +88,11 @@
                                                     <input type="text" class="form-control text-right"
                                                            aria-describedby="add-${product.id}"
                                                            name="${Keys.PRODUCT_QUANTITY}"
-                                                           value="${product.quantity}">
+                                                           value="<fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="3"
+                                                                                     minFractionDigits="3" value="${product.quantity}" />">
                                                     <div class="input-group-append d-print-none">
                                                         <button class="btn btn-secondary" type="submit"
-                                                            <%--                                                            name="button" value="button.update" id="add-${product.id}">--%>
-                                                                onclick="
-                                                                    $('#buttonId').val('button.update');
-                                                                    $('#receipt-form').submit();
-                                                                    ">
+                                                                name="button" value="button.update">
                                                             <i class="fa fa-check" aria-hidden="true"></i>
                                                         </button>
                                                     </div>
@@ -110,9 +106,15 @@
                                                              bundle="${settings}"/>
                                             </td>
 
-                                            <td class="text-right">${product.price}</td>
+                                            <td class="text-right">
+                                                <fmt:formatNumber type="number" groupingUsed="false"
+                                                                  maxFractionDigits="2"
+                                                                  minFractionDigits="2" value="${product.price}"/></td>
 
-                                            <td class="text-right">${product.cost}</td>
+                                            <td class="text-right">
+                                                <fmt:formatNumber type="number" groupingUsed="false"
+                                                                  maxFractionDigits="2"
+                                                                  minFractionDigits="2" value="${product.cost}"/></td>
 
                                             <td class="text-center d-print-none">
                                                 <button type="button" class="btn btn-link"
@@ -172,12 +174,7 @@
                         <div class="col-3 col-sm-2">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-secondary btn-block"
-                            <%--name="button" value="button.add"--%>
-                                    onclick="
-                                            $('#buttonId').val('button.add');
-                                            $('#receipt-form').submit();
-                                            "
-                            >
+                                    name="button" value="button.add">
                                 <fmt:message key="${Keys.ADD}" bundle="${msg}"/></button>
                         </div>
                     </div>
@@ -185,7 +182,7 @@
                     <div class="form-group">
                         <label><fmt:message key="${Keys.PAYMENT}" bundle="${msg}"/>
                         </label>
-                        <c:forEach items="${rcalculator.paymentTypes}" var="payType">
+                        <c:forEach items="${paymentTypes}" var="payType">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="payment" id="payment-${payType.id}"
                                        value="${payType.id}" ${rcalculator.receipt.paymentTypeId.equals(payType.id) ? "checked" : ""}>
@@ -195,23 +192,18 @@
                             </div>
                         </c:forEach>
                     </div>
+
                     <div class="form-row d-print-none">
                         <div class="col-xs-6 col-md-2">
-                            <button type="button" class="btn btn-primary btn-block"
-                                    onclick="
-                                            $('#buttonId').val('button.save');
-                                            $('#receipt-form').submit();
-                                            "
-                            >
+                            <button type="submit" class="btn btn-primary btn-block"
+                                    name="button" value="button.save">
                                 <fmt:message key="${Keys.SAVE}" bundle="${msg}"/></button>
                         </div>
+
                         <div class="col-xs-6 col-md-2">
-                            <button type="button" class="btn btn-secondary btn-block"
-                                    onclick="
-                                            $('#buttonId').val('button.cancel');
-                                            $('#receipt-form').submit();
-                                            "
-                            ><fmt:message key="${Keys.CANCEL}" bundle="${msg}"/></button>
+                            <button type="submit" class="btn btn-secondary btn-block"
+                                    name="button" value="button.cancel">
+                                <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/></button>
                         </div>
                     </div>
                 </form>

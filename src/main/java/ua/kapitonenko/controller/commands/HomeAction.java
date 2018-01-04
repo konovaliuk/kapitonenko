@@ -1,6 +1,7 @@
 package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
@@ -14,10 +15,13 @@ public class HomeAction implements ActionCommand {
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (request.getSession().userIsGuest()) {
-			
 			return request.redirect(Routes.LOGIN);
 		}
 		
-		return request.redirect(Routes.PRODUCTS);
+		if (request.getSession().getUser().getUserRoleId().equals(Application.getId(Application.ROLE_MERCHANDISER))) {
+			return request.redirect(Routes.PRODUCTS);
+		}
+		
+		return request.redirect(Routes.RECEIPTS);
 	}
 }

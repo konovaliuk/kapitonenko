@@ -109,10 +109,7 @@ public class ValidationBuilder {
 		}
 		return this;
 	}
-	
-	public ValidationBuilder id(String id) {
-		return this;
-	}
+
 	
 	public ValidationBuilder idInSet(Long id, Set<Long> set, String label) {
 		if (id == null || !set.contains(id)) {
@@ -143,7 +140,33 @@ public class ValidationBuilder {
 		return this;
 	}
 	
+	
+	public ValidationBuilder listSize(int size, List<? extends Model> list, String messageLess, String messageMore) {
+		if (list == null || list.isEmpty()) {
+			alertContainer.addMessage(messageManager.getProperty(messageLess));
+			valid = false;
+		} else if (list.size() > size) {
+			alertContainer.addMessage(messageManager.getProperty(messageMore));
+			valid = false;
+		}
+		return this;
+	}
+	
+	public ValidationBuilder compare(BigDecimal value, BigDecimal base, String lessThanMessage, String greatThanMessage) {
+		if (lessThanMessage != null && value.compareTo(base) > 0) {
+			alertContainer.addMessage(messageManager.getProperty(lessThanMessage));
+			valid = false;
+		}
+		if (greatThanMessage != null && value.compareTo(base) < 0) {
+			alertContainer.addMessage(messageManager.getProperty(greatThanMessage));
+			valid = false;
+		}
+		return this;
+	}
+
+	
 	public boolean isValid() {
+		
 		if (!allValid) {
 			alertContainer.addMessage(messageManager.notEmptyAnyMessage(labelAllValid));
 		}

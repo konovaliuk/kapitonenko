@@ -103,6 +103,7 @@ public class Keys {
 	public static final String COMPANY = "company";
 	public static final String COMPANY_PN = "company.pn";
 	public static final String PAYMENT = "payment";
+	public static final String PAYMENT_TYPES = "paymentTypes";
 	
 	public static final String STATUS = "status";
 	public static final String NUMBER_ARTICLES = "articles.number";
@@ -112,9 +113,9 @@ public class Keys {
 	public static final String NO_PAGES = "noOfPages";
 	public static final String CUR_PAGE = "currentPage";
 	public static final String PAGE = "page";
-
 	
-
-
-
+	
+	public static final String ERROR_SEARCH_FAIL = "error.search.fail";
+	public static final String GUIDE_SPECIFY_REQUEST = "guide.specify.request";
+	public static final String ERROR_NOT_ENOUGH = "error.not.enough";
 }

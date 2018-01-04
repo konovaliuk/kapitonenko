@@ -7,6 +7,7 @@ import ua.kapitonenko.config.keys.Keys;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AlertContainer implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger(AlertContainer.class);
@@ -37,4 +38,9 @@ public class AlertContainer implements Serializable {
 	public boolean isHasMessages() {
 		return !this.messageList.isEmpty();
 	}
+	
+	public String joinMessages() {
+		return messageList.stream().collect(Collectors.joining("<br>"));
+	}
+
 }
