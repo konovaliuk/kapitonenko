@@ -5,6 +5,7 @@ import ua.kapitonenko.controller.commands.ActionCommand;
 import ua.kapitonenko.controller.helpers.RequestHelper;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
 import ua.kapitonenko.controller.helpers.ResponseParams;
+import ua.kapitonenko.exceptions.ForbiddenException;
 import ua.kapitonenko.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.exceptions.NotFoundException;
 
@@ -35,7 +36,7 @@ public class Controller extends HttpServlet {
 		RequestWrapper requestWrapper = new RequestWrapper(request);
 		
 		try {
-			ActionCommand command = requestHelper.getCommand(request);
+			ActionCommand command = requestHelper.getCommand(requestWrapper);
 			ResponseParams result = command.execute(requestWrapper);
 			
 			if (result.isRedirect()) {
@@ -48,6 +49,8 @@ public class Controller extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		} catch (MethodNotAllowedException e) {
 			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, e.getMessage());
+		} catch (ForbiddenException e) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 			// TODO add exception handling

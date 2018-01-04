@@ -78,6 +78,10 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 		return UPDATE;
 	}
 	
+	protected String getCountQuery() {
+		return super.getCountQuery() + WHERE_NOT_DELETED;
+	}
+	
 	public Product findOne(final Long id) {
 		return getRow(getSelectOneNotDeletedQuery(),
 				ps -> ps.setLong(1, id),
@@ -156,4 +160,10 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			
 		}, getResultSetExtractor());
 	}
+	
+	@Override
+	public List<Product> findAllByQuery(String query, PreparedStatementSetter pss) {
+		return getList(getSelectAllNotDeletedQuery() + " " + query, pss, getResultSetExtractor());
+	}
+
 }

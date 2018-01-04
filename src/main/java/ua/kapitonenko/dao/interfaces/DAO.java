@@ -20,4 +20,5 @@ public interface DAO<E extends BaseEntity> {
 	int getCount();
 	
 	List<E> findAllByQuery(String query, PreparedStatementSetter pss);
+	
 }

@@ -6,6 +6,7 @@ import ua.kapitonenko.connection.ConnectionPool;
 import ua.kapitonenko.dao.interfaces.*;
 import ua.kapitonenko.dao.tables.ReceiptsTable;
 import ua.kapitonenko.domain.ReceiptCalculator;
+import ua.kapitonenko.domain.entities.Product;
 import ua.kapitonenko.domain.entities.Receipt;
 import ua.kapitonenko.domain.entities.ReceiptProduct;
 import ua.kapitonenko.exceptions.DAOException;
@@ -56,17 +57,22 @@ public class ReceiptServiceImpl implements ReceiptService {
 			connection.setAutoCommit(false);
 			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
 			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
 			
 			Receipt receipt = calculator.getReceipt();
 			
 			if (receiptDAO.update(receipt)) {
 				
 				Receipt created = receiptDAO.findOne(receipt.getId());
+				
 				calculator.getProducts().forEach(product -> {
-					
 					ReceiptProduct rp = new ReceiptProduct(null, created.getId(), product.getId(), product.getQuantity());
 					receiptProductDAO.insert(rp);
+					Product inStock = productDAO.findOne(product.getId());
+					inStock.addQuantity(product.getQuantity().negate());
+					productDAO.update(inStock);
 				});
+				
 				setReferences(created, connection);
 				calculator.setReceipt(created);
 				connection.commit();

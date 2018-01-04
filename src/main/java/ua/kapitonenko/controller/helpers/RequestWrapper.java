@@ -111,4 +111,8 @@ public class RequestWrapper {
 	public AlertContainer getAlert() {
 		return alert;
 	}
+	
+	public String getMethod() {
+		return request.getMethod();
+	}
 }

@@ -16,4 +16,6 @@ public interface ProductService {
 	List<Product> findAllByReceiptId(Long id);
 	
 	int getProductsCount();
+	
+	boolean delete(Long prodId, Long userId);
 }

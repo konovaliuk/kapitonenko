@@ -19,7 +19,6 @@ public class ReceiptCancelAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		LOGGER.debug("Cancel action");
 		if (!request.isPost()) {
 			throw new MethodNotAllowedException("POST");
 		}
@@ -27,10 +26,7 @@ public class ReceiptCancelAction implements ActionCommand {
 		String id = request.getParameter("id");
 		Long receiptId = ValidationBuilder.parseId(id);
 		
-		LOGGER.debug(receiptId);
-		
 		if (receiptId == null || !receiptService.cancel(receiptId)) {
-			
 			throw new NotFoundException(request.getUri());
 		}
 		

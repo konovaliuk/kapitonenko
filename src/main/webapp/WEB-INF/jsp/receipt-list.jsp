@@ -11,6 +11,7 @@
 <body>
 <%@ include file="includes/alert.jsp" %>
 <%@ include file="includes/logout.jsp" %>
+<%@ taglib prefix="u" uri="/WEB-INF/access.tld" %>
 
 <main role="main">
     <div class="container">
@@ -21,12 +22,16 @@
                         <h4 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h4>
                     </div>
                     <div class="col-2 pl-0">
-                        <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
-                            <fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></a>
+                        <u:can route="/products">
+                            <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
+                                <fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></a>
+                        </u:can>
                     </div>
                     <div class="col-2 pl-0 mb-4">
-                        <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
-                            <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                        <u:can route="/create-receipt">
+                            <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
+                                <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                        </u:can>
                     </div>
                 </div>
                 <div class="card">
@@ -93,23 +98,25 @@
                                         <td class="text-center">
                                             <c:if test="${!calculator.receipt.cancelled}">
                                                 <c:if test="${calculator.returnVisible}">
+                                                    <u:can route="/return-receipt">
+                                                        <button type="button" class="btn btn-link"
+                                                                onclick="var form = $('#receipt-list-form');
+                                                                        $('#rId').val(${calculator.receipt.id});
+                                                                        form.attr('action', '/return-receipt');
+                                                                        form.submit();">
+                                                            <fmt:message key="${Keys.RETURN}" bundle="${msg}"/>
+                                                        </button>
+                                                    </u:can>
+                                                </c:if>
+                                                <u:can route="/cancel-receipt">
                                                     <button type="button" class="btn btn-link"
                                                             onclick="var form = $('#receipt-list-form');
                                                                     $('#rId').val(${calculator.receipt.id});
-                                                                    form.attr('action', '/return-receipt');
+                                                                    form.attr('action', '/cancel-receipt');
                                                                     form.submit();">
-                                                        <fmt:message key="${Keys.RETURN}" bundle="${msg}"/>
+                                                        <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/>
                                                     </button>
-
-                                                </c:if>
-
-                                                <button type="button" class="btn btn-link"
-                                                        onclick="var form = $('#receipt-list-form');
-                                                                $('#rId').val(${calculator.receipt.id});
-                                                                form.attr('action', '/cancel-receipt');
-                                                                form.submit();">
-                                                    <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/>
-                                                </button>
+                                                </u:can>
                                             </c:if>
                                         </td>
                                     </tr>

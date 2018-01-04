@@ -21,7 +21,8 @@
                             <c:forEach var="name" items="${product.names}">
                                 <div class="col">
                                     <input name="${Keys.PRODUCT_NAME}" value="${name.propertyValue}"
-                                           type="text" class="form-control" placeholder="${name.locale.language}" title="${name.locale.language}">
+                                           type="text" class="form-control" placeholder="${name.locale.language}"
+                                           title="${name.locale.language}">
                                 </div>
                             </c:forEach>
                         </div>
@@ -30,7 +31,8 @@
                         <div class="form-group col-md-6">
                             <label><fmt:message key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></label>
                             <input type="text" class="form-control"
-                                   name="${Keys.PRODUCT_QUANTITY}" value="<fmt:formatNumber type="number" groupingUsed="false" value="${product.quantity}" />">
+                                   name="${Keys.PRODUCT_QUANTITY}"
+                                   value="<fmt:formatNumber type="number" groupingUsed="false" value="${product.quantity}" />">
                         </div>
                         <div class="form-group col-md-6">
                             <label><fmt:message key="${Keys.PRODUCT_UNIT}" bundle="${msg}"/></label>
@@ -48,7 +50,8 @@
                         <div class="form-group col-md-6">
                             <label><fmt:message key="${Keys.PRODUCT_PRICE}" bundle="${msg}"/></label>
                             <input type="text" class="form-control"
-                                   name="${Keys.PRODUCT_PRICE}" value="<fmt:formatNumber type="number" groupingUsed="false" value="${product.price}" />">
+                                   name="${Keys.PRODUCT_PRICE}"
+                                   value="<fmt:formatNumber type="number" groupingUsed="false" value="${product.price}" />">
                         </div>
                         <div class="form-group col-md-6">
                             <label><fmt:message key="${Keys.PRODUCT_TAX}" bundle="${msg}"/></label>
@@ -64,11 +67,12 @@
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-xs-6 col-md-2">
-                            <button type="submit" class="btn btn-primary btn-block"><fmt:message key="${Keys.SAVE}" bundle="${msg}"/></button>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <fmt:message key="${Keys.SAVE}" bundle="${msg}"/></button>
                         </div>
                         <div class="col-xs-6 col-md-2">
-                            <button type="submit" class="btn btn-secondary btn-block"><fmt:message key="${Keys.CLOSE}"
-                                                                                                   bundle="${msg}"/></button>
+                            <a href="/products" class="btn btn-secondary btn-block">
+                                <fmt:message key="${Keys.CLOSE}" bundle="${msg}"/></a>
                         </div>
                     </div>
 

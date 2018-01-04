@@ -27,7 +27,6 @@ public class ProductCreateAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		
 		LOGGER.debug(request.paramsToString());
 		
 		List<TaxCategory> taxes = settingsService.getTaxCatList();

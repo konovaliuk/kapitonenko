@@ -132,14 +132,14 @@ public class ReceiptCreateAction implements ActionCommand {
 					calculator.getReceipt().setCancelled(false);
 					if (receiptService.update(calculator)) {
 						request.getSession().remove(R_CALCULATOR);
-						return request.goHome();
+						return request.redirect(Routes.RECEIPTS);
 					}
 					
 				}
 			} else if (command.equals(Keys.CANCEL)) {
 				if (receiptService.update(calculator)) {
 					request.getSession().remove(R_CALCULATOR);
-					return request.goHome();
+					return request.redirect(Routes.RECEIPTS);
 				}
 			}
 		}

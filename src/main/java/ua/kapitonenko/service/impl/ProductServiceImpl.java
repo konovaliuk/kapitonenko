@@ -150,4 +150,17 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 	
+	@Override
+	public boolean delete(Long prodId, Long userId) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			Product product = productDAO.findOne(prodId);
+			return productDAO.delete(product, userId);
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
 }

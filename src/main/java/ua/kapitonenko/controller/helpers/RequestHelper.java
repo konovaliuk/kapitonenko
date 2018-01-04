@@ -1,12 +1,14 @@
 package ua.kapitonenko.controller.helpers;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.config.Application;
 import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.commands.*;
+import ua.kapitonenko.domain.entities.User;
+import ua.kapitonenko.exceptions.ForbiddenException;
 import ua.kapitonenko.exceptions.NotFoundException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -39,13 +41,19 @@ public class RequestHelper {
 		commands.put(Routes.RECEIPTS, new ReceiptListAction());
 	}
 	
-	public ActionCommand getCommand(HttpServletRequest request) throws IOException, ServletException {
-		String key = request.getRequestURI();
+	public ActionCommand getCommand(RequestWrapper request) throws IOException, ServletException {
+		String key = request.getUri();
 		LOGGER.debug(request.getMethod() + ":" + key);
 		ActionCommand command = commands.get(key);
 		if (command == null) {
 			throw new NotFoundException(key);
 		}
+		User user = request.getSession().getUser();
+		if ((user == null && !Application.guestAllowed(key)) ||
+				    (user != null && !Application.allowed(user.getUserRoleId(), key))) {
+			throw new ForbiddenException(key);
+		}
 		return command;
 	}
+	
 }

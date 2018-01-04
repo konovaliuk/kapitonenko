@@ -9,6 +9,7 @@
     <div class="container">
         <div class="col-md-4 content-center">
             <div class="card card-login card-plain">
+                <h1>${pageContext.errorData.statusCode}</h1>
                 Something bad happened :(
                 <%-- TODO replace placeholder --%>
             </div>
