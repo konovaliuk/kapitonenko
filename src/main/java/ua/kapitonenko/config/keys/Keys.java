@@ -118,4 +118,5 @@ public class Keys {
 	public static final String ERROR_SEARCH_FAIL = "error.search.fail";
 	public static final String GUIDE_SPECIFY_REQUEST = "guide.specify.request";
 	public static final String ERROR_NOT_ENOUGH = "error.not.enough";
+	public static final String ERROR_LESS_ZERO = "error.less.zero";
 }

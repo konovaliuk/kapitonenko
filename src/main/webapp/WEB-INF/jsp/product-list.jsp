@@ -18,18 +18,19 @@
                     <div class="col-8">
                         <h4 class="card-title"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                    <div class="col-2 pl-0">
                         <u:can route="/receipts">
-                            <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
-                                <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
+                            <div class="col-2 pl-0 ml-auto mb-4">
+                                <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
+                                    <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
+
+                            </div>
                         </u:can>
-                    </div>
-                    <div class="col-2 pl-0 mb-4">
-                        <u:can route="/products">
+                    <u:can route="/create-product">
+                        <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-primary btn-block" href="/create-product" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                        </div>
                         </u:can>
-                    </div>
                 </div>
                 <div class="card">
                     <div class="table-responsive">
@@ -70,12 +71,18 @@
                                         </c:forEach>
                                     </td>
 
-                                    <td class="text-right">${product.quantity}</td>
+                                    <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
+                                                                             maxFractionDigits="3"
+                                                                             minFractionDigits="3"
+                                                                             value="${product.quantity}"/></td>
 
                                     <td class="text-center"><fmt:message key="${product.unit.bundleKey}"
                                                                          bundle="${settings}"/></td>
 
-                                    <td class="text-right">${product.price}</td>
+                                    <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
+                                                                             maxFractionDigits="2"
+                                                                             minFractionDigits="2"
+                                                                             value="${product.price}"/></td>
 
                                     <td class="text-center"><fmt:message key="${product.taxCategory.bundleKey}"
                                                                          bundle="${settings}"/></td>

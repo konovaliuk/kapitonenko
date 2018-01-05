@@ -2,6 +2,7 @@ package ua.kapitonenko.controller.commands;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.config.Application;
+import ua.kapitonenko.config.keys.Keys;
 import ua.kapitonenko.config.keys.Pages;
 import ua.kapitonenko.config.keys.Routes;
 import ua.kapitonenko.controller.helpers.RequestWrapper;
@@ -27,6 +28,7 @@ public class ProductCreateAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
+		// TODO split to smaller methods
 		LOGGER.debug(request.paramsToString());
 		
 		List<TaxCategory> taxes = settingsService.getTaxCatList();
@@ -58,14 +60,15 @@ public class ProductCreateAction implements ActionCommand {
 			BigDecimal priceValue = validator.parseDecimal(price, 2, PRODUCT_PRICE);
 			BigDecimal quantityValue = validator.parseDecimal(quantity, 3, PRODUCT_QUANTITY);
 			
-			boolean valid = validator
-									.required(lang, PRODUCT_NAME)
-					                .required(quantityValue, PRODUCT_QUANTITY)
-					                .required(priceValue, PRODUCT_PRICE)
-					                .idInList(unitId, units, PRODUCT_UNIT)
-									.idInList(taxId, taxes, PRODUCT_TAX)
-					                .isValid();
-
+			validator
+					.required(lang, PRODUCT_NAME)
+					.required(quantityValue, PRODUCT_QUANTITY)
+					.required(priceValue, PRODUCT_PRICE)
+					.idInList(unitId, units, PRODUCT_UNIT)
+					.idInList(taxId, taxes, PRODUCT_TAX)
+					.ifValid()
+					.notLess(quantityValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, PRODUCT_QUANTITY)
+					.isValid();
 			
 			product.setQuantity(quantityValue);
 			product.setPrice(priceValue);
@@ -78,12 +81,12 @@ public class ProductCreateAction implements ActionCommand {
 			product.setNames(names);
 			product.setCreatedBy(request.getSession().getUser().getId());
 			
-			if (valid) {
+			if (validator.isValid()) {
 				productService.createProduct(product);
 				return request.redirect(Routes.PRODUCTS);
 			}
 		}
-
+		
 		request.setAttribute(PRODUCT, product);
 		request.setAttribute(TAX_CAT_LIST, taxes);
 		request.setAttribute(UNIT_LIST, units);

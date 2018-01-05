@@ -144,11 +144,12 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	
 	@Override
 	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
+		LOGGER.debug(localeId + " " + productId + " " + name);
 		return getList(SELECT_BY_ID_OR_NAME, ps -> {
 			ps.setString(1, Keys.PRODUCT_NAME);
 			ps.setLong(2, localeId);
 			ps.setString(3, name);
-			ps.setLong(4, productId);
+			ps.setObject(4, productId);
 			
 		}, getResultSetExtractor());
 	}

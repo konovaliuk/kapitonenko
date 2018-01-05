@@ -43,10 +43,11 @@ public class RequestHelper {
 	
 	public ActionCommand getCommand(RequestWrapper request) throws IOException, ServletException {
 		String key = request.getUri();
-		LOGGER.debug(request.getMethod() + ":" + key);
+		LOGGER.debug(request.getMethod() + ": " + key);
 		ActionCommand command = commands.get(key);
 		
 		if (command == null) {
+			LOGGER.debug("command not found");
 			throw new NotFoundException(key);
 		}
 		User user = request.getSession().getUser();
@@ -55,10 +56,13 @@ public class RequestHelper {
 			
 			return commands.get(Routes.HOME);
 			
-		} else if (user != null && !Application.allowed(user.getUserRoleId(), key)) {
+		}
+		
+		if (user != null && !Application.allowed(user.getUserRoleId(), key)) {
 			
 			throw new ForbiddenException(key);
 		}
+		
 		return command;
 	}
 	

@@ -18,6 +18,9 @@ public class MessageProvider {
 	private static Map<String, MessageProvider> providers = new HashMap<>();
 	private Locale locale;
 	
+	private MessageProvider() {
+	}
+	
 	public static MessageProvider get(Locale locale) {
 		
 		if (!providers.containsKey(locale.toString())) {
@@ -77,5 +80,9 @@ public class MessageProvider {
 	
 	public String decimalValidMessage(String label, int precision) {
 		return String.format(getProperty(ERROR_DECIMAL_FORMAT), getProperty(label), precision);
+	}
+	
+	public String concat(String message, String attribute) {
+		return String.format(getProperty(ERROR_LESS_ZERO), getProperty(attribute));
 	}
 }

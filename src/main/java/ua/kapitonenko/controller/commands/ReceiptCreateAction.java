@@ -110,7 +110,8 @@ public class ReceiptCreateAction implements ActionCommand {
 			
 			if (validator.isValid()) {
 				Product found = foundList.get(0);
-				validator.compare(quantityValue, found.getQuantity(), Keys.ERROR_NOT_ENOUGH, null);
+				LOGGER.debug(quantityValue + " " + found.getQuantity());
+				validator.notGreater(quantityValue, found.getQuantity(), Keys.ERROR_NOT_ENOUGH);
 				
 				if (validator.isValid()) {
 					found.setQuantity(quantityValue);

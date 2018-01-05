@@ -95,6 +95,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
+		LOGGER.debug(name);
 		Connection connection = pool.getConnection();
 		try {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);

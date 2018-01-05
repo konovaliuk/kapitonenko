@@ -24,6 +24,7 @@ public class ValidationBuilder {
 	private String labelAllValid;
 	private MessageProvider messageManager;
 	private AlertContainer alertContainer;
+	private boolean skip;
 	
 	public ValidationBuilder(MessageProvider messageManager, AlertContainer alertContainer) {
 		this.messageManager = messageManager;
@@ -53,7 +54,19 @@ public class ValidationBuilder {
 		return decimal;
 	}
 	
+	public ValidationBuilder ifValid() {
+		if (!valid) {
+			skip = true;
+		}
+		return this;
+	}
+	
+	
 	public ValidationBuilder required(String value, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (StringUtils.isEmpty(value)) {
 			alertContainer.addMessage(messageManager.notEmptyMessage(label));
 			valid = false;
@@ -62,6 +75,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder required(Object value, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (value == null) {
 			alertContainer.addMessage(messageManager.notEmptyMessage(label));
 			valid = false;
@@ -70,6 +87,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder required(List<? extends Model> list, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (list == null || list.isEmpty()) {
 			alertContainer.addMessage(messageManager.getProperty(label));
 			valid = false;
@@ -78,6 +99,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder required(String[] values, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (values == null || Stream.of(values).anyMatch(StringUtils::isEmpty)) {
 			alertContainer.addMessage(messageManager.notEmptyLanguagesMessage(label));
 			valid = false;
@@ -86,6 +111,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder requiredAll(Object value, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (value == null) {
 			allValid = false;
 			valid = false;
@@ -95,6 +124,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder requiredOne(Long first, String firstLabel, String second, String secondLabel) {
+		if (skip) {
+			return this;
+		}
+		
 		if (first == null && StringUtils.isEmpty(second)) {
 			alertContainer.addMessage(messageManager.notEmptyOneMessage(firstLabel, secondLabel));
 			valid = false;
@@ -103,15 +136,23 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder identical(String first, String firstLabel, String second, String secondLabel) {
+		if (skip) {
+			return this;
+		}
+		
 		if (!first.equals(second)) {
 			alertContainer.addMessage(messageManager.notEqualsMessage(firstLabel, secondLabel));
 			valid = false;
 		}
 		return this;
 	}
-
+	
 	
 	public ValidationBuilder idInSet(Long id, Set<Long> set, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (id == null || !set.contains(id)) {
 			alertContainer.addMessage(messageManager.notEmptyMessage(label));
 			valid = false;
@@ -120,11 +161,19 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder idInList(Long id, List<? extends BaseEntity> list, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		Set<Long> set = list.stream().map(BaseEntity::getId).collect(Collectors.toSet());
 		return idInSet(id, set, label);
 	}
 	
 	public ValidationBuilder unique(Model model, String username) {
+		if (skip) {
+			return this;
+		}
+		
 		if (model != null) {
 			alertContainer.addMessage(messageManager.notUniqueMessage(username));
 			valid = false;
@@ -133,6 +182,10 @@ public class ValidationBuilder {
 	}
 	
 	public ValidationBuilder exists(Long id, Supplier<Boolean> supplier, String label) {
+		if (skip) {
+			return this;
+		}
+		
 		if (id == null || supplier.get()) {
 			alertContainer.addMessage(messageManager.notExists(label));
 			valid = false;
@@ -142,6 +195,10 @@ public class ValidationBuilder {
 	
 	
 	public ValidationBuilder listSize(int size, List<? extends Model> list, String messageLess, String messageMore) {
+		if (skip) {
+			return this;
+		}
+		
 		if (list == null || list.isEmpty()) {
 			alertContainer.addMessage(messageManager.getProperty(messageLess));
 			valid = false;
@@ -152,18 +209,57 @@ public class ValidationBuilder {
 		return this;
 	}
 	
-	public ValidationBuilder compare(BigDecimal value, BigDecimal base, String lessThanMessage, String greatThanMessage) {
-		if (lessThanMessage != null && value.compareTo(base) > 0) {
-			alertContainer.addMessage(messageManager.getProperty(lessThanMessage));
-			valid = false;
+	public ValidationBuilder notLess(BigDecimal value, BigDecimal base, String message) {
+		if (skip) {
+			return this;
 		}
-		if (greatThanMessage != null && value.compareTo(base) < 0) {
-			alertContainer.addMessage(messageManager.getProperty(greatThanMessage));
+		
+		if (value.compareTo(base) < 0) {
+			alertContainer.addMessage(messageManager.getProperty(message));
 			valid = false;
 		}
 		return this;
 	}
-
+	
+	public ValidationBuilder notLess(BigDecimal value, BigDecimal base, String format, String attr) {
+		if (skip) {
+			return this;
+		}
+		
+		if (value.compareTo(base) < 0) {
+			String message = messageManager.concat(format, attr);
+			alertContainer.addMessage(message);
+			valid = false;
+		}
+		return this;
+	}
+	
+	
+	public ValidationBuilder notGreater(BigDecimal value, BigDecimal base, String message) {
+		if (skip) {
+			return this;
+		}
+		
+		if (value.compareTo(base) > 0) {
+			alertContainer.addMessage(messageManager.getProperty(message));
+			valid = false;
+		}
+		return this;
+	}
+	
+	public ValidationBuilder notGreater(BigDecimal value, BigDecimal base, String format, String attr) {
+		if (skip) {
+			return this;
+		}
+		
+		if (value.compareTo(base) > 0) {
+			String message = messageManager.concat(format, attr);
+			alertContainer.addMessage(message);
+			valid = false;
+		}
+		return this;
+	}
+	
 	
 	public boolean isValid() {
 		

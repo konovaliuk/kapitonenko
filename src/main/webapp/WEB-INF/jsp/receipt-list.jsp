@@ -21,18 +21,18 @@
                     <div class="col-8">
                         <h4 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                    <div class="col-2 pl-0">
-                        <u:can route="/products">
+                    <u:can route="/products">
+                        <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
                                 <fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></a>
-                        </u:can>
-                    </div>
-                    <div class="col-2 pl-0 mb-4">
-                        <u:can route="/create-receipt">
+                        </div>
+                    </u:can>
+                    <u:can route="/create-receipt">
+                        <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
-                        </u:can>
-                    </div>
+                        </div>
+                    </u:can>
                 </div>
                 <div class="card">
                     <div class="table-responsive">
@@ -86,8 +86,14 @@
                                         <td><fmt:message key="${calculator.receipt.paymentType.bundleKey}"
                                                          bundle="${settings}"/></td>
                                         <td class="text-centert">${calculator.products.size()}</td>
-                                        <td class="text-right">${calculator.taxAmount}</td>
-                                        <td class="text-right">${calculator.totalCost}</td>
+                                        <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
+                                                                                 maxFractionDigits="2"
+                                                                                 minFractionDigits="2"
+                                                                                 value="${calculator.taxAmount}"/></td>
+                                        <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
+                                                                                 maxFractionDigits="2"
+                                                                                 minFractionDigits="2"
+                                                                                 value="${calculator.totalCost}"/></td>
                                         <td><fmt:formatDate type="both" value="${calculator.receipt.createdAt}"/></td>
                                         <td>
                                             <c:if test="${calculator.receipt.cancelled}">
