@@ -163,26 +163,6 @@ CREATE TABLE IF NOT EXISTS `z_reports` (
   KEY `FK_z_report_created_by` (`created_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `z_report_details`;
-CREATE TABLE IF NOT EXISTS `z_report_details` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `z_report_id` int(11) NOT NULL,
-  `receipt_type_id` int(11) NOT NULL,
-  `receipts_number` int(11) NOT NULL,
-  `cancelled_number` int(11) NOT NULL,
-  `products_number` int(11) NOT NULL,
-  `cash_amount` decimal(10,2) NOT NULL,
-  `cat_1_amount` decimal(10,2) NOT NULL,
-  `cat_2_amount` decimal(10,2) NOT NULL,
-  `total_amount` decimal(10,2) NOT NULL,
-  `tax_1_amount` decimal(10,2) NOT NULL,
-  `tax_2_amount` decimal(10,2) NOT NULL,
-  `tax_tax_amount` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_details_z_report` (`z_report_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
 DROP TABLE IF EXISTS `locale`;
 CREATE TABLE IF NOT EXISTS `locale` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -223,8 +203,6 @@ ALTER TABLE `z_reports`
   ADD CONSTRAINT `FK_z_report_cashbox` FOREIGN KEY (`cashbox_id`) REFERENCES `cashboxes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_z_report_receipt` FOREIGN KEY (`last_receipt_id`) REFERENCES `receipts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-ALTER TABLE `z_report_details`
-  ADD CONSTRAINT `FK_details_z_report` FOREIGN KEY (`z_report_id`) REFERENCES `z_reports` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

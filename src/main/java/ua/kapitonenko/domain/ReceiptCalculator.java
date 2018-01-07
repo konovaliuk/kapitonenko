@@ -22,6 +22,7 @@ public class ReceiptCalculator extends Model implements Serializable {
 
 	private List<TaxCategory> categories;
 	private Map<TaxCategory, BigDecimal> taxByCategory = new HashMap<>();
+	private Map<TaxCategory, BigDecimal> costByCategory = new HashMap<>();
 	
 	public ReceiptCalculator() {
 	}
@@ -77,6 +78,18 @@ public class ReceiptCalculator extends Model implements Serializable {
 			taxByCategory.put(cat, taxByCategory.get(cat).add(product.getTax()));
 		}
 		return taxByCategory;
+	}
+	
+	public Map<TaxCategory, BigDecimal> getCostByCategory() {
+		for (TaxCategory cat : categories) {
+			costByCategory.put(cat, new BigDecimal("0.00"));
+		}
+		
+		for (Product product : products) {
+			TaxCategory cat = product.getTaxCategory();
+			costByCategory.put(cat, costByCategory.get(cat).add(product.getCost()));
+		}
+		return costByCategory;
 	}
 	
 	public void setCategories(List<TaxCategory> taxCats) {

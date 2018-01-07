@@ -7,6 +7,6 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 public interface ActionCommand {
-	ResponseParams execute(RequestWrapper requestWrapper)
+	ResponseParams execute(RequestWrapper request)
 			throws ServletException, IOException;
 }

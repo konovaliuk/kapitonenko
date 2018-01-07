@@ -52,7 +52,7 @@ public class ReceiptDAOTest extends BaseDAOTest {
 			Receipt updated = entities.get(0);
 			final boolean CANCELLED = true;
 			updated.setCancelled(CANCELLED);
-			assertThat(dao.update(updated), is(CANCELLED));
+			assertThat(dao.update(updated), is(true));
 			assertThat(dao.findOne(updated.getId()).isCancelled(), is(CANCELLED));
 			assertThat(dao.findOne(updated.getId()), is(equalTo(updated)));
 			

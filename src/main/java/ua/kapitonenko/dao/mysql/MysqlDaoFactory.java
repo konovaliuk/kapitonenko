@@ -67,11 +67,6 @@ public class MysqlDaoFactory implements DAOFactory {
 	}
 	
 	@Override
-	public ZReportDetailDAO getZReportDetailDAO(Connection connection) {
-		return new MysqlZReportDetailDAO(connection);
-	}
-	
-	@Override
 	public ZReportDAO getZReportDAO(Connection connection) {
 		return new MysqlZReportDAO(connection);
 	}

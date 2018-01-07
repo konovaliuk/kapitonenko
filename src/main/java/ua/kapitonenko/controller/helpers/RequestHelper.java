@@ -39,11 +39,18 @@ public class RequestHelper {
 		commands.put(Routes.RECEIPT_RETURN, new ReceiptReturnAction());
 		commands.put(Routes.RECEIPT_CANCEL, new ReceiptCancelAction());
 		commands.put(Routes.RECEIPTS, new ReceiptListAction());
+		commands.put(Routes.REPORT_CREATE, new ReportCreateAction());
+		commands.put(Routes.REPORTS, new ReportListAction());
+		commands.put(Routes.REPORT_VIEW, new ReportViewAction());
+		
 	}
 	
 	public ActionCommand getCommand(RequestWrapper request) throws IOException, ServletException {
 		String key = request.getUri();
+		
 		LOGGER.debug(request.getMethod() + ": " + key);
+		LOGGER.debug(request.paramsToString());
+		
 		ActionCommand command = commands.get(key);
 		
 		if (command == null) {
@@ -53,13 +60,10 @@ public class RequestHelper {
 		User user = request.getSession().getUser();
 		
 		if (user == null && !Application.guestAllowed(key)) {
-			
 			return commands.get(Routes.HOME);
-			
 		}
 		
 		if (user != null && !Application.allowed(user.getUserRoleId(), key)) {
-			
 			throw new ForbiddenException(key);
 		}
 		

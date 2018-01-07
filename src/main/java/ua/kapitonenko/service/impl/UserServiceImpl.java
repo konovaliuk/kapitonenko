@@ -61,4 +61,16 @@ public class UserServiceImpl implements UserService {
 			pool.close(connection);
 		}
 	}
+	
+	@Override
+	public User findById(Long id) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			UserDAO userDAO = Application.getDAOFactory().getUserDAO(connection);
+			return userDAO.findOne(id);
+		} finally {
+			pool.close(connection);
+		}
+	}
 }

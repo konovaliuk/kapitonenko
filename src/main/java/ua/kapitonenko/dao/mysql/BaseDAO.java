@@ -1,5 +1,6 @@
 package ua.kapitonenko.dao.mysql;
 
+import org.apache.log4j.Logger;
 import ua.kapitonenko.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.dao.interfaces.DAO;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
+	private static final Logger LOGGER = Logger.getLogger(BaseDAO.class);
+	
+	
 	protected static final String WHERE_ID = " WHERE " + BaseTable.ID + "=? ";
 	protected static final String AND_NOT_DELETED = " AND " + BaseTable.DELETED_AT + " IS NULL";
 	protected static final String WHERE_NOT_DELETED = " WHERE " + BaseTable.DELETED_AT + " IS NULL";
@@ -86,6 +90,8 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 			if (pss != null) {
 				pss.prepare(ps);
 			}
+			
+			LOGGER.debug(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			List<E> list = new ArrayList<>();
 			while (rs.next()) {
@@ -176,6 +182,7 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 	
 	@Override
 	public List<E> findAllByQuery(String query, PreparedStatementSetter pss) {
-		return getList(getSelectAllQuery() + " " + query, pss, getResultSetExtractor());
+		String sql = getSelectAllQuery() + " " + query;
+		return getList(sql, pss, getResultSetExtractor());
 	}
 }

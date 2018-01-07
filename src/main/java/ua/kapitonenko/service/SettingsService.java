@@ -18,6 +18,8 @@ public interface SettingsService {
 	
 	Cashbox findCashbox(Long id);
 	
+	PaymentType findPaymentType(Long id);
+	
 	List<Locale> getLocaleList();
 	
 	List<String> getSupportedLanguages();
@@ -27,4 +29,6 @@ public interface SettingsService {
 	Company findCompany(Long id);
 	
 	List<PaymentType> getPaymentTypes();
+	
+	List<Cashbox> getCashboxList();
 }

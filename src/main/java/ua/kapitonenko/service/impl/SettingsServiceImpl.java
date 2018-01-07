@@ -111,6 +111,18 @@ public class SettingsServiceImpl implements SettingsService {
 	}
 	
 	@Override
+	public PaymentType findPaymentType(Long id) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
+			return paymentTypeDAO.findOne(id);
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
 	public List<Locale> getLocaleList() {
 		Connection connection = null;
 		try {
@@ -156,6 +168,21 @@ public class SettingsServiceImpl implements SettingsService {
 			PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
 			
 			List<PaymentType> list = paymentTypeDAO.findAll();
+			
+			return list;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public List<Cashbox> getCashboxList() {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection);
+			
+			List<Cashbox> list = cashboxDAO.findAll();
 			
 			return list;
 		} finally {

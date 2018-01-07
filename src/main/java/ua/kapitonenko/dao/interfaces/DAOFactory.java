@@ -29,8 +29,6 @@ public interface DAOFactory {
 	
 	UserDAO getUserDAO(Connection connection);
 	
-	ZReportDetailDAO getZReportDetailDAO(Connection connection);
-	
 	ZReportDAO getZReportDAO(Connection connection);
 	
 	LocaleDAO getLocaleDAO(Connection connection);

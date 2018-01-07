@@ -329,5 +329,22 @@ td p {
     border-color: #88cc00;
 }
 
+.report .table th + th,
+.report .table th + td,
+.report .table td + td {
+    border-left: 1px solid #e9ecef;
+}
+
+.report .card-footer {
+    padding: 12px 10.88px;
+}
+
+.report .table td, .table th {
+    padding: 0.42rem .68rem;
+}
+
+
+
+
 
 

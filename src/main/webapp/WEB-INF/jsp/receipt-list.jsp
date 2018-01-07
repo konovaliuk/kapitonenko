@@ -55,7 +55,7 @@
                                             key="${Keys.PAYMENT}" bundle="${msg}"/></th>
 
                                     <th scope="col" width="50px"><fmt:message
-                                            key="${Keys.NUMBER_ARTICLES}" bundle="${msg}"/></th>
+                                            key="${Keys.NO_ARTICLES}" bundle="${msg}"/></th>
 
 
                                     <th scope="col" width="100px" class="text-right"><fmt:message

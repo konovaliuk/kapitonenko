@@ -18,6 +18,7 @@ public class Keys {
 	public static final String DELETE = "button.delete";
 	public static final String RETURN = "button.return";
 	public static final String CREATE = "button.create";
+	public static final String PRINT = "button.print";
 	
 	
 	public static final String LOGIN_FIRST = "guide.login.first";
@@ -106,7 +107,7 @@ public class Keys {
 	public static final String PAYMENT_TYPES = "paymentTypes";
 	
 	public static final String STATUS = "status";
-	public static final String NUMBER_ARTICLES = "articles.number";
+	public static final String NO_ARTICLES = "articles.number";
 	public static final String CREATED_AT = "created.at";
 	public static final String CANCELLED = "status.cancelled";
 	
@@ -119,4 +120,30 @@ public class Keys {
 	public static final String GUIDE_SPECIFY_REQUEST = "guide.specify.request";
 	public static final String ERROR_NOT_ENOUGH = "error.not.enough";
 	public static final String ERROR_LESS_ZERO = "error.less.zero";
+	public static final String X_REPORT = "report.type.x";
+	public static final String Z_REPORT = "report.type.z";
+	public static final String REPORT_TYPES = "reportTypes";
+	public static final String REPORT_TYPE = "report.type";
+	public static final String CASHBOX_LIST = "cashboxList";
+	public static final String REPORTS = "reports";
+	public static final String REPORT = "report";
+	public static final String REPORT_LIST = "report.list";
+	public static final String REPORT_NEW = "report.new";
+	
+	public static final String REPORT_CASHBOX = "report.cashbox";
+	public static final String SALES = "sales";
+	public static final String REFUNDS = "refunds";
+	
+	public static final String NO_RECEIPTS = "receipts.number";
+	public static final String NO_CANCELLED = "cancelled.number";
+	public static final String TURNOVER_BY_TAX_CAT = "turnover.tax";
+	public static final String TOTAL_TURNOVER = "total.turnover";
+	public static final String TAX_BY_TAX_CAT = "tax.tax";
+	
+	public static final String DEPOSIT = "deposit";
+	public static final String WITHDRAWAL = "withdrawal";
+	public static final String CASH_IN_SAFE = "cash.in.safe";
+	
+	
+	public static final String FISCAL = "fiscal";
 }

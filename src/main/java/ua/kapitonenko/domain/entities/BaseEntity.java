@@ -4,7 +4,7 @@ import ua.kapitonenko.domain.Model;
 
 import java.io.Serializable;
 
-public abstract class BaseEntity extends Model implements Serializable {
+public abstract class BaseEntity extends Model implements Serializable, Comparable<BaseEntity> {
 	
 	private Long id;
 	
@@ -23,5 +23,8 @@ public abstract class BaseEntity extends Model implements Serializable {
 		this.id = id;
 	}
 	
-	
+	@Override
+	public int compareTo(BaseEntity o) {
+		return id.compareTo(o.id);
+	}
 }

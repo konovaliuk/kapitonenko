@@ -16,4 +16,5 @@ public class PaymentType extends BaseLocalizedEntity {
 				       .toString();
 	}
 	
+	
 }

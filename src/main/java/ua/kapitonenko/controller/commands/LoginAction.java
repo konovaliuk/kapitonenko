@@ -26,7 +26,6 @@ public class LoginAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		LOGGER.debug(request.paramsToString());
 		
 		if (!request.getSession().userIsGuest()) {
 			return request.goHome();

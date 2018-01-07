@@ -32,7 +32,6 @@ public class ReceiptCreateAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		LOGGER.debug(request.paramsToString());
 		// TODO split into separate classes
 		
 		ReceiptCalculator calculator = getCalculator(request);

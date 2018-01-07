@@ -7,11 +7,23 @@ import ua.kapitonenko.dao.tables.ZReportsTable;
 import ua.kapitonenko.domain.entities.ZReport;
 
 import java.sql.Connection;
-import java.util.Date;
 
 public class MysqlZReportDAO extends BaseDAO<ZReport> implements ZReportDAO {
-	private static final String UPDATE = "" + WHERE_ID;
-	private static final String INSERT = "";
+	private static final String UPDATE = "UPDATE " +
+			                                     ZReportsTable.NAME + " SET " +
+			                                     ZReportsTable.CASHBOX_ID + " = ?, " +
+			                                     ZReportsTable.LAST_RECEIPT_ID + " = ?, " +
+			                                     ZReportsTable.CASH_BALANCE + " = ? " +
+			                                     WHERE_ID;
+	
+	private static final String INSERT = "INSERT INTO " +
+			                                     ZReportsTable.NAME + " ( " +
+			                                     ZReportsTable.CASHBOX_ID + ", " +
+			                                     ZReportsTable.LAST_RECEIPT_ID + ", " +
+			                                     ZReportsTable.CASH_BALANCE + ", " +
+			                                     ZReportsTable.CREATED_AT + ", " +
+			                                     ZReportsTable.CREATED_BY +
+			                                     ") VALUES (?, ?, ?, NOW(), ?)";
 	
 	MysqlZReportDAO(Connection connection) {
 		super(connection);
@@ -35,23 +47,20 @@ public class MysqlZReportDAO extends BaseDAO<ZReport> implements ZReportDAO {
 	@Override
 	protected PreparedStatementSetter getInsertStatementSetter(final ZReport entity) {
 		return ps -> {
-			ps.setLong(1, entity.getMachineId());
+			ps.setLong(1, entity.getCashboxId());
 			ps.setLong(2, entity.getLastReceiptId());
-			ps.setString(3, entity.getCashBalance());
-			ps.setTimestamp(4, new java.sql.Timestamp(entity.getCreatedAt().getTime()));
-			ps.setLong(5, entity.getCreatedBy());
+			ps.setBigDecimal(3, entity.getCashBalance());
+			ps.setLong(4, entity.getCreatedBy());
 		};
 	}
 	
 	@Override
 	protected PreparedStatementSetter getUpdateStatementSetter(final ZReport entity) {
 		return ps -> {
-			ps.setLong(1, entity.getMachineId());
+			ps.setLong(1, entity.getCashboxId());
 			ps.setLong(2, entity.getLastReceiptId());
-			ps.setString(3, entity.getCashBalance());
-			ps.setTimestamp(4, new java.sql.Timestamp(entity.getCreatedAt().getTime()));
-			ps.setLong(5, entity.getCreatedBy());
-			ps.setLong(6, entity.getId());
+			ps.setBigDecimal(3, entity.getCashBalance());
+			ps.setLong(4, entity.getId());
 		};
 	}
 	
@@ -64,12 +73,12 @@ public class MysqlZReportDAO extends BaseDAO<ZReport> implements ZReportDAO {
 	protected ResultSetExtractor<ZReport> getResultSetExtractor() {
 		return rs -> {
 			ZReport row = new ZReport();
-			row.setId(rs.getLong("id"));
-			row.setMachineId(rs.getLong("machine_id"));
-			row.setLastReceiptId(rs.getLong("last_receipt_id"));
-			row.setCashBalance(rs.getString("cash_balance"));
-			row.setCreatedAt(new Date(rs.getTimestamp("created_at").getTime()));
-			row.setCreatedBy(rs.getLong("created_by"));
+			row.setId(rs.getLong(ZReportsTable.ID));
+			row.setCashboxId(rs.getLong(ZReportsTable.CASHBOX_ID));
+			row.setLastReceiptId(rs.getLong(ZReportsTable.LAST_RECEIPT_ID));
+			row.setCashBalance(rs.getBigDecimal(ZReportsTable.CASH_BALANCE));
+			row.setCreatedAt(rs.getTimestamp(ZReportsTable.CREATED_AT));
+			row.setCreatedBy(rs.getLong(ZReportsTable.CREATED_BY));
 			return row;
 		};
 	}

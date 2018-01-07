@@ -22,4 +22,9 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	public ReceiptService getReceiptService() {
 		return ReceiptServiceImpl.getInstance();
 	}
+	
+	@Override
+	public ReportService getReportService() {
+		return ReportServiceImpl.getInstance();
+	}
 }

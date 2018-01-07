@@ -8,4 +8,6 @@ public interface ServiceFactory {
 	ProductService getProductService();
 	
 	ReceiptService getReceiptService();
+	
+	ReportService getReportService();
 }

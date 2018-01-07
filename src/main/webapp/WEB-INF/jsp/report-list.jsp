@@ -16,24 +16,24 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-8">
-                        <h4 class="card-title"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h4>
+                        <h4 class="card-title"><fmt:message key="${Keys.REPORT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                        <u:can route="/receipts">
-                            <div class="col-2 pl-0 ml-auto mb-4">
-                                <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
-                                    <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
-
-                            </div>
-                        </u:can>
-                    <u:can route="/create-product">
+                    <u:can route="/receipts">
                         <div class="col-2 pl-0 ml-auto mb-4">
-                            <a class="btn btn-primary btn-block" href="/create-product" role="button">
+                            <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
+                                <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
+
+                        </div>
+                    </u:can>
+                    <u:can route="/create-report">
+                        <div class="col-2 pl-0 ml-auto mb-4">
+                            <a class="btn btn-primary btn-block" href="/create-report" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
                         </div>
-                        </u:can>
+                    </u:can>
                 </div>
-                <div class="card">
-                    <%-- TODO show product name in all lang only to merchandiser --%>
+                <%--<div class="card">
+                    &lt;%&ndash; TODO show product name in all lang only to merchandiser &ndash;%&gt;
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -101,8 +101,8 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <%@ include file="includes/pager.jsp" %>
+                </div>--%>
+                <%--<%@ include file="includes/pager.jsp" %>--%>
             </div>
         </div>
     </div>

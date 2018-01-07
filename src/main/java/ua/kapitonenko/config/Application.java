@@ -83,6 +83,9 @@ public class Application {
 				getId(ROLE_SENIOR), Arrays.asList(
 						Routes.LANGUAGE,
 						Routes.PRODUCTS,
+						Routes.REPORTS,
+						Routes.REPORT_CREATE,
+						Routes.REPORT_VIEW,
 						Routes.RECEIPT_CANCEL,
 						Routes.RECEIPT_RETURN,
 						Routes.RECEIPTS,

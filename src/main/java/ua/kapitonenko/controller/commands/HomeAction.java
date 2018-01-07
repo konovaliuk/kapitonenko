@@ -22,6 +22,10 @@ public class HomeAction implements ActionCommand {
 			return request.redirect(Routes.PRODUCTS);
 		}
 		
+		if (request.getSession().getUser().getUserRoleId().equals(Application.getId(Application.ROLE_SENIOR))) {
+			return request.redirect(Routes.REPORTS);
+		}
+		
 		return request.redirect(Routes.RECEIPTS);
 	}
 }

@@ -8,4 +8,6 @@ public interface UserService {
 	User findByLoginAndPassword(User user);
 	
 	User findByUsername(User user);
+	
+	User findById(Long id);
 }
