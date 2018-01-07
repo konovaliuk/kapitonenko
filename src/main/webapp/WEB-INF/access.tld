@@ -8,10 +8,10 @@
 
     <tag>
         <name>can</name>
-        <tag-class>ua.kapitonenko.taglib.AccessTag</tag-class>
+        <tag-class>ua.kapitonenko.app.taglib.AccessTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
-            <name>route</name>
+            <name>action</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>

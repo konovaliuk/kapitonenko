@@ -7,7 +7,7 @@
 
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>ua.kapitonenko.controller.filters.EncodingFilter</filter-class>
+        <filter-class>ua.kapitonenko.app.controller.filters.EncodingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
@@ -16,7 +16,7 @@
 
     <filter>
         <filter-name>LocaleFilter</filter-name>
-        <filter-class>ua.kapitonenko.controller.filters.LocaleFilter</filter-class>
+        <filter-class>ua.kapitonenko.app.controller.filters.LocaleFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LocaleFilter</filter-name>
@@ -47,7 +47,7 @@
 
     <servlet>
         <servlet-name>controller</servlet-name>
-        <servlet-class>ua.kapitonenko.controller.Controller</servlet-class>
+        <servlet-class>ua.kapitonenko.app.controller.Controller</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>controller</servlet-name>

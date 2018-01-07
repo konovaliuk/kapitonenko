@@ -1,9 +1,9 @@
-<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.domain.entities.Product"/>
-<%--@elvariable id="rcalculator" type="ua.kapitonenko.domain.ReceiptCalculator"--%>
-<%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
-<%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.domain.ReceiptCalculator>"--%>
+<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
+<%--@elvariable id="rcalculator" type="ua.kapitonenko.app.domain.Receipt"--%>
+<%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
+<%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.app.domain.Receipt>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -21,13 +21,13 @@
                     <div class="col-8">
                         <h4 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                    <u:can route="/products">
+                    <u:can action="/products">
                         <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
                                 <fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></a>
                         </div>
                     </u:can>
-                    <u:can route="/create-receipt">
+                    <u:can action="/create-receipt">
                         <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
@@ -104,7 +104,7 @@
                                         <td class="text-center">
                                             <c:if test="${!calculator.receipt.cancelled}">
                                                 <c:if test="${calculator.returnVisible}">
-                                                    <u:can route="/return-receipt">
+                                                    <u:can action="/return-receipt">
                                                         <button type="button" class="btn btn-link"
                                                                 onclick="var form = $('#receipt-list-form');
                                                                         $('#rId').val(${calculator.receipt.id});
@@ -114,7 +114,7 @@
                                                         </button>
                                                     </u:can>
                                                 </c:if>
-                                                <u:can route="/cancel-receipt">
+                                                <u:can action="/cancel-receipt">
                                                     <button type="button" class="btn btn-link"
                                                             onclick="var form = $('#receipt-list-form');
                                                                     $('#rId').val(${calculator.receipt.id});

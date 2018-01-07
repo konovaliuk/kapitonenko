@@ -1,6 +1,6 @@
-<%--@elvariable id="user" type="ua.kapitonenko.domain.entities.User"--%>
+<%--@elvariable id="user" type="ua.kapitonenko.app.domain.records.User"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -44,7 +44,7 @@
                                        placeholder="<fmt:message key="${Keys.CONFIRM_PASS}" bundle="${msg}"/> ..."/>
                             </div>
 
-                            <%--@elvariable id="roleList" type="java.util.List<ua.kapitonenko.domain.entities.UserRole>"--%>
+                            <%--@elvariable id="roleList" type="java.util.List<ua.kapitonenko.app.domain.records.UserRole>"--%>
                             <c:if test="${not empty roleList}">
                                 <div class="form-group option-list">
                                     <c:forEach items="${roleList}" var="option">

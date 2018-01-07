@@ -1,6 +1,6 @@
-<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
+<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <%@ taglib prefix="u" uri="/WEB-INF/access.tld" %>
 <!DOCTYPE html>
 <html>
@@ -18,14 +18,14 @@
                     <div class="col-8">
                         <h4 class="card-title"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                        <u:can route="/receipts">
+                        <u:can action="/receipts">
                             <div class="col-2 pl-0 ml-auto mb-4">
                                 <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
                                     <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
 
                             </div>
                         </u:can>
-                    <u:can route="/create-product">
+                    <u:can action="/create-product">
                         <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-primary btn-block" href="/create-product" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
@@ -90,7 +90,7 @@
                                     <td class="text-center">
                                         <form action="/delete-product" method="POST" role="form">
                                             <input type="hidden" name="id" value="${product.id}">
-                                            <u:can route="/delete-product">
+                                            <u:can action="/delete-product">
                                                 <button type="submit" class="btn btn-link">
                                                     <fmt:message key="${Keys.DELETE}" bundle="${msg}"/></button>
                                             </u:can>

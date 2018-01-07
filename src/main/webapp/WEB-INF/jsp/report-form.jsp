@@ -1,6 +1,6 @@
-<%--@elvariable id="report" type="ua.kapitonenko.domain.Report"--%>
+<%--@elvariable id="report" type="ua.kapitonenko.app.domain.Report"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -20,7 +20,7 @@
                             <label><fmt:message key="${Keys.CASHBOX}" bundle="${msg}"/></label>
                             <select class="form-control" name="report.cashbox">
                                 <option></option>
-                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.domain.entities.Cashbox>"--%>
+                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.app.domain.records.Cashbox>"--%>
                                 <c:forEach items="${cashboxList}" var="option">
                                     <option value="${option.id}" ${report.cashbox.id.equals(option.id) ? "selected" : ""}>
                                             ${option.id}
@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <label class="mb-1"><fmt:message key="${Keys.REPORT_TYPE}" bundle="${msg}"/></label>
                         <br>
-                        <%--@elvariable id="reportTypes" type="ua.kapitonenko.domain.ReportType"--%>
+                        <%--@elvariable id="reportTypes" type="ua.kapitonenko.app.domain.ReportType"--%>
                         <c:forEach items="${reportTypes}" var="type">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="report.type" id="type-${type.label}"

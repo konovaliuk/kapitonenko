@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--@elvariable id="alert" type="ua.kapitonenko.controller.helpers.AlertContainer"--%>
+<%--@elvariable id="alert" type="ua.kapitonenko.app.controller.helpers.AlertContainer"--%>
 
 <c:if test="${not empty alert && alert.hasMessages}">
     <div class="alert alert-${alert.messageType} clearfix" role="alert">

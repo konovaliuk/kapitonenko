@@ -1,6 +1,6 @@
-<%--@elvariable id="report" type="ua.kapitonenko.domain.Report"--%>
+<%--@elvariable id="report" type="ua.kapitonenko.app.domain.Report"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 

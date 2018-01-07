@@ -17,7 +17,7 @@
                 </ul>
             </form>
         </div>
-        <%--@elvariable id="company" type="ua.kapitonenko.domain.entities.Company"--%>
+        <%--@elvariable id="company" type="ua.kapitonenko.app.domain.records.Company"--%>
         <c:if test="${company != null}">
             <p class="company pull-right mb-0">
                 <fmt:message key="${company.bundleKeyName}" bundle="${settings}"/>&nbsp;

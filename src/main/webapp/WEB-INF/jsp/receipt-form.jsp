@@ -1,9 +1,9 @@
-<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.domain.entities.Product"/>
-<%--@elvariable id="rcalculator" type="ua.kapitonenko.domain.ReceiptCalculator"--%>
-<%--@elvariable id="product" type="ua.kapitonenko.domain.entities.Product"--%>
-<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.domain.entities.Product>"--%>
+<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
+<%--@elvariable id="rcalculator" type="ua.kapitonenko.app.domain.Receipt"--%>
+<%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
+<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.config.keys.Keys" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 

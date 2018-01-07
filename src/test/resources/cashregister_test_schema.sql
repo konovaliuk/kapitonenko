@@ -63,12 +63,12 @@ DROP TABLE IF EXISTS `product_locale`;
 CREATE TABLE IF NOT EXISTS `product_locale` (
   `id`             int(11)                              NOT NULL AUTO_INCREMENT,
   `product_id`     int(11)                              NOT NULL,
-  `locale`         INT(11)                              NOT NULL,
+  `locale_id`      INT(11)                              NOT NULL,
   `property_name`  varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `property_value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_product_locale_products` (`product_id`),
-  KEY `FK_product_locale_locale` (`locale`)
+  KEY `FK_product_locale_locale` (`locale_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `receipts`;
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `locale` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `product_locale`
-  ADD CONSTRAINT `FK_product_locale_locale` FOREIGN KEY (`locale`) REFERENCES `locale` (`id`)
+  ADD CONSTRAINT `FK_product_locale_locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_product_locale_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
