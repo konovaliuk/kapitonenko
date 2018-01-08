@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.service.impl;
 
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.dao.interfaces.UserDAO;
 import ua.kapitonenko.app.domain.records.User;
 import ua.kapitonenko.app.service.UserService;

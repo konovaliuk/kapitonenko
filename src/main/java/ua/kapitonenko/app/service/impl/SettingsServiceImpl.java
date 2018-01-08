@@ -2,7 +2,7 @@ package ua.kapitonenko.app.service.impl;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.dao.interfaces.*;
 import ua.kapitonenko.app.domain.records.*;
 import ua.kapitonenko.app.service.SettingsService;

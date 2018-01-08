@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.fixtures;
 
-import ua.kapitonenko.app.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.exceptions.DAOException;
 
 import java.sql.Connection;

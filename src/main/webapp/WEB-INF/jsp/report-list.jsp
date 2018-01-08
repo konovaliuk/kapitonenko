@@ -1,4 +1,4 @@
-<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
+<%--@elvariable id="report" type="ua.kapitonenko.app.domain.Report"--%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <%@ taglib prefix="u" uri="/WEB-INF/access.tld" %>
@@ -32,77 +32,39 @@
                         </div>
                     </u:can>
                 </div>
-                <%--<div class="card">
-                    &lt;%&ndash; TODO show product name in all lang only to merchandiser &ndash;%&gt;
+                <div class="card">
+                    <%-- TODO show product name in all lang only to merchandiser --%>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
                                 <th scope="col" width="50px"><fmt:message key="${Keys.ID}" bundle="${msg}"/></th>
+                                ${report.fields.size()}
+                                <c:forEach var="field" items="${report.fields}">
+                                    <%--<c:if test="${field.showInList}">--%>
+                                    <fmt:setBundle basename="${field.bundle}" var="custom"/>
 
-                                <th scope="col" width="300px"><fmt:message key="${Keys.PRODUCT_NAME}"
-                                                                           bundle="${msg}"/></th>
+                                    <th scope="col">
+                                        <fmt:message key="${field.name}" bundle="${custom}"/><br>
+                                        (<fmt:message key="${Keys.SALES}" bundle="${msg}"/>)
+                                    </th>
 
-                                <th scope="col" width="160px" class="text-right"><fmt:message
-                                        key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></th>
+                                    <th scope="col">
+                                        <fmt:message key="${field.name}" bundle="${custom}"/><br>
+                                        (<fmt:message key="${Keys.REFUNDS}" bundle="${msg}"/>)
+                                    </th>
 
-                                <th scope="col" width="120px" class="text-center"><fmt:message
-                                        key="${Keys.PRODUCT_UNIT}"
-                                        bundle="${msg}"/></th>
-
-                                <th scope="col" width="120px" class="text-right"><fmt:message
-                                        key="${Keys.PRODUCT_PRICE}" bundle="${msg}"/></th>
-
-                                <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.PRODUCT_TAX}"
-                                                                                               bundle="${msg}"/></th>
-
-                                <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.ACTION}"
-                                                                                               bundle="${msg}"/></th>
+                                    <%--</c:if>--%>
+                                </c:forEach>
                             </tr>
                             </thead>
                             <tbody>
 
-                            <c:forEach var="product" items="${products}">
-                                <tr>
-                                    <th scope="row">${product.id}</th>
-
-                                    <td>
-                                        <c:forEach items="${product.names}" var="name">
-                                            <p>${name.propertyValue} (${name.locale.language})</p>
-                                        </c:forEach>
-                                    </td>
-
-                                    <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
-                                                                             maxFractionDigits="3"
-                                                                             minFractionDigits="3"
-                                                                             value="${product.quantity}"/></td>
-
-                                    <td class="text-center"><fmt:message key="${product.unit.bundleKey}"
-                                                                         bundle="${settings}"/></td>
-
-                                    <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
-                                                                             maxFractionDigits="2"
-                                                                             minFractionDigits="2"
-                                                                             value="${product.price}"/></td>
-
-                                    <td class="text-center"><fmt:message key="${product.taxCategory.bundleKey}"
-                                                                         bundle="${settings}"/></td>
-                                    <td class="text-center">
-                                        <form action="/delete-product" method="POST" role="form">
-                                            <input type="hidden" name="id" value="${product.id}">
-                                            <u:can route="/delete-product">
-                                                <button type="submit" class="btn btn-link">
-                                                    <fmt:message key="${Keys.DELETE}" bundle="${msg}"/></button>
-                                            </u:can>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
                             </tbody>
                         </table>
                     </div>
-                </div>--%>
-                <%--<%@ include file="includes/pager.jsp" %>--%>
+                </div>
+                <%@ include file="includes/pager.jsp" %>
             </div>
         </div>
     </div>

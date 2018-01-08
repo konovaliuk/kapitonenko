@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.exceptions;
 
-public class ForbiddenException extends CashregisterException {
+public class ForbiddenException extends AppException {
 	
 	public ForbiddenException(String message) {
 		super(message);

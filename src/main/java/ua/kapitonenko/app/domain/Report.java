@@ -1,48 +1,56 @@
 package ua.kapitonenko.app.domain;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.domain.records.Cashbox;
 import ua.kapitonenko.app.domain.records.PaymentType;
 import ua.kapitonenko.app.domain.records.TaxCategory;
+import ua.kapitonenko.app.domain.records.ZReport;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Report extends Model implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger(Report.class);
 	
+	private Long userId;
 	private Cashbox cashbox;
 	private ReportType type;
 	private String docType;
-	private Date createdAt;
+	private Date createdAt = new Date();
 	private BigDecimal deposit = new BigDecimal("0.00");
 	private BigDecimal withdrawal = new BigDecimal("0.00");
+	private ZReport record;
 	
 	private ReportSummary salesFigures;
 	private ReportSummary refundsFigures;
 	
 	private List<ReportField> fields = new ArrayList<>();
 	
-	private boolean initialized;
 	
-	public Report() {
-		createdAt = new Date();
+	public Report(Long userId) {
+		this.userId = userId;
 	}
 	
-	public boolean isInitialized() {
-		return initialized;
+	public Long getUserId() {
+		return userId;
 	}
 	
-	public void initSummary(List<Receipt> sales, List<Receipt> refunds,
+	
+	public void initSummary(List<Receipt> receipts,
 	                        List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
+		
+		Map<Long, List<Receipt>> map = receipts.stream().collect(Collectors.groupingBy(receipt -> receipt.getRecord().getReceiptTypeId()));
+		
+		List<Receipt> sales = map.getOrDefault(Application.getId(Application.RECEIPT_TYPE_FISCAL), Collections.emptyList());
 		salesFigures = new ReportSummary(sales, taxCats, paymentTypes);
+		
+		List<Receipt> refunds = map.getOrDefault(Application.getId(Application.RECEIPT_TYPE_RETURN), Collections.emptyList());
 		refundsFigures = new ReportSummary(refunds, taxCats, paymentTypes);
 		initFields();
-		initialized = true;
 	}
 	
 	
@@ -51,21 +59,21 @@ public class Report extends Model implements Serializable {
 	}
 	
 	private void initFields() {
-		fields.add(new ReportField(Keys.NO_RECEIPTS,
+		fields.add(new ReportField(true, Keys.NO_RECEIPTS,
 				                          BigDecimal.valueOf(salesFigures.getNoReceipts()),
 				                          BigDecimal.valueOf(refundsFigures.getNoReceipts()),
 				                          null, 0));
-		fields.add(new ReportField(Keys.NO_ARTICLES,
+		fields.add(new ReportField(false, Keys.NO_ARTICLES,
 				                          BigDecimal.valueOf(salesFigures.getNoArticles()),
 				                          BigDecimal.valueOf(refundsFigures.getNoArticles()),
 				                          null, 0));
-		fields.add(new ReportField(Keys.NO_CANCELLED,
+		fields.add(new ReportField(false, Keys.NO_CANCELLED,
 				                          BigDecimal.valueOf(salesFigures.getNoCancelled()),
 				                          BigDecimal.valueOf(refundsFigures.getNoCancelled()),
 				                          null, 0));
 		
 		for (PaymentType type : salesFigures.costPerPayType().keySet()) {
-			fields.add(new ReportField(type.getBundleKey(),
+			fields.add(new ReportField(false, type.getBundleKey(),
 					                          salesFigures.costPerPayType().get(type),
 					                          refundsFigures.costPerPayType().get(type),
 					                          type.getBundleName(),
@@ -73,31 +81,31 @@ public class Report extends Model implements Serializable {
 			));
 		}
 		
-		fields.add(new ReportField(Keys.TURNOVER_BY_TAX_CAT, null, null, null, 0));
+		fields.add(new ReportField(false, Keys.TURNOVER_BY_TAX_CAT, null, null, null, 0));
 		for (TaxCategory cat : salesFigures.costPerTaxCat().keySet()) {
-			fields.add(new ReportField(cat.getBundleKey(),
+			fields.add(new ReportField(false, cat.getBundleKey(),
 					                          salesFigures.costPerTaxCat().get(cat),
 					                          refundsFigures.costPerTaxCat().get(cat),
 					                          cat.getBundleName(),
 					                          2
 			));
 		}
-		fields.add(new ReportField(Keys.TOTAL_TURNOVER,
+		fields.add(new ReportField(true, Keys.TOTAL_TURNOVER,
 				                          salesFigures.getTotalCost(),
 				                          refundsFigures.getTotalCost(),
 				                          null,
 				                          2));
 		
-		fields.add(new ReportField(Keys.TAX_BY_TAX_CAT, null, null, null, 0));
+		fields.add(new ReportField(false, Keys.TAX_BY_TAX_CAT, null, null, null, 0));
 		for (TaxCategory cat : salesFigures.costPerTaxCat().keySet()) {
-			fields.add(new ReportField(cat.getBundleKey(),
+			fields.add(new ReportField(false, cat.getBundleKey(),
 					                          salesFigures.taxPerTaxCat().get(cat),
 					                          refundsFigures.taxPerTaxCat().get(cat),
 					                          cat.getBundleName(),
 					                          2
 			));
 		}
-		fields.add(new ReportField(Keys.TAX_AMOUNT,
+		fields.add(new ReportField(true, Keys.TAX_AMOUNT,
 				                          salesFigures.getTaxAmount(),
 				                          refundsFigures.getTaxAmount(),
 				                          null, 2));
@@ -105,6 +113,9 @@ public class Report extends Model implements Serializable {
 	
 	
 	public Date getCreatedAt() {
+		if (record != null) {
+			return record.getCreatedAt();
+		}
 		return createdAt;
 	}
 	
@@ -133,7 +144,7 @@ public class Report extends Model implements Serializable {
 	}
 	
 	public BigDecimal getCashBalance() {
-		return salesFigures.getTotalCost().subtract(refundsFigures.getTotalCost());
+		return salesFigures.getCashAmount().subtract(refundsFigures.getCashAmount());
 	}
 	
 	public String getDocType() {
@@ -144,4 +155,11 @@ public class Report extends Model implements Serializable {
 		return null;
 	}
 	
+	public ZReport getRecord() {
+		return record;
+	}
+	
+	public void setRecord(ZReport record) {
+		this.record = record;
+	}
 }

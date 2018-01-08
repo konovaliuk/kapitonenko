@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.controller.helpers;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.LongValidator;
@@ -52,6 +53,14 @@ public class ValidationBuilder {
 		}
 		
 		return decimal;
+	}
+	
+	public static <E extends Enum<E>> E parseEnum(Class<E> enumClass, String enumName) {
+		if (!EnumUtils.isValidEnum(enumClass, enumName)) {
+			return null;
+		}
+		return EnumUtils.getEnum(enumClass,
+				enumName.toUpperCase());
 	}
 	
 	public ValidationBuilder ifValid() {
@@ -271,4 +280,5 @@ public class ValidationBuilder {
 		}
 		return valid;
 	}
+	
 }

@@ -156,6 +156,7 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 			}
 			
 			ps.executeUpdate();
+			LOGGER.debug(ps.toString());
 			
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs != null && rs.next()) {
@@ -167,12 +168,12 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 		}
 	}
 	
-	public int getCount() {
-		int result = 0;
+	public long getCount() {
+		long result = 0;
 		try (Statement stmt = connection.createStatement()) {
 			ResultSet rs = stmt.executeQuery(getCountQuery());
 			while (rs.next()) {
-				result = rs.getInt("count");
+				result = rs.getLong("count");
 			}
 			return result;
 		} catch (Exception e) {
@@ -185,4 +186,6 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 		String sql = getSelectAllQuery() + " " + query;
 		return getList(sql, pss, getResultSetExtractor());
 	}
+	
+	
 }

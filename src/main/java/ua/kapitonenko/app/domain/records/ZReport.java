@@ -9,7 +9,6 @@ import java.util.Date;
 public class ZReport extends BaseEntity {
 	
 	private Long cashboxId;
-	private Long lastReceiptId;
 	private BigDecimal cashBalance;
 	private Date createdAt;
 	private Long createdBy;
@@ -17,10 +16,9 @@ public class ZReport extends BaseEntity {
 	public ZReport() {
 	}
 	
-	public ZReport(Long id, Long cashboxId, Long lastReceiptId, BigDecimal cashBalance, Long createdBy) {
+	public ZReport(Long id, Long cashboxId, BigDecimal cashBalance, Long createdBy) {
 		super(id);
 		this.cashboxId = cashboxId;
-		this.lastReceiptId = lastReceiptId;
 		this.cashBalance = cashBalance;
 		this.createdBy = createdBy;
 	}
@@ -31,14 +29,6 @@ public class ZReport extends BaseEntity {
 	
 	public void setCashboxId(Long cashboxId) {
 		this.cashboxId = cashboxId;
-	}
-	
-	public Long getLastReceiptId() {
-		return lastReceiptId;
-	}
-	
-	public void setLastReceiptId(Long lastReceiptId) {
-		this.lastReceiptId = lastReceiptId;
 	}
 	
 	public BigDecimal getCashBalance() {
@@ -76,7 +66,6 @@ public class ZReport extends BaseEntity {
 		return new EqualsBuilder()
 				       .append(getId(), zReport.getId())
 				       .append(cashboxId, zReport.cashboxId)
-				       .append(lastReceiptId, zReport.lastReceiptId)
 				       .append(cashBalance, zReport.cashBalance)
 				       .isEquals();
 	}
@@ -86,7 +75,6 @@ public class ZReport extends BaseEntity {
 		return new HashCodeBuilder(17, 37)
 				       .append(getId())
 				       .append(cashboxId)
-				       .append(lastReceiptId)
 				       .append(cashBalance)
 				       .toHashCode();
 	}
@@ -96,7 +84,6 @@ public class ZReport extends BaseEntity {
 		return new StringBuilder("ZReport{")
 				       .append("id=").append(getId())
 				       .append(", cashboxId=").append(cashboxId)
-				       .append(", lastReceiptId=").append(lastReceiptId)
 				       .append(", cashBalance=").append(cashBalance)
 				       .append(", createdAt=").append(createdAt)
 				       .append(", createdBy=").append(createdBy)

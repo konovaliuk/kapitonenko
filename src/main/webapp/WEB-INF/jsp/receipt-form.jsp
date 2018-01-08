@@ -1,5 +1,5 @@
 <jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
-<%--@elvariable id="rcalculator" type="ua.kapitonenko.app.domain.Receipt"--%>
+<%--@elvariable id="receipt" type="ua.kapitonenko.app.domain.Receipt"--%>
 <%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
 <%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
@@ -17,8 +17,8 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title mb-4">
-                    <fmt:message key="${rcalculator.receipt.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
-                    <fmt:message key="${Keys.ID}" bundle="${msg}"/>${rcalculator.receipt.id}
+                    <fmt:message key="${receipt.record.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
+                    <fmt:message key="${Keys.ID}" bundle="${msg}"/>${receipt.record.id}
                 </h5>
                 <form class="form" method="POST" action="${action}" autocomplete="off" id="receipt-form">
                     <input type="hidden" name="${Keys.PRODUCT_ID}" id="productId">
@@ -26,22 +26,22 @@
                     <div class="row mb-4">
                         <div class="col-2">
                             <label><fmt:message key="${Keys.CASHBOX}" bundle="${msg}"/>:</label>
-                            <b>${rcalculator.receipt.cashboxId}</b>
+                            <b>${receipt.record.cashboxId}</b>
                         </div>
                         <div class="col-3">
                             <label><fmt:message key="${Keys.CASHBOX_FN}" bundle="${msg}"/>:</label>
-                            <b>${rcalculator.receipt.cashbox.fnNumber}</b>
+                            <b>${receipt.record.cashbox.fnNumber}</b>
                         </div>
                         <div class="col-4">
                             <label><fmt:message key="${Keys.CASHBOX_ZN}" bundle="${msg}"/>:</label>
-                            <b>${rcalculator.receipt.cashbox.znNumber}</b>
+                            <b>${receipt.record.cashbox.znNumber}</b>
                         </div>
                         <div class="col-3 text-right">
-                            <fmt:formatDate type="both" value="${rcalculator.receipt.createdAt}"/>
+                            <fmt:formatDate type="both" value="${receipt.record.createdAt}"/>
 
                         </div>
                     </div>
-                    <c:if test="${not empty rcalculator.products}">
+                    <c:if test="${not empty receipt.products}">
                         <div class="card mb-4 product-list">
                             <div class="table-responsive">
 
@@ -77,7 +77,7 @@
                                     </thead>
 
                                     <tbody>
-                                    <c:forEach var="product" items="${rcalculator.products}">
+                                    <c:forEach var="product" items="${receipt.products}">
                                         <tr>
                                             <th scope="row">${product.id}</th>
 
@@ -136,7 +136,7 @@
                             </div>
                             <div class="card-footer">
                                 <dl class="row" id="total">
-                                    <c:forEach var="taxCatEntry" items="${rcalculator.taxByCategory.entrySet()}">
+                                    <c:forEach var="taxCatEntry" items="${receipt.taxByCategory.entrySet()}">
                                         <dt class="col-2 offset-8 col-md-2 offset-md-8">
                                             <fmt:message key="${taxCatEntry.key.bundleKey}" bundle="${settings}"/></dt>
                                         <dd class="col-2 col-md-2">${taxCatEntry.value}</dd>
@@ -144,11 +144,11 @@
 
                                     <dt class="col-2 offset-8 col-md-2 offset-md-8">
                                         <fmt:message key="${Keys.TAX_AMOUNT}" bundle="${msg}"/></dt>
-                                    <dd class="col-2 col-md-2">${rcalculator.taxAmount}</dd>
+                                    <dd class="col-2 col-md-2">${receipt.taxAmount}</dd>
 
                                     <dt class="col-2 offset-8 col-md-2 offset-md-8 total">
                                         <fmt:message key="${Keys.RECEIPT_TOTAL}" bundle="${msg}"/></dt>
-                                    <dd class="col-2 col-md-2 total">${rcalculator.totalCost}</dd>
+                                    <dd class="col-2 col-md-2 total">${receipt.totalCost}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -185,7 +185,7 @@
                         <c:forEach items="${paymentTypes}" var="payType">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="payment" id="payment-${payType.id}"
-                                       value="${payType.id}" ${rcalculator.receipt.paymentTypeId.equals(payType.id) ? "checked" : ""}>
+                                       value="${payType.id}" ${receipt.record.paymentTypeId.equals(payType.id) ? "checked" : ""}>
                                 <label class="form-check-label" for="payment-${payType.id}">
                                     <fmt:message key="${payType.bundleKey}" bundle="${settings}"/>
                                 </label>

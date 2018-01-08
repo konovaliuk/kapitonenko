@@ -153,12 +153,10 @@ DROP TABLE IF EXISTS `z_reports`;
 CREATE TABLE IF NOT EXISTS `z_reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cashbox_id` int(11) NOT NULL,
-  `last_receipt_id` int(11) NOT NULL,
   `cash_balance` decimal(10,2) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_z_report_receipt` (`last_receipt_id`),
   KEY `FK_z_report_cashbox` (`cashbox_id`),
   KEY `FK_z_report_created_by` (`created_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -200,8 +198,9 @@ ALTER TABLE `users`
 
 ALTER TABLE `z_reports`
   ADD CONSTRAINT `FK_z_report_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_z_report_cashbox` FOREIGN KEY (`cashbox_id`) REFERENCES `cashboxes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_z_report_receipt` FOREIGN KEY (`last_receipt_id`) REFERENCES `receipts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_z_report_cashbox` FOREIGN KEY (`cashbox_id`) REFERENCES `cashboxes` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
 
 SET FOREIGN_KEY_CHECKS=1;
 

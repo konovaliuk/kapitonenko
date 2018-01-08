@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.service;
 
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 import ua.kapitonenko.app.domain.records.ReceiptType;
@@ -15,19 +14,17 @@ public interface ReceiptService {
 	
 	List<Receipt> getReceiptList(int offset, int limit);
 	
-	List<Receipt> getReceiptList(int offset, int limit, Long cashboxId);
+	List<Receipt> getReceiptList(Long cashboxId);
 	
 	ReceiptRecord findById(Long receiptId);
 	
 	boolean cancel(Long receiptId);
 	
-	int getReceiptsCount();
+	long getReceiptsCount();
 	
-	List<Receipt> getSales(Long cashboxId);
+/*	List<Receipt> getSales(Long cashboxId);
 	
-	List<Receipt> getRefunds(Long cashboxId);
-	
-	List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps);
+	List<Receipt> getRefunds(Long cashboxId);*/
 	
 	ReceiptType findReceiptType(Long id);
 }

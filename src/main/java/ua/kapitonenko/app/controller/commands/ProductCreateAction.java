@@ -2,9 +2,9 @@ package ua.kapitonenko.app.controller.commands;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
-import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -73,7 +73,7 @@ public class ProductCreateAction implements ActionCommand {
 			product.setUnitId(unitId);
 			
 			for (int i = 0; i < locales.size(); i++) {
-				names.add(new ProductLocale(product, locales.get(i), Keys.PRODUCT_NAME, lang[i]));
+				names.add(new ProductLocale(product, locales.get(i), Keys.PRODUCT_NAME, lang[i].trim()));
 			}
 			product.setNames(names);
 			product.setCreatedBy(request.getSession().getUser().getId());

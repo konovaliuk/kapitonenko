@@ -1,3 +1,5 @@
+USE `cashregister_test`;
+
 INSERT INTO user_roles
 (name, bundle_name, bundle_key)
 VALUES ('admin', 'messages', 'role.admin');
@@ -53,7 +55,7 @@ VALUES
 INSERT INTO `receipt_products`
 (id, receipt_id, product_id, quantity)
 VALUES
-  (1, 1, 1, 111.111)
+  (1, 1, 1, 111.111);
 
 
 

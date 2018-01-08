@@ -3,7 +3,7 @@ package ua.kapitonenko.app.service.impl;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.dao.interfaces.*;
 import ua.kapitonenko.app.dao.tables.ProductsTable;
 import ua.kapitonenko.app.domain.records.Product;
@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public List<Product> getProductsList(int offset, int limit) {
+	public List<Product> getProductsList(int offset, int limit, Long localeId) {
 		Connection connection = pool.getConnection();
 		try {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
@@ -85,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
 			});
 			products.forEach(product -> {
 				setReferences(product, connection);
+				product.setLocaleId(localeId);
 			});
 			
 			return products;
@@ -140,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public int getProductsCount() {
+	public long getProductsCount() {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();

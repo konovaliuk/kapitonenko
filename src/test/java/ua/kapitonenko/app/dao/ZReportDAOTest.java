@@ -35,8 +35,8 @@ public class ZReportDAOTest extends BaseDAOTest {
 		ZReportDAO dao = Application.getDAOFactory().getZReportDAO(connection);
 		
 		List<ZReport> entities = Arrays.asList(
-				new ZReport(null, CASHBOX, RECEIPT_ID, BigDecimal.valueOf(0.99), USER_ID),
-				new ZReport(null, CASHBOX, RECEIPT_ID, BigDecimal.valueOf(1000.01), USER_ID)
+				new ZReport(null, CASHBOX, BigDecimal.valueOf(0.99), USER_ID),
+				new ZReport(null, CASHBOX, BigDecimal.valueOf(1000.01), USER_ID)
 		);
 		
 		try {

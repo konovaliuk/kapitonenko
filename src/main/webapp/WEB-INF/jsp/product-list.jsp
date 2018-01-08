@@ -18,19 +18,19 @@
                     <div class="col-8">
                         <h4 class="card-title"><fmt:message key="${Keys.PRODUCT_LIST}" bundle="${msg}"/></h4>
                     </div>
-                        <u:can action="/receipts">
-                            <div class="col-2 pl-0 ml-auto mb-4">
-                                <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
-                                    <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
+                    <u:can action="/receipts">
+                        <div class="col-2 pl-0 ml-auto mb-4">
+                            <a class="btn btn-outline-secondary btn-block" href="/receipts" role="button">
+                                <fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></a>
 
-                            </div>
-                        </u:can>
+                        </div>
+                    </u:can>
                     <u:can action="/create-product">
                         <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-primary btn-block" href="/create-product" role="button">
                                 <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
                         </div>
-                        </u:can>
+                    </u:can>
                 </div>
                 <div class="card">
                     <%-- TODO show product name in all lang only to merchandiser --%>
@@ -67,9 +67,15 @@
                                     <th scope="row">${product.id}</th>
 
                                     <td>
-                                        <c:forEach items="${product.names}" var="name">
-                                            <p>${name.propertyValue} (${name.locale.language})</p>
-                                        </c:forEach>
+                                        <u:can action="/create-receipt">
+                                            ${product.name}
+                                        </u:can>
+                                        <u:can action="/create-product">
+                                            <c:forEach items="${product.names}" var="name">
+                                                <p>${name.propertyValue} (${name.locale.language})</p>
+                                            </c:forEach>
+                                        </u:can>
+
                                     </td>
 
                                     <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"

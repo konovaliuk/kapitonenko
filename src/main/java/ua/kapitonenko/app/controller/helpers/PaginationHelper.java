@@ -13,12 +13,12 @@ public class PaginationHelper {
 	private RequestWrapper request;
 	private int currentPage = 1;
 	
-	public PaginationHelper(RequestWrapper request, int noOfRecords) {
+	public PaginationHelper(RequestWrapper request, long noOfRecords) {
 		this.request = request;
 		init(noOfRecords);
 	}
 	
-	public void init(int noOfRecords) {
+	public void init(long noOfRecords) {
 		int noOfPages = (int) Math.ceil((double) noOfRecords / getRecordsPerPage());
 		
 		String page = request.getParameter(Keys.PAGE);

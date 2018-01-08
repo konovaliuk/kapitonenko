@@ -65,6 +65,14 @@ public class SessionWrapper {
 		return (User) session.getAttribute(Keys.USER);
 	}
 	
+	public Long getUserId() {
+		if (getUser() == null) {
+			return null;
+		}
+		
+		return getUser().getId();
+	}
+	
 	public void remove(String key) {
 		session.removeAttribute(key);
 	}

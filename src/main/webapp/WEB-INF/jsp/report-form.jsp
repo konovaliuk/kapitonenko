@@ -37,7 +37,7 @@
                         <c:forEach items="${reportTypes}" var="type">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="report.type" id="type-${type.label}"
-                                       value="${type.name()}" ${report.type.name().equals(type.name()) ? "checked" : ""}>
+                                       value="${type}" ${report.type.equals(type) ? "checked" : ""}>
                                 <label class="form-check-label" for="type-${type.label}">
                                     <fmt:message key="${type.label}" bundle="${msg}"/>
                                 </label>

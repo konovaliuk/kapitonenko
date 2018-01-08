@@ -3,9 +3,9 @@ package ua.kapitonenko.app.controller.commands;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
-import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -32,33 +32,33 @@ public class ReceiptCreateAction implements ActionCommand {
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		// TODO split into separate classes
 		
-		Receipt calculator = getCalculator(request);
+		Receipt receipt = getCalculator(request);
 		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
 		
 		if (request.isPost()) {
 			String command = getCommand(request);
 			
-			setPayment(request, calculator);
+			setPayment(request, receipt);
 			
 			String route = Actions.RECEIPT_CREATE;
 			
 			switch (command) {
 				case Keys.ADD:
-					add(request, calculator, validator);
+					add(request, receipt, validator);
 					break;
 				case Keys.UPDATE:
-					update(request, calculator, validator);
+					update(request, receipt, validator);
 					break;
 				case Keys.DELETE:
-					delete(request, calculator);
+					delete(request, receipt);
 					break;
 				case Keys.SAVE:
-					if (save(request, calculator, validator)) {
+					if (save(request, receipt, validator)) {
 						route = Actions.RECEIPTS;
 					}
 					break;
 				case Keys.CANCEL:
-					if (cancel(request, calculator)) {
+					if (cancel(request, receipt)) {
 						route = Actions.RECEIPTS;
 					}
 					break;
@@ -72,12 +72,12 @@ public class ReceiptCreateAction implements ActionCommand {
 		return request.forward(Pages.RECEIPT_FORM, Actions.RECEIPT_CREATE);
 	}
 	
-	private void setPayment(RequestWrapper request, Receipt calculator) {
+	private void setPayment(RequestWrapper request, Receipt receipt) {
 		String payment = request.getParameter(Keys.PAYMENT);
 		Long paymentId = ValidationBuilder.parseId(payment);
 		
 		if (paymentId != null) {
-			calculator.getReceipt().setPaymentTypeId(paymentId);
+			receipt.getRecord().setPaymentTypeId(paymentId);
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class ReceiptCreateAction implements ActionCommand {
 		return command;
 	}
 	
-	private void add(RequestWrapper request, Receipt calculator, ValidationBuilder validator) {
+	private void add(RequestWrapper request, Receipt receipt, ValidationBuilder validator) {
 		String quantity = request.getParameter(Keys.NEW_PRODUCT_QUANTITY);
 		String product = request.getParameter(Keys.NEW_PRODUCT_ID);
 		String name = request.getParameter(Keys.NEW_PRODUCT_NAME);
@@ -101,7 +101,7 @@ public class ReceiptCreateAction implements ActionCommand {
 				.requiredOne(productId, Keys.PRODUCT_ID, name, Keys.PRODUCT_NAME);
 		
 		if (validator.isValid()) {
-			List<Product> foundList = productService.findByIdOrName(request.getSession().getLocaleId(), productId, name);
+			List<Product> foundList = productService.findByIdOrName(request.getSession().getLocaleId(), productId, name.trim());
 			
 			validator.listSize(1, foundList, Keys.ERROR_SEARCH_FAIL, Keys.GUIDE_SPECIFY_REQUEST);
 			
@@ -112,54 +112,54 @@ public class ReceiptCreateAction implements ActionCommand {
 				
 				if (validator.isValid()) {
 					found.setQuantity(quantityValue);
-					calculator.addProduct(found);
+					receipt.addProduct(found);
 				}
 			}
 		}
 	}
 	
-	private boolean cancel(RequestWrapper request, Receipt calculator) {
+	private boolean cancel(RequestWrapper request, Receipt receipt) {
 		
-		if (receiptService.update(calculator)) {
-			request.getSession().remove(Keys.R_CALCULATOR);
+		if (receiptService.update(receipt)) {
+			request.getSession().remove(Keys.RECEIPT);
 			request.getSession().remove(Keys.PAYMENT_TYPES);
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean save(RequestWrapper request, Receipt calculator, ValidationBuilder validator) {
+	private boolean save(RequestWrapper request, Receipt receipt, ValidationBuilder validator) {
 		validator
-				.idInList(calculator.getReceipt().getPaymentTypeId(),
+				.idInList(receipt.getRecord().getPaymentTypeId(),
 						(List<PaymentType>) request.getSession().get(Keys.PAYMENT_TYPES),
 						Keys.PAYMENT)
-				.required(calculator.getProducts(), Keys.ERROR_PRODUCT_LIST_NOT_EMPTY);
+				.required(receipt.getProducts(), Keys.ERROR_PRODUCT_LIST_NOT_EMPTY);
 		
 		if (validator.isValid()) {
-			calculator.getReceipt().setCancelled(false);
-			if (receiptService.update(calculator)) {
-				request.getSession().remove(Keys.R_CALCULATOR);
+			receipt.getRecord().setCancelled(false);
+			if (receiptService.update(receipt)) {
+				request.getSession().remove(Keys.RECEIPT);
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private void delete(RequestWrapper request, Receipt calculator) {
+	private void delete(RequestWrapper request, Receipt receipt) {
 		String toDelete = request.getParameter(Keys.PRODUCT_ID);
 		Long deleteId = ValidationBuilder.parseId(toDelete);
 		if (deleteId != null) {
-			calculator.remove(deleteId);
+			receipt.remove(deleteId);
 		}
 	}
 	
-	private void update(RequestWrapper request, Receipt calculator, ValidationBuilder validator) {
+	private void update(RequestWrapper request, Receipt receipt, ValidationBuilder validator) {
 		String[] updatedQuantities = request.getParams().get(Keys.PRODUCT_QUANTITY);
 		for (int i = 0; i < updatedQuantities.length; i++) {
 			BigDecimal updated = validator.parseDecimal(updatedQuantities[i], 3, Keys.PRODUCT_QUANTITY);
 			validator.requiredAll(updated, Keys.PRODUCT_QUANTITY);
 			if (updated != null) {
-				calculator.getProducts().get(i).setQuantity(updated);
+				receipt.getProducts().get(i).setQuantity(updated);
 			}
 		}
 	}
@@ -167,27 +167,27 @@ public class ReceiptCreateAction implements ActionCommand {
 	private Receipt getCalculator(RequestWrapper request) {
 		
 		Long localeId = request.getSession().getLocaleId();
-		Receipt calculator = (Receipt) request.getSession().get(Keys.R_CALCULATOR);
+		Receipt receipt = (Receipt) request.getSession().get(Keys.RECEIPT);
 		
-		if (calculator == null) {
-			LOGGER.debug("new calculator created");
+		if (receipt == null) {
+			LOGGER.debug("new receipt created");
 			Cashbox cashbox = (Cashbox) request.getSession().get(Keys.CASHBOX);
 			User user = request.getSession().getUser();
-			ReceiptRecord receipt = new ReceiptRecord(null,
-					                             cashbox.getId(),
-					                             Application.getId(Application.PAYMENT_TYPE_UNDEFINED),
-					                             Application.getId(Application.RECEIPT_TYPE_FISCAL),
-					                             true, user.getId());
+			ReceiptRecord record = new ReceiptRecord(null,
+					                                        cashbox.getId(),
+					                                        Application.getId(Application.PAYMENT_TYPE_UNDEFINED),
+					                                        Application.getId(Application.RECEIPT_TYPE_FISCAL),
+					                                        true, user.getId());
 			
-			calculator = new Receipt(receipt);
-			calculator.setCategories(settingsService.getTaxCatList());
+			receipt = new Receipt(record);
+			receipt.setCategories(settingsService.getTaxCatList());
 			
-			receiptService.create(calculator);
-			request.getSession().set(Keys.R_CALCULATOR, calculator);
+			receiptService.create(receipt);
+			request.getSession().set(Keys.RECEIPT, receipt);
 			request.getSession().set(Keys.PAYMENT_TYPES, settingsService.getPaymentTypes());
 		}
 		
-		calculator.setLocalId(localeId);
-		return calculator;
+		receipt.setLocalId(localeId);
+		return receipt;
 	}
 }

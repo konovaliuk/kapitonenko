@@ -1,3 +1,5 @@
+USE `cashregister`;
+
 INSERT INTO user_roles
 (name, bundle_name, bundle_key)
 VALUES

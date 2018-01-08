@@ -98,8 +98,6 @@ public class Keys {
 	public static final String RECEIPT_TYPE = "receipt.type";
 	public static final String RECEIPT_TOTAL = "receipt.total";
 	public static final String TAX_AMOUNT = "tax.amount";
-	public static final String R_CALCULATOR = "rcalculator";
-	
 	
 	public static final String COMPANY = "company";
 	public static final String COMPANY_PN = "company.pn";
@@ -143,7 +141,6 @@ public class Keys {
 	public static final String DEPOSIT = "deposit";
 	public static final String WITHDRAWAL = "withdrawal";
 	public static final String CASH_IN_SAFE = "cash.in.safe";
-	
 	
 	public static final String FISCAL = "fiscal";
 }

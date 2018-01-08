@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.domain;
 
+import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.domain.records.PaymentType;
 import ua.kapitonenko.app.domain.records.TaxCategory;
 
@@ -18,11 +19,11 @@ public class ReportSummary {
 	public ReportSummary(List<Receipt> receiptList, List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
 		
 		noCancelled = receiptList.stream()
-				              .filter(receipt -> receipt.getReceipt().isCancelled())
+				              .filter(receipt -> receipt.getRecord().isCancelled())
 				              .count();
 		
 		this.receiptList = receiptList.stream()
-				                   .filter(receipt -> !receipt.getReceipt().isCancelled())
+				                   .filter(receipt -> !receipt.getRecord().isCancelled())
 				                   .collect(Collectors.toList());
 		this.taxCats = taxCats;
 		this.paymentTypes = paymentTypes;
@@ -39,7 +40,7 @@ public class ReportSummary {
 	
 	public long getNoArticles() {
 		return receiptList.stream()
-				       .map(r -> r.getReceipt().getProducts())
+				       .map(r -> r.getRecord().getProducts())
 				       .collect(Collectors.toList())
 				       .size();
 	}
@@ -51,7 +52,7 @@ public class ReportSummary {
 		}
 		
 		for (Receipt receipt : receiptList) {
-			PaymentType type = receipt.getReceipt().getPaymentType();
+			PaymentType type = receipt.getRecord().getPaymentType();
 			map.put(type, map.get(type).add(receipt.getTotalCost()));
 		}
 		return map;
@@ -98,6 +99,13 @@ public class ReportSummary {
 				       .map(Receipt::getTotalCost)
 				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
 		
+	}
+	
+	public BigDecimal getCashAmount() {
+		PaymentType cash = costPerPayType().keySet().stream()
+				                   .filter(paymentType -> paymentType.getId().equals(Application.getId(Application.PAYMENT_TYPE_CASH)))
+				                   .findFirst().orElseGet(null);
+		return costPerPayType().getOrDefault(cash, BigDecimal.ZERO);
 	}
 	
 	

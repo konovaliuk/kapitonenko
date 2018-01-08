@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.connection;
+package ua.kapitonenko.app.dao.connection;
 
 import ua.kapitonenko.app.exceptions.DAOException;
 

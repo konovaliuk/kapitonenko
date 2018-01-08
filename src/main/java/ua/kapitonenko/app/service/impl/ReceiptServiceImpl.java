@@ -2,10 +2,11 @@ package ua.kapitonenko.app.service.impl;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.interfaces.*;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
+import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.domain.records.ReceiptProduct;
@@ -73,7 +74,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
 			
-			ReceiptRecord receipt = calculator.getReceipt();
+			ReceiptRecord receipt = calculator.getRecord();
 			
 			if (receiptDAO.update(receipt)) {
 				
@@ -88,7 +89,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 				});
 				
 				setReferences(created, connection);
-				calculator.setReceipt(created);
+				calculator.setRecord(created);
 				connection.commit();
 				return true;
 			}
@@ -114,11 +115,11 @@ public class ReceiptServiceImpl implements ReceiptService {
 			connection = pool.getConnection();
 			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
 			
-			ReceiptRecord receipt = calculator.getReceipt();
+			ReceiptRecord receipt = calculator.getRecord();
 			if (receiptDAO.insert(receipt)) {
 				ReceiptRecord created = receiptDAO.findOne(receipt.getId());
 				setReferences(created, connection);
-				calculator.setReceipt(created);
+				calculator.setRecord(created);
 				return true;
 			}
 			return false;
@@ -138,16 +139,18 @@ public class ReceiptServiceImpl implements ReceiptService {
 	}
 	
 	@Override
-	public List<Receipt> getReceiptList(int offset, int limit, Long cashboxId) {
-		if (cashboxId == null) {
-			return getReceiptList(offset, limit);
-		}
-		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? ORDER BY ? LIMIT ? OFFSET ?";
+	public List<Receipt> getReceiptList(Long cashboxId) {
+		
+		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " +
+				               ReceiptsTable.CREATED_AT + " > IFNULL((SELECT " +
+				               ZReportsTable.CREATED_AT + " FROM " +
+				               ZReportsTable.NAME + " WHERE " +
+				               ZReportsTable.CASHBOX_ID + "=? ORDER BY " +
+				               ZReportsTable.ID + " DESC LIMIT 1), '0000-00-00 00:00:00')";
+		
 		return getReceiptList(query, ps -> {
 			ps.setLong(1, cashboxId);
-			ps.setInt(2, limit);
-			ps.setInt(3, offset);
-			
+			ps.setLong(2, cashboxId);
 		});
 	}
 	
@@ -185,7 +188,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 	}
 	
 	@Override
-	public int getReceiptsCount() {
+	public long getReceiptsCount() {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
@@ -196,8 +199,13 @@ public class ReceiptServiceImpl implements ReceiptService {
 		}
 	}
 	
-	@Override
+/*	@Override
 	public List<Receipt> getSales(Long cashboxId) {
+		String temp = "SELECT * FROM receipts\n" +
+				              "WHERE cashbox_id=2\n" +
+				              "      AND created_at > IFNULL(\n" +
+				              "    (SELECT created_at FROM z_reports WHERE cashbox_id=2 ORDER BY id DESC LIMIT 1),\n" +
+				              "    '0000-00-00 00:00:00');"
 		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " + ReceiptsTable.RECEIPT_TYPE_ID + "=?";
 		return getReceiptList(query, ps -> {
 			ps.setLong(1, cashboxId);
@@ -212,10 +220,10 @@ public class ReceiptServiceImpl implements ReceiptService {
 			ps.setLong(1, cashboxId);
 			ps.setLong(2, Application.getId(Application.RECEIPT_TYPE_RETURN));
 		});
-	}
+	}*/
 	
-	@Override
-	public List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps) {
+	
+	private List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps) {
 		List<Receipt> receiptList = new ArrayList<>();
 		Connection connection = pool.getConnection();
 		try {
@@ -224,12 +232,12 @@ public class ReceiptServiceImpl implements ReceiptService {
 			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 			List<ReceiptRecord> list = receiptDAO.findAllByQuery(sql, ps);
 			
-			list.forEach(receipt -> {
-				setReferences(receipt, connection);
-				Receipt calculator = new Receipt(receipt);
-				calculator.setProducts(productService.findAllByReceiptId(receipt.getId()));
-				calculator.setCategories(settingsService.getTaxCatList());
-				receiptList.add(calculator);
+			list.forEach(record -> {
+				setReferences(record, connection);
+				Receipt receipt = new Receipt(record);
+				receipt.setProducts(productService.findAllByReceiptId(record.getId()));
+				receipt.setCategories(settingsService.getTaxCatList());
+				receiptList.add(receipt);
 			});
 			LOGGER.debug(receiptList);
 			return receiptList;

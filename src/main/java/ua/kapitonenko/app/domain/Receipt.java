@@ -16,7 +16,7 @@ import java.util.Map;
 public class Receipt extends Model implements Serializable {
 	private static final Logger LOGGER = Logger.getLogger(Receipt.class);
 	
-	private ReceiptRecord receipt;
+	private ReceiptRecord record;
 	private List<Product> products = new ArrayList<>();
 	private Long localId;
 
@@ -27,16 +27,16 @@ public class Receipt extends Model implements Serializable {
 	public Receipt() {
 	}
 	
-	public Receipt(ReceiptRecord receipt) {
-		this.receipt = receipt;
+	public Receipt(ReceiptRecord record) {
+		this.record = record;
 	}
 	
-	public ReceiptRecord getReceipt() {
-		return receipt;
+	public ReceiptRecord getRecord() {
+		return record;
 	}
 	
-	public void setReceipt(ReceiptRecord receipt) {
-		this.receipt = receipt;
+	public void setRecord(ReceiptRecord record) {
+		this.record = record;
 	}
 	
 	public Long getLocalId() {
@@ -120,7 +120,7 @@ public class Receipt extends Model implements Serializable {
 	}
 	
 	public boolean isReturnVisible() {
-		return !receipt.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN));
+		return !record.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN));
 	}
 	
 	

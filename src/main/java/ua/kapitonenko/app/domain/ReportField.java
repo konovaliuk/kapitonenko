@@ -12,15 +12,17 @@ public class ReportField extends Model implements Serializable {
 	private int fractionalDigits;
 	private BigDecimal salesValue;
 	private BigDecimal refundsValue;
+	private boolean showInList;
 	
 	public ReportField() {
 	}
 	
-	public ReportField(String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
+	public ReportField(boolean showInList, String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
 		this.name = name;
 		this.salesValue = salesValue;
 		this.refundsValue = refundsValue;
 		this.fractionalDigits = fractionalDigits;
+		this.showInList = showInList;
 		
 		if (!StringUtils.isEmpty(bundle)) {
 			this.bundle = bundle;
@@ -57,5 +59,9 @@ public class ReportField extends Model implements Serializable {
 	
 	public int getFractionalDigits() {
 		return fractionalDigits;
+	}
+	
+	public boolean isShowInList() {
+		return showInList;
 	}
 }

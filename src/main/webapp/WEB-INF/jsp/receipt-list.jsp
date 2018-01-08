@@ -1,5 +1,4 @@
 <jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
-<%--@elvariable id="rcalculator" type="ua.kapitonenko.app.domain.Receipt"--%>
 <%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
 <%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.app.domain.Receipt>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
@@ -21,6 +20,12 @@
                     <div class="col-8">
                         <h4 class="card-title mb-3"><fmt:message key="${Keys.RECEIPT_LIST}" bundle="${msg}"/></h4>
                     </div>
+                    <u:can action="/reports">
+                        <div class="col-2 pl-0 ml-auto mb-4">
+                            <a class="btn btn-outline-secondary btn-block" href="/reports" role="button">
+                                <fmt:message key="${Keys.REPORT_LIST}" bundle="${msg}"/></a>
+                        </div>
+                    </u:can>
                     <u:can action="/products">
                         <div class="col-2 pl-0 ml-auto mb-4">
                             <a class="btn btn-outline-secondary btn-block" href="/products" role="button">
@@ -79,11 +84,11 @@
 
                                 <c:forEach var="calculator" items="${receipts}">
                                     <tr>
-                                        <th scope="row">${calculator.receipt.id}</th>
-                                        <td><fmt:message key="${calculator.receipt.receiptType.bundleKey}"
+                                        <th scope="row">${calculator.record.id}</th>
+                                        <td><fmt:message key="${calculator.record.receiptType.bundleKey}"
                                                          bundle="${settings}"/></td>
-                                        <td class="text-centert">${calculator.receipt.cashboxId}</td>
-                                        <td><fmt:message key="${calculator.receipt.paymentType.bundleKey}"
+                                        <td class="text-centert">${calculator.record.cashboxId}</td>
+                                        <td><fmt:message key="${calculator.record.paymentType.bundleKey}"
                                                          bundle="${settings}"/></td>
                                         <td class="text-centert">${calculator.products.size()}</td>
                                         <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
@@ -94,20 +99,20 @@
                                                                                  maxFractionDigits="2"
                                                                                  minFractionDigits="2"
                                                                                  value="${calculator.totalCost}"/></td>
-                                        <td><fmt:formatDate type="both" value="${calculator.receipt.createdAt}"/></td>
+                                        <td><fmt:formatDate type="both" value="${calculator.record.createdAt}"/></td>
                                         <td>
-                                            <c:if test="${calculator.receipt.cancelled}">
+                                            <c:if test="${calculator.record.cancelled}">
                                                 <fmt:message key="${Keys.CANCELLED}" bundle="${msg}"/>
                                             </c:if>
                                         </td>
 
                                         <td class="text-center">
-                                            <c:if test="${!calculator.receipt.cancelled}">
+                                            <c:if test="${!calculator.record.cancelled}">
                                                 <c:if test="${calculator.returnVisible}">
                                                     <u:can action="/return-receipt">
                                                         <button type="button" class="btn btn-link"
                                                                 onclick="var form = $('#receipt-list-form');
-                                                                        $('#rId').val(${calculator.receipt.id});
+                                                                        $('#rId').val(${calculator.record.id});
                                                                         form.attr('action', '/return-receipt');
                                                                         form.submit();">
                                                             <fmt:message key="${Keys.RETURN}" bundle="${msg}"/>
@@ -117,7 +122,7 @@
                                                 <u:can action="/cancel-receipt">
                                                     <button type="button" class="btn btn-link"
                                                             onclick="var form = $('#receipt-list-form');
-                                                                    $('#rId').val(${calculator.receipt.id});
+                                                                    $('#rId').val(${calculator.record.id});
                                                                     form.attr('action', '/cancel-receipt');
                                                                     form.submit();">
                                                         <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/>

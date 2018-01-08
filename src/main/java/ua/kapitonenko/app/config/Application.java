@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.config;
 
 import ua.kapitonenko.app.config.keys.Actions;
-import ua.kapitonenko.app.connection.ConnectionPool;
-import ua.kapitonenko.app.connection.DataSourceConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionPool;
+import ua.kapitonenko.app.dao.connection.DataSourceConnectionPool;
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.dao.mysql.MysqlDaoFactory;
 import ua.kapitonenko.app.service.ServiceFactory;
@@ -23,6 +23,7 @@ public class Application {
 	public static final String RECEIPT_TYPE_FISCAL = "receipt.fiscal";
 	public static final String RECEIPT_TYPE_RETURN = "receipt.return";
 	public static final String PAYMENT_TYPE_UNDEFINED = "payment.undefined";
+	public static final String PAYMENT_TYPE_CASH = "payment.cash";
 	public static final String COMPANY = "company";
 	
 	public static final String ROLE_CASHIER = "role.cashier";
@@ -42,6 +43,7 @@ public class Application {
 		ids.put(RECEIPT_TYPE_FISCAL, 1L);
 		ids.put(RECEIPT_TYPE_RETURN, 2L);
 		ids.put(PAYMENT_TYPE_UNDEFINED, 1L);
+		ids.put(PAYMENT_TYPE_CASH, 2L);
 		ids.put(COMPANY, 1L);
 		ids.put(DEFAULT_LOCALE, 1L);
 		ids.put(ROLE_CASHIER, 1L);
@@ -84,7 +86,6 @@ public class Application {
 		access.put(
 				getId(ROLE_SENIOR), Arrays.asList(
 						Actions.LANGUAGE,
-						Actions.PRODUCTS,
 						Actions.REPORTS,
 						Actions.REPORT_CREATE,
 						Actions.REPORT_VIEW,
