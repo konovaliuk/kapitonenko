@@ -42,21 +42,21 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	private static final String SELECT_BY_ID_OR_NAME = "SELECT * FROM " +
 			                                                   ProductsTable.NAME + " JOIN " +
 			                                                   ProductLocaleTable.NAME + " ON " +
-			                                                   ProductsTable.NAME_ID + " = " +
+			                                                   ProductsTable.ID + " = " +
 			                                                   ProductLocaleTable.NAME_PRODUCT_ID + " WHERE ( " +
 			                                                   ProductLocaleTable.PROP_NAME + " = ? AND " +
 			                                                   ProductLocaleTable.LOCALE + " = ? AND " +
 			                                                   ProductLocaleTable.PROP_VALUE + " = ? ) OR ( " +
-			                                                   ProductsTable.NAME_ID + " = ?)" +
+			                                                   ProductsTable.ID + " = ?)" +
 			                                                   AND_NOT_DELETED + " GROUP BY " +
-			                                                   ProductsTable.NAME_ID;
+			                                                   ProductsTable.ID;
 	
-	private static final String SELECT_BY_RECEIPT_ID = "SELECT * FROM " +
-			                                                   ReceiptProductsTable.NAME + " JOIN " +
-			                                                   ProductsTable.NAME + " ON " +
-			                                                   ProductsTable.NAME_ID + " = " +
-			                                                   ReceiptProductsTable.NAME_PRODUCT_ID + " WHERE " +
-			                                                   ReceiptProductsTable.RECEIPT_ID + " = ?";
+	private static final String SELECT_BY_RECEIPT_ID = "SELECT *, " + ReceiptProductsTable.QUANTITY +
+			                                                   " AS " + ProductsTable.QUANTITY_ALIAS +
+			                                                   " FROM " + ReceiptProductsTable.NAME +
+			                                                   " JOIN " + ProductsTable.NAME + " ON " +
+			                                                   ProductsTable.ID + " = " + ReceiptProductsTable.PRODUCT_ID +
+			                                                   " WHERE " + ReceiptProductsTable.RECEIPT_ID + " = ?";
 	
 	
 	MysqlProductDAO(Connection connection) {
@@ -133,7 +133,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			row.setUnitId(rs.getLong(ProductsTable.UNIT));
 			row.setPrice(rs.getBigDecimal(ProductsTable.PRICE));
 			row.setTaxCategoryId(rs.getLong(ProductsTable.TAX_CAT));
-			row.setQuantity(rs.getBigDecimal(ProductsTable.QUANTITY));
+			row.setQuantity(rs.getBigDecimal(ProductsTable.QUANTITY_ALIAS));
 			row.setCreatedAt(rs.getTimestamp(ProductsTable.CREATED_AT));
 			row.setCreatedBy(rs.getLong(ProductsTable.CREATED_BY));
 			row.setDeletedAt(rs.getTimestamp(ProductsTable.DELETED_AT));
@@ -166,5 +166,5 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	public List<Product> findAllByQuery(String query, PreparedStatementSetter pss) {
 		return getList(getSelectAllNotDeletedQuery() + " " + query, pss, getResultSetExtractor());
 	}
-
+	
 }

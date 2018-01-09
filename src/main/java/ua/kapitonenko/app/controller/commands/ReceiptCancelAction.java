@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 public class ReceiptCancelAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ReceiptCreateAction.class);
+	private static final Logger LOGGER = Logger.getLogger(ReceiptCancelAction.class);
 	
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	

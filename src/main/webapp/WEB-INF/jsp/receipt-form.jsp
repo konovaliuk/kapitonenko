@@ -153,46 +153,50 @@
                             </div>
                         </div>
                     </c:if>
-                    <div class="form-row mb-4 d-print-none">
-                        <div class="col-1">
-                            <label><fmt:message key="${Keys.PRODUCT}" bundle="${msg}"/></label>
-                            <input type="text" class="form-control"
-                                   placeholder="<fmt:message key="${Keys.ID}" bundle="${msg}"/>"
-                                   name="${Keys.NEW_PRODUCT_ID}" value="${newProduct.id}">
-                        </div>
-                        <div class="col-6">
-                            <label>&nbsp;</label>
-                            <input type="text" class="form-control"
-                                   placeholder="<fmt:message key="${Keys.PRODUCT_NAME}" bundle="${msg}"/>"
-                                   name="${Keys.NEW_PRODUCT_NAME}" value="${newProduct.name}">
-                        </div>
-                        <div class="col-3 col-sm-3">
-                            <label><fmt:message key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></label>
-                            <input type="text" class="form-control"
-                                   name="${Keys.NEW_PRODUCT_QUANTITY}" value="${newProduct.quantity}">
-                        </div>
-                        <div class="col-3 col-sm-2">
-                            <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-secondary btn-block"
-                                    name="button" value="button.add">
-                                <fmt:message key="${Keys.ADD}" bundle="${msg}"/></button>
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label><fmt:message key="${Keys.PAYMENT}" bundle="${msg}"/>
-                        </label>
-                        <c:forEach items="${paymentTypes}" var="payType">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment" id="payment-${payType.id}"
-                                       value="${payType.id}" ${receipt.record.paymentTypeId.equals(payType.id) ? "checked" : ""}>
-                                <label class="form-check-label" for="payment-${payType.id}">
-                                    <fmt:message key="${payType.bundleKey}" bundle="${settings}"/>
-                                </label>
+                    <c:set var="create" value="/create-receipt"/>
+                    <c:if test="${action eq create}">
+                        <div class="form-row mb-4 d-print-none">
+                            <div class="col-1">
+                                <label><fmt:message key="${Keys.PRODUCT}" bundle="${msg}"/></label>
+                                <input type="text" class="form-control"
+                                       placeholder="<fmt:message key="${Keys.ID}" bundle="${msg}"/>"
+                                       name="${Keys.NEW_PRODUCT_ID}" value="${newProduct.id}">
                             </div>
-                        </c:forEach>
-                    </div>
+                            <div class="col-6">
+                                <label>&nbsp;</label>
+                                <input type="text" class="form-control"
+                                       placeholder="<fmt:message key="${Keys.PRODUCT_NAME}" bundle="${msg}"/>"
+                                       name="${Keys.NEW_PRODUCT_NAME}" value="${newProduct.name}">
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <label><fmt:message key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></label>
+                                <input type="text" class="form-control"
+                                       name="${Keys.NEW_PRODUCT_QUANTITY}" value="${newProduct.quantity}">
+                            </div>
+                            <div class="col-3 col-sm-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-secondary btn-block"
+                                        name="button" value="button.add">
+                                    <fmt:message key="${Keys.ADD}" bundle="${msg}"/></button>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label><fmt:message key="${Keys.PAYMENT}" bundle="${msg}"/>
+                            </label>
+                            <c:forEach items="${paymentTypes}" var="payType">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment"
+                                           id="payment-${payType.id}"
+                                           value="${payType.id}" ${receipt.record.paymentTypeId.equals(payType.id) ? "checked" : ""}>
+                                    <label class="form-check-label" for="payment-${payType.id}">
+                                        <fmt:message key="${payType.bundleKey}" bundle="${settings}"/>
+                                    </label>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                     <div class="form-row d-print-none">
                         <div class="col-xs-6 col-md-2">
                             <button type="submit" class="btn btn-primary btn-block"

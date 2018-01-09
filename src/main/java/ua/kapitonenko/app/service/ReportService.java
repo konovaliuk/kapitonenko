@@ -9,5 +9,5 @@ public interface ReportService {
 	
 	long getCount();
 	
-	List<Report> getReportList(int offset, int recordsPerPage);
+	List<Report> getReportList(int offset, int limit);
 }

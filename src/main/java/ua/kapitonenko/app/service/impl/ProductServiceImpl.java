@@ -78,10 +78,11 @@ public class ProductServiceImpl implements ProductService {
 		Connection connection = pool.getConnection();
 		try {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
-			List<Product> products = productDAO.findAllByQuery("ORDER BY ? LIMIT ? OFFSET ?", ps -> {
-				ps.setString(1, ProductsTable.ID);
-				ps.setInt(3, offset);
-				ps.setInt(2, limit);
+			List<Product> products = productDAO.findAllByQuery("ORDER BY " + ProductsTable.ID +
+					                                                   " DESC LIMIT ? OFFSET ?", ps -> {
+				ps.setInt(1, limit);
+				ps.setInt(2, offset);
+				
 			});
 			products.forEach(product -> {
 				setReferences(product, connection);
@@ -101,9 +102,7 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
 			List<Product> products = productDAO.findByIdOrName(localeId, productId, name);
-			products.forEach(product -> {
-				setReferences(product, connection);
-			});
+			products.forEach(product -> setReferences(product, connection));
 			
 			return products;
 		} finally {
@@ -117,9 +116,8 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
 			List<Product> products = productDAO.findAllByReceiptId(id);
-			products.forEach(product -> {
-				setReferences(product, connection);
-			});
+			LOGGER.debug(products);
+			products.forEach(product -> setReferences(product, connection));
 			
 			return products;
 		} finally {
@@ -164,5 +162,30 @@ public class ProductServiceImpl implements ProductService {
 			pool.close(connection);
 		}
 	}
+	
+	@Override
+	public boolean update(Product product) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			return productDAO.update(product);
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public Product findOne(Long id) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+			return productDAO.findOne(id);
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
 	
 }

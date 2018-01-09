@@ -33,12 +33,20 @@ public class RequestHelper {
 		commands.put(Actions.LANGUAGE, new LanguageAction());
 		commands.put(Actions.PRODUCTS, new ProductListAction());
 		commands.put(Actions.PRODUCTS_CREATE, new ProductCreateAction());
-		commands.put(Actions.PRODUCTS_ADD, new ProductAddAction());
+		commands.put(Actions.PRODUCTS_UPDATE, new ProductUpdateAction());
 		commands.put(Actions.PRODUCTS_DELETE, new ProductDeleteAction());
+		
 		commands.put(Actions.RECEIPT_CREATE, new ReceiptCreateAction());
 		commands.put(Actions.RECEIPT_RETURN, new ReceiptReturnAction());
 		commands.put(Actions.RECEIPT_CANCEL, new ReceiptCancelAction());
 		commands.put(Actions.RECEIPTS, new ReceiptListAction());
+		
+		commands.put(Actions.RECEIPT_EDIT_UPDATE, new ReceiptEditUpdateAction());
+		commands.put(Actions.RECEIPT_EDIT_DELETE, new ReceiptEditDeleteAction());
+		commands.put(Actions.RECEIPT_EDIT_CANCEL, new ReceiptEditCancelAction());
+		commands.put(Actions.RECEIPT_EDIT_SAVE, new ReceiptEditSaveAction());
+		commands.put(Actions.RECEIPT_EDIT_ADD, new ReceiptEditAddAction());
+		
 		commands.put(Actions.REPORT_CREATE, new ReportCreateAction());
 		commands.put(Actions.REPORTS, new ReportListAction());
 		commands.put(Actions.REPORT_VIEW, new ReportViewAction());

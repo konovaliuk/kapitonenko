@@ -34,8 +34,11 @@
                     </u:can>
                     <u:can action="/create-receipt">
                         <div class="col-2 pl-0 ml-auto mb-4">
-                            <a class="btn btn-primary btn-block" href="/create-receipt" role="button">
-                                <fmt:message key="${Keys.CREATE}" bundle="${msg}"/></a>
+                            <form class="form" method="POST" action="/create-receipt">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <fmt:message key="${Keys.CREATE}" bundle="${msg}"/>
+                                </button>
+                            </form>
                         </div>
                     </u:can>
                 </div>

@@ -70,6 +70,13 @@ public class Application {
 						Actions.RECEIPTS,
 						Actions.RECEIPT_CREATE,
 						Actions.RECEIPT_CANCEL,
+						
+						Actions.RECEIPT_EDIT_CANCEL,
+						Actions.RECEIPT_EDIT_DELETE,
+						Actions.RECEIPT_EDIT_SAVE,
+						Actions.RECEIPT_EDIT_UPDATE,
+						Actions.RECEIPT_EDIT_ADD,
+						
 						Actions.LOGOUT,
 						Actions.HOME));
 		
@@ -77,7 +84,7 @@ public class Application {
 				getId(ROLE_MERCHANDISER), Arrays.asList(
 						Actions.LANGUAGE,
 						Actions.PRODUCTS,
-						Actions.PRODUCTS_ADD,
+						Actions.PRODUCTS_UPDATE,
 						Actions.PRODUCTS_DELETE,
 						Actions.PRODUCTS_CREATE,
 						Actions.LOGOUT,
@@ -92,6 +99,13 @@ public class Application {
 						Actions.RECEIPT_CANCEL,
 						Actions.RECEIPT_RETURN,
 						Actions.RECEIPTS,
+						
+						Actions.RECEIPT_EDIT_CANCEL,
+						Actions.RECEIPT_EDIT_DELETE,
+						Actions.RECEIPT_EDIT_SAVE,
+						Actions.RECEIPT_EDIT_UPDATE,
+						Actions.RECEIPT_EDIT_ADD,
+						
 						Actions.LOGOUT,
 						Actions.HOME));
 	}

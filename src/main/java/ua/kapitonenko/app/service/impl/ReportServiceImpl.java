@@ -75,16 +75,16 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	@Override
-	public List<Report> getReportList(int offset, int recordsPerPage) {
+	public List<Report> getReportList(int offset, int limit) {
 		List<Report> reportList = new ArrayList<>();
 		Connection connection = pool.getConnection();
 		try {
 			ZReportDAO reportDAO = Application.getDAOFactory().getZReportDAO(connection);
 			CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection);
-			List<ZReport> list = reportDAO.findAllByQuery("ORDER BY ? LIMIT ? OFFSET ?", ps -> {
-				ps.setString(1, ZReportsTable.ID);
-				ps.setInt(3, offset);
-				ps.setInt(2, recordsPerPage);
+			List<ZReport> list = reportDAO.findAllByQuery("ORDER BY " + ZReportsTable.ID +
+					                                              " DESC LIMIT ? OFFSET ?", ps -> {
+				ps.setInt(1, limit);
+				ps.setInt(2, offset);
 			});
 			
 			list.forEach(record -> {

@@ -120,7 +120,8 @@ public class Receipt extends Model implements Serializable {
 	}
 	
 	public boolean isReturnVisible() {
-		return !record.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN));
+		return !record.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN))
+				       && record.getPaymentTypeId().equals(Application.getId(Application.PAYMENT_TYPE_CASH));
 	}
 	
 	

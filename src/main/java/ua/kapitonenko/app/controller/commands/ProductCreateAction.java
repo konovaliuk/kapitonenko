@@ -64,8 +64,7 @@ public class ProductCreateAction implements ActionCommand {
 					.idInList(unitId, units, Keys.PRODUCT_UNIT)
 					.idInList(taxId, taxes, Keys.PRODUCT_TAX)
 					.ifValid()
-					.notLess(quantityValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, Keys.PRODUCT_QUANTITY)
-					.isValid();
+					.notLess(quantityValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, Keys.PRODUCT_QUANTITY);
 			
 			product.setQuantity(quantityValue);
 			product.setPrice(priceValue);

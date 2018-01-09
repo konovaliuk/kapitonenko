@@ -36,6 +36,7 @@
                     <%-- TODO show product name in all lang only to merchandiser --%>
                     <div class="table-responsive">
                         <table class="table table-striped">
+
                             <thead>
                             <tr>
                                 <th scope="col" width="50px"><fmt:message key="${Keys.ID}" bundle="${msg}"/></th>
@@ -43,8 +44,15 @@
                                 <th scope="col" width="300px"><fmt:message key="${Keys.PRODUCT_NAME}"
                                                                            bundle="${msg}"/></th>
 
-                                <th scope="col" width="160px" class="text-right"><fmt:message
-                                        key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></th>
+                                <u:can action="/create-product">
+                                    <th scope="col" width="160px" class="text-center"><fmt:message
+                                            key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></th>
+                                </u:can>
+
+                                <u:can action="/create-receipt">
+                                    <th scope="col" width="160px" class="text-right"><fmt:message
+                                            key="${Keys.PRODUCT_QUANTITY}" bundle="${msg}"/></th>
+                                </u:can>
 
                                 <th scope="col" width="120px" class="text-center"><fmt:message
                                         key="${Keys.PRODUCT_UNIT}"
@@ -53,8 +61,9 @@
                                 <th scope="col" width="120px" class="text-right"><fmt:message
                                         key="${Keys.PRODUCT_PRICE}" bundle="${msg}"/></th>
 
-                                <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.PRODUCT_TAX}"
-                                                                                               bundle="${msg}"/></th>
+                                <th scope="col" width="140px" class="text-center"><fmt:message
+                                        key="${Keys.PRODUCT_TAX}"
+                                        bundle="${msg}"/></th>
 
                                 <th scope="col" width="140px" class="text-center"><fmt:message key="${Keys.ACTION}"
                                                                                                bundle="${msg}"/></th>
@@ -78,10 +87,33 @@
 
                                     </td>
 
-                                    <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
-                                                                             maxFractionDigits="3"
-                                                                             minFractionDigits="3"
-                                                                             value="${product.quantity}"/></td>
+                                    <u:can action="/create-product">
+                                        <form class="form" method="POST" action="/update-product" autocomplete="off">
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <input type="hidden" name="id" value="${product.id}">
+                                                    <input type="text" class="form-control text-right"
+                                                           aria-describedby="add-${product.id}"
+                                                           name="${Keys.PRODUCT_QUANTITY}"
+                                                           value="<fmt:formatNumber type="number" groupingUsed="false" maxFractionDigits="3"
+                                                                                     minFractionDigits="3" value="${product.quantity}" />">
+                                                    <div class="input-group-append d-print-none">
+                                                        <button class="btn btn-secondary" type="submit">
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </form>
+                                    </u:can>
+
+                                    <u:can action="/create-receipt">
+                                        <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
+                                                                                 maxFractionDigits="3"
+                                                                                 minFractionDigits="3"
+                                                                                 value="${product.quantity}"/></td>
+                                    </u:can>
+
 
                                     <td class="text-center"><fmt:message key="${product.unit.bundleKey}"
                                                                          bundle="${settings}"/></td>
@@ -94,13 +126,15 @@
                                     <td class="text-center"><fmt:message key="${product.taxCategory.bundleKey}"
                                                                          bundle="${settings}"/></td>
                                     <td class="text-center">
-                                        <form action="/delete-product" method="POST" role="form">
-                                            <input type="hidden" name="id" value="${product.id}">
-                                            <u:can action="/delete-product">
+                                        <u:can action="/delete-product">
+                                            <form action="/delete-product" method="POST" role="form">
+                                                <input type="hidden" name="id" value="${product.id}">
+
                                                 <button type="submit" class="btn btn-link">
                                                     <fmt:message key="${Keys.DELETE}" bundle="${msg}"/></button>
-                                            </u:can>
-                                        </form>
+
+                                            </form>
+                                        </u:can>
                                     </td>
                                 </tr>
                             </c:forEach>

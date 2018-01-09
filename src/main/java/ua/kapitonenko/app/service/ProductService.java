@@ -18,4 +18,9 @@ public interface ProductService {
 	long getProductsCount();
 	
 	boolean delete(Long prodId, Long userId);
+	
+	
+	boolean update(Product product);
+	
+	Product findOne(Long id);
 }

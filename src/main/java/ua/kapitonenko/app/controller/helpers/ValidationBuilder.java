@@ -209,7 +209,8 @@ public class ValidationBuilder {
 		}
 		
 		if (list == null || list.isEmpty()) {
-			alertContainer.addMessage(messageManager.getProperty(messageLess));
+			alertContainer.addMessage(
+					messageManager.getProperty(messageLess));
 			valid = false;
 		} else if (list.size() > size) {
 			alertContainer.addMessage(messageManager.getProperty(messageMore));

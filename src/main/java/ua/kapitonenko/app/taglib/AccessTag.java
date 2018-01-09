@@ -24,7 +24,6 @@ public class AccessTag extends TagSupport {
 		User user = (User) session.getAttribute(Keys.USER);
 		
 		if (user != null && !Application.allowed(user.getUserRoleId(), action)) {
-			LOGGER.debug(user.getUserRoleId() + " " + action);
 			return SKIP_BODY;
 		}
 		

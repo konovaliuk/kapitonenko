@@ -95,6 +95,7 @@ public class RequestWrapper {
 	}
 	
 	private void initAlert() {
+		LOGGER.debug("init alert ");
 		if (request.getAttribute(Keys.ALERT) == null) {
 			alert = new AlertContainer();
 			
@@ -109,7 +110,7 @@ public class RequestWrapper {
 	}
 	
 	public AlertContainer getAlert() {
-		return alert;
+		return (AlertContainer) request.getAttribute(Keys.ALERT);
 	}
 	
 	public String getMethod() {

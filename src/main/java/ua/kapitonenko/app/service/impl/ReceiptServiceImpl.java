@@ -64,7 +64,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 	
 	
 	@Override
-	public boolean update(Receipt calculator) {
+	public boolean update(Receipt receipt) {
 		
 		Connection connection = null;
 		try {
@@ -74,22 +74,31 @@ public class ReceiptServiceImpl implements ReceiptService {
 			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
 			
-			ReceiptRecord receipt = calculator.getRecord();
+			ReceiptRecord record = receipt.getRecord();
 			
-			if (receiptDAO.update(receipt)) {
+			if (receiptDAO.update(record)) {
 				
-				ReceiptRecord created = receiptDAO.findOne(receipt.getId());
+				ReceiptRecord created = receiptDAO.findOne(record.getId());
 				
-				calculator.getProducts().forEach(product -> {
+				receipt.getProducts().forEach(product -> {
 					ReceiptProduct rp = new ReceiptProduct(null, created.getId(), product.getId(), product.getQuantity());
+					
+					LOGGER.debug(rp);
+					
 					receiptProductDAO.insert(rp);
 					Product inStock = productDAO.findOne(product.getId());
-					inStock.addQuantity(product.getQuantity().negate());
+					
+					if (record.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN))) {
+						inStock.addQuantity(product.getQuantity());
+					} else {
+						inStock.addQuantity(product.getQuantity().negate());
+					}
+					
 					productDAO.update(inStock);
 				});
 				
 				setReferences(created, connection);
-				calculator.setRecord(created);
+				receipt.setRecord(created);
 				connection.commit();
 				return true;
 			}
@@ -130,12 +139,11 @@ public class ReceiptServiceImpl implements ReceiptService {
 	
 	@Override
 	public List<Receipt> getReceiptList(int offset, int limit) {
-		return getReceiptList("ORDER BY ? LIMIT ? OFFSET ?", ps -> {
-			ps.setString(1, ReceiptsTable.ID);
-			ps.setInt(3, offset);
-			ps.setInt(2, limit);
+		return getReceiptList("ORDER BY " + ReceiptsTable.ID +
+				                      " DESC LIMIT ? OFFSET ?", ps -> {
+			ps.setInt(1, limit);
+			ps.setInt(2, offset);
 		});
-		
 	}
 	
 	@Override
@@ -162,6 +170,30 @@ public class ReceiptServiceImpl implements ReceiptService {
 			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
 			ReceiptRecord receipt = receiptDAO.findOne(receiptId);
 			setReferences(receipt, connection);
+			return receipt;
+		} finally {
+			pool.close(connection);
+		}
+	}
+	
+	@Override
+	public Receipt findOne(Long receiptId) {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+			ProductService productService = Application.getServiceFactory().getProductService();
+			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
+			ReceiptRecord record = receiptDAO.findOne(receiptId);
+			
+			setReferences(record, connection);
+			Receipt receipt = new Receipt(record);
+			
+			LOGGER.debug(record.getId());
+			
+			receipt.setProducts(productService.findAllByReceiptId(record.getId()));
+			receipt.setCategories(settingsService.getTaxCatList());
+			
 			return receipt;
 		} finally {
 			pool.close(connection);
