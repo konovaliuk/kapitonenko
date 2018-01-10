@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.TaxCategoryDAO;
 import ua.kapitonenko.app.dao.tables.TaxCategoriesTable;
 import ua.kapitonenko.app.domain.records.TaxCategory;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.math.BigDecimal;
 import java.sql.Statement;
@@ -67,7 +67,7 @@ public class TaxCategoryDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO tax_categories " +
 					                  "(id, name, bundle_name, bundle_key, rate) VALUES " +
@@ -75,7 +75,7 @@ public class TaxCategoryDAOTest extends BaseDAOTest {
 					                  "  (2, '2', 'settings', 'tax.2', 0);"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

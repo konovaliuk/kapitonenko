@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.ReceiptDAO;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -66,7 +66,7 @@ public class ReceiptDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO `receipts` " +
 					                  "(`id`, `cashbox_id`, `payment_type_id`, `receipt_type_id`, `cancelled`, `created_at`, `created_by`) " +
@@ -75,7 +75,7 @@ public class ReceiptDAOTest extends BaseDAOTest {
 					                  "  (2, 2, 1, 1, TRUE , NOW(), 1);"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

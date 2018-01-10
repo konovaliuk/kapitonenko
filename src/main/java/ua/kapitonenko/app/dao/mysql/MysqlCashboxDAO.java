@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.dao.mysql;
 
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.interfaces.CashboxDAO;
+import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.CashboxesTable;
 import ua.kapitonenko.app.domain.records.Cashbox;

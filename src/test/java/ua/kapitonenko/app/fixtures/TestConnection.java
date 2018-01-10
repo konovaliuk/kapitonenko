@@ -1,23 +1,22 @@
 package ua.kapitonenko.app.fixtures;
 
-import ua.kapitonenko.app.dao.connection.ConnectionPool;
 import ua.kapitonenko.app.exceptions.DAOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class TestConnectionPool implements ConnectionPool {
+public class TestConnection {
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "root";
 	private static final String URL = "jdbc:mysql://localhost:3366/cashregister_test?autoReconnect=true&useSSL=false";
 	
-	private static TestConnectionPool instance = new TestConnectionPool();
+	private static TestConnection instance = new TestConnection();
 	
-	private TestConnectionPool() {
+	private TestConnection() {
 	}
 	
-	public static TestConnectionPool getInstance() {
+	public static TestConnection getInstance() {
 		return instance;
 	}
 	

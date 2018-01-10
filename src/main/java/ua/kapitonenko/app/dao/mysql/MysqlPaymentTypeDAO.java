@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.dao.mysql;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.app.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.interfaces.PaymentTypeDAO;
+import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.PaymentTypesTable;
 import ua.kapitonenko.app.domain.records.PaymentType;

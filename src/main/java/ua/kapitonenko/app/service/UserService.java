@@ -2,7 +2,7 @@ package ua.kapitonenko.app.service;
 
 import ua.kapitonenko.app.domain.records.User;
 
-public interface UserService {
+public interface UserService extends Service {
 	User createAccount(User user);
 	
 	User findByLoginAndPassword(User user);

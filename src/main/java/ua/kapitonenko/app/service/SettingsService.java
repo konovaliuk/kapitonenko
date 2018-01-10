@@ -5,7 +5,7 @@ import ua.kapitonenko.app.domain.records.*;
 import java.util.List;
 import java.util.Map;
 
-public interface SettingsService {
+public interface SettingsService extends Service {
 	List<UserRole> getRoleList();
 	
 	Map<Long, String> getTaxMap();

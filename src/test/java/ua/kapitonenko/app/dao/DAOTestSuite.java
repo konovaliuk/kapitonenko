@@ -3,7 +3,7 @@ package ua.kapitonenko.app.dao;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public class DAOTestSuite {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		
-		Connection connection = TestConnectionPool.getInstance().getConnection();
+		Connection connection = TestConnection.getInstance().getConnection();
 		connection.setAutoCommit(false);
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("SET FOREIGN_KEY_CHECKS = 0;\n" +
@@ -61,7 +61,7 @@ public class DAOTestSuite {
 		} catch (SQLException e) {
 			connection.rollback();
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

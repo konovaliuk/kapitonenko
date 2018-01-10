@@ -1,10 +1,22 @@
 package ua.kapitonenko.app.dao.mysql;
 
+import org.apache.log4j.Logger;
 import ua.kapitonenko.app.dao.interfaces.*;
 
 import java.sql.Connection;
 
 public class MysqlDaoFactory implements DAOFactory {
+	
+	private static final Logger LOGGER = Logger.getLogger(MysqlDaoFactory.class);
+	
+	private static MysqlDaoFactory instance = new MysqlDaoFactory();
+	
+	private MysqlDaoFactory() {
+	}
+	
+	public static MysqlDaoFactory getInstance() {
+		return instance;
+	}
 	
 	@Override
 	public CompanyDAO getCompanyDAO(Connection connection) {

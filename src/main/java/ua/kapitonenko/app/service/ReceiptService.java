@@ -6,7 +6,7 @@ import ua.kapitonenko.app.domain.records.ReceiptType;
 
 import java.util.List;
 
-public interface ReceiptService {
+public interface ReceiptService extends Service {
 	
 	boolean update(Receipt receipt);
 	

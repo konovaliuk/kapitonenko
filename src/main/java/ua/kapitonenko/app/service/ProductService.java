@@ -4,7 +4,8 @@ import ua.kapitonenko.app.domain.records.Product;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductService extends Service {
+	
 	Product createProduct(Product product);
 	
 	List<Product> getProductsList();

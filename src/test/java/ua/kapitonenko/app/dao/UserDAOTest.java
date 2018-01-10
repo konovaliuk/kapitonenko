@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.UserDAO;
 import ua.kapitonenko.app.dao.tables.UsersTable;
 import ua.kapitonenko.app.domain.records.User;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -73,13 +73,13 @@ public class UserDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO users " +
 					                  "(id, user_role_id, username, password_hash, active, created_at) " +
 					                  "VALUES (1, 1, 'admin', 'admin', TRUE, NOW())");
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

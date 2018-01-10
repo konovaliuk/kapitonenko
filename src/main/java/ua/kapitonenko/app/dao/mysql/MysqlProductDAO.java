@@ -2,9 +2,9 @@ package ua.kapitonenko.app.dao.mysql;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.interfaces.ProductDAO;
+import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.ProductLocaleTable;
 import ua.kapitonenko.app.dao.tables.ProductsTable;
 import ua.kapitonenko.app.dao.tables.ReceiptProductsTable;

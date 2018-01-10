@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.ReceiptTypeDAO;
 import ua.kapitonenko.app.dao.tables.ReceiptTypesTable;
 import ua.kapitonenko.app.domain.records.ReceiptType;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -66,7 +66,7 @@ public class ReceiptTypeDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO `receipt_types` " +
 					                  "(`id`, `name`, `bundle_name`, `bundle_key`) " +
@@ -75,7 +75,7 @@ public class ReceiptTypeDAOTest extends BaseDAOTest {
 					                  "(2, 'return', 'settings', 'receipt.type.return');"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

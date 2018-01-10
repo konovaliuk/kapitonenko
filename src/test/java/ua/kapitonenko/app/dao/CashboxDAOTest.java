@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.CashboxDAO;
 import ua.kapitonenko.app.dao.tables.CashboxesTable;
 import ua.kapitonenko.app.domain.records.Cashbox;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -71,7 +71,7 @@ public class CashboxDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO cashboxes " +
 					                  "(id, fn_number, zn_number, make) " +
@@ -81,7 +81,7 @@ public class CashboxDAOTest extends BaseDAOTest {
 					                  "  (3, '0123456789', '12345678910', 'Datecs');"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

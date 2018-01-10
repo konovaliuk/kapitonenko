@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.dao.mysql;
 
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.interfaces.ReceiptDAO;
+import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 

@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.ReceiptProductDAO;
 import ua.kapitonenko.app.dao.tables.ReceiptProductsTable;
 import ua.kapitonenko.app.domain.records.ReceiptProduct;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.math.BigDecimal;
 import java.sql.Statement;
@@ -68,14 +68,14 @@ public class ReceiptProductDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO `receipt_products` " +
 					                  "(id, receipt_id, product_id, quantity) " +
 					                  "VALUES " +
 					                  "  (1, 1, 1 , 111.111)");
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

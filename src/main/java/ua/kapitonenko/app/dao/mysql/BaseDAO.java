@@ -1,9 +1,9 @@
 package ua.kapitonenko.app.dao.mysql;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.dao.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.interfaces.DAO;
+import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.domain.records.BaseEntity;
 import ua.kapitonenko.app.exceptions.DAOException;

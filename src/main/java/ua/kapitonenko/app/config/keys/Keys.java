@@ -143,4 +143,5 @@ public class Keys {
 	public static final String CASH_IN_SAFE = "cash.in.safe";
 	
 	public static final String FISCAL = "fiscal";
+	public static final String LANG = "l";
 }

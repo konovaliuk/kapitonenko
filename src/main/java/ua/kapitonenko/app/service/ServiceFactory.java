@@ -1,6 +1,7 @@
 package ua.kapitonenko.app.service;
 
 public interface ServiceFactory {
+	
 	UserService getUserService();
 	
 	SettingsService getSettingsService();
@@ -10,4 +11,8 @@ public interface ServiceFactory {
 	ReceiptService getReceiptService();
 	
 	ReportService getReportService();
+	
+	public enum ServiceName {
+		USER, SETTINGS, PRODUCT, RECEIPT, REPORT
+	}
 }

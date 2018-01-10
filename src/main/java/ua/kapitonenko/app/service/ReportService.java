@@ -4,7 +4,8 @@ import ua.kapitonenko.app.domain.Report;
 
 import java.util.List;
 
-public interface ReportService {
+public interface ReportService extends Service {
+	
 	boolean createZReport(Report report);
 	
 	long getCount();

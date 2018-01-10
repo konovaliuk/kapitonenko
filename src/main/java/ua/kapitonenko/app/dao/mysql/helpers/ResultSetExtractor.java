@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.dao.helpers;
+package ua.kapitonenko.app.dao.mysql.helpers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

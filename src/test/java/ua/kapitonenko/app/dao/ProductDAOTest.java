@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.ProductDAO;
 import ua.kapitonenko.app.dao.tables.ProductsTable;
 import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.math.BigDecimal;
 import java.sql.Statement;
@@ -73,13 +73,13 @@ public class ProductDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO products " +
 					                  "(id, unit_id, price, tax_category_id, quantity, created_at, created_by, deleted_at, deleted_by) " +
 					                  "VALUES (1, 1, 9.99, 1, 999.999, NOW(), 1, NULL, NULL)");
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

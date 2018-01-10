@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.UserRoleDAO;
 import ua.kapitonenko.app.dao.tables.UserRoleTable;
 import ua.kapitonenko.app.domain.records.UserRole;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -66,14 +66,14 @@ public class UserRoleDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO user_roles " +
 					                  "(id, name, bundle_name, bundle_key) " +
 					                  "VALUES (1, 'admin', 'messages', 'role.admin');"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }

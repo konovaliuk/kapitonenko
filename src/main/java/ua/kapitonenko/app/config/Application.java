@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.config;
 
 import ua.kapitonenko.app.config.keys.Actions;
-import ua.kapitonenko.app.dao.connection.ConnectionPool;
-import ua.kapitonenko.app.dao.connection.DataSourceConnectionPool;
+import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
+import ua.kapitonenko.app.dao.connection.DataSourceConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.dao.mysql.MysqlDaoFactory;
 import ua.kapitonenko.app.service.ServiceFactory;
@@ -32,12 +32,12 @@ public class Application {
 	private static final String ROLE_GUEST = "role.guest";
 	
 	private static final int RECORDS_PER_PAGE = 5;
-
+	
 	
 	private static Map<String, Long> ids = new HashMap<>();
 	private static Map<String, String> params = new HashMap<>();
 	private static Map<Long, List<String>> access = new HashMap<>();
-
+	
 	
 	static {
 		ids.put(RECEIPT_TYPE_FISCAL, 1L);
@@ -111,15 +111,15 @@ public class Application {
 	}
 	
 	public static DAOFactory getDAOFactory() {
-		return new MysqlDaoFactory();
+		return MysqlDaoFactory.getInstance();
 	}
 	
 	public static ServiceFactory getServiceFactory() {
-		return new ServiceFactoryImpl();
+		return ServiceFactoryImpl.getInstance();
 	}
 	
-	public static ConnectionPool getConnectionPool() {
-		return DataSourceConnectionPool.getInstance();
+	public static ConnectionWrapper getConnection() {
+		return new DataSourceConnectionWrapper();
 	}
 	
 	public static Long getId(String key) {

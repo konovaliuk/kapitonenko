@@ -25,7 +25,7 @@ public abstract class BaseDAOTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 	}
 	
 	protected void truncateTable() throws SQLException {

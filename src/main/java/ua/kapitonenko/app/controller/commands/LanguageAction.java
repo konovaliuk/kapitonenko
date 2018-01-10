@@ -24,7 +24,7 @@ public class LanguageAction implements ActionCommand {
 			throw new MethodNotAllowedException("POST");
 		}
 		
-		String lang = request.getParameter("l");
+		String lang = request.getParameter(Keys.LANG);
 		List<String> supported = settingsService.getSupportedLanguages();
 		
 		if (!supported.contains(lang)) {

@@ -2,9 +2,9 @@ package ua.kapitonenko.app.service.impl;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.connection.ConnectionPool;
-import ua.kapitonenko.app.dao.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
+import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
 import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.Receipt;
@@ -12,43 +12,16 @@ import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.domain.records.ReceiptProduct;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 import ua.kapitonenko.app.domain.records.ReceiptType;
-import ua.kapitonenko.app.exceptions.DAOException;
 import ua.kapitonenko.app.service.ProductService;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiptServiceImpl implements ReceiptService {
 	private static final Logger LOGGER = Logger.getLogger(ReceiptServiceImpl.class);
-	
-	private static ReceiptServiceImpl instance = new ReceiptServiceImpl();
-	
-	private ConnectionPool pool = Application.getConnectionPool();
-	
-	private ReceiptServiceImpl() {
-	}
-	
-	public static ReceiptServiceImpl getInstance() {
-		return instance;
-	}
-
-	private void setReferences(ReceiptRecord record, Connection connection) {
-		CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection);
-		PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
-		ReceiptTypeDAO receiptTypeDAO = Application.getDAOFactory().getReceiptTypeDAO(connection);
-		UserDAO userDAO = Application.getDAOFactory().getUserDAO(connection);
-		ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
-		
-		record.setCashbox(cashboxDAO.findOne(record.getCashboxId()));
-		record.setPaymentType(paymentTypeDAO.findOne(record.getPaymentTypeId()));
-		record.setReceiptType(receiptTypeDAO.findOne(record.getReceiptTypeId()));
-		record.setUserCreateBy(userDAO.findOne(record.getCreatedBy()));
-		record.setProducts(receiptProductDAO.findAllByReceiptId(record.getId()));
-	}
 	
 	@Override
 	public boolean update(Receipt receipt) {
@@ -66,14 +39,13 @@ public class ReceiptServiceImpl implements ReceiptService {
 	}
 	
 	private boolean update(Receipt receipt, boolean updateStock, boolean increase) {
-		
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			connection.setAutoCommit(false);
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
-			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			
+			connection.beginTransaction();
+			
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
+			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection.open());
+			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
 			
 			ReceiptRecord record = receipt.getRecord();
 			
@@ -103,43 +75,28 @@ public class ReceiptServiceImpl implements ReceiptService {
 					}
 				});
 				
-				setReferences(updated, connection);
+				setReferences(updated, connection.open());
 				receipt.setRecord(updated);
 				connection.commit();
 				return true;
 			}
-			
 			return false;
-		} catch (SQLException e) {
-			try {
-				connection.rollback();
-				return false;
-			} catch (SQLException e1) {
-				throw new DAOException(e);
-			}
-			
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	@Override
 	public boolean create(Receipt calculator) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
 			
 			ReceiptRecord receipt = calculator.getRecord();
 			if (receiptDAO.insert(receipt)) {
 				ReceiptRecord created = receiptDAO.findOne(receipt.getId());
-				setReferences(created, connection);
+				setReferences(created, connection.open());
 				calculator.setRecord(created);
 				return true;
 			}
 			return false;
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
@@ -154,7 +111,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 	
 	@Override
 	public List<Receipt> getReceiptList(Long cashboxId) {
-		
 		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " +
 				               ReceiptsTable.CREATED_AT + " > IFNULL((SELECT " +
 				               ZReportsTable.CREATED_AT + " FROM " +
@@ -170,29 +126,23 @@ public class ReceiptServiceImpl implements ReceiptService {
 	
 	@Override
 	public ReceiptRecord findById(Long receiptId) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
 			ReceiptRecord receipt = receiptDAO.findOne(receiptId);
-			setReferences(receipt, connection);
+			setReferences(receipt, connection.open());
 			return receipt;
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	@Override
 	public Receipt findOne(Long receiptId) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
 			ProductService productService = Application.getServiceFactory().getProductService();
 			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 			ReceiptRecord record = receiptDAO.findOne(receiptId);
 			
-			setReferences(record, connection);
+			setReferences(record, connection.open());
 			Receipt receipt = new Receipt(record);
 			
 			LOGGER.debug(record.getId());
@@ -201,34 +151,27 @@ public class ReceiptServiceImpl implements ReceiptService {
 			receipt.setCategories(settingsService.getTaxCatList());
 			
 			return receipt;
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	@Override
 	public long getReceiptsCount() {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
 			return receiptDAO.getCount();
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	private List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps) {
 		List<Receipt> receiptList = new ArrayList<>();
-		Connection connection = pool.getConnection();
-		try {
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection.open());
 			ProductService productService = Application.getServiceFactory().getProductService();
 			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 			List<ReceiptRecord> list = receiptDAO.findAllByQuery(sql, ps);
 			
 			list.forEach(record -> {
-				setReferences(record, connection);
+				setReferences(record, connection.open());
 				Receipt receipt = new Receipt(record);
 				receipt.setProducts(productService.findAllByReceiptId(record.getId()));
 				receipt.setCategories(settingsService.getTaxCatList());
@@ -236,31 +179,35 @@ public class ReceiptServiceImpl implements ReceiptService {
 			});
 			LOGGER.debug(receiptList);
 			return receiptList;
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	@Override
 	public ReceiptType findReceiptType(Long id) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptTypeDAO receiptTypeDAO = Application.getDAOFactory().getReceiptTypeDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptTypeDAO receiptTypeDAO = Application.getDAOFactory().getReceiptTypeDAO(connection.open());
 			return receiptTypeDAO.findOne(id);
-		} finally {
-			pool.close(connection);
 		}
 	}
 	
 	public List<ReceiptProduct> findReceiptProducts(Long receiptId) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
+		try (ConnectionWrapper connection = Application.getConnection()) {
+			ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection.open());
 			return receiptProductDAO.findAllByReceiptId(receiptId);
-		} finally {
-			pool.close(connection);
 		}
+	}
+	
+	private void setReferences(ReceiptRecord record, Connection connection) {
+		CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection);
+		PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
+		ReceiptTypeDAO receiptTypeDAO = Application.getDAOFactory().getReceiptTypeDAO(connection);
+		UserDAO userDAO = Application.getDAOFactory().getUserDAO(connection);
+		ReceiptProductDAO receiptProductDAO = Application.getDAOFactory().getReceiptProductDAO(connection);
+		
+		record.setCashbox(cashboxDAO.findOne(record.getCashboxId()));
+		record.setPaymentType(paymentTypeDAO.findOne(record.getPaymentTypeId()));
+		record.setReceiptType(receiptTypeDAO.findOne(record.getReceiptTypeId()));
+		record.setUserCreateBy(userDAO.findOne(record.getCreatedBy()));
+		record.setProducts(receiptProductDAO.findAllByReceiptId(record.getId()));
 	}
 }

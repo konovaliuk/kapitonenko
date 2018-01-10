@@ -7,7 +7,7 @@ import ua.kapitonenko.app.dao.interfaces.UnitDAO;
 import ua.kapitonenko.app.dao.tables.UnitsTable;
 import ua.kapitonenko.app.domain.records.Unit;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnectionPool;
+import ua.kapitonenko.app.fixtures.TestConnection;
 
 import java.sql.Statement;
 import java.util.Arrays;
@@ -66,7 +66,7 @@ public class UnitDAOTest extends BaseDAOTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		connection = TestConnectionPool.getInstance().getConnection();
+		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
 			statement.execute("INSERT INTO units" +
 					                  "(id, name, bundle_name, bundle_key) VALUES" +
@@ -74,7 +74,7 @@ public class UnitDAOTest extends BaseDAOTest {
 					                  "  (2, 'piece', 'settings', 'pc');"
 			);
 		} finally {
-			TestConnectionPool.getInstance().close(connection);
+			TestConnection.getInstance().close(connection);
 		}
 	}
 }
