@@ -43,7 +43,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 			                                                   ProductsTable.NAME + " JOIN " +
 			                                                   ProductLocaleTable.NAME + " ON " +
 			                                                   ProductsTable.ID + " = " +
-			                                                   ProductLocaleTable.NAME_PRODUCT_ID + " WHERE ( " +
+			                                                   ProductLocaleTable.PRODUCT_ID + " WHERE ( " +
 			                                                   ProductLocaleTable.PROP_NAME + " = ? AND " +
 			                                                   ProductLocaleTable.LOCALE + " = ? AND " +
 			                                                   ProductLocaleTable.PROP_VALUE + " = ? ) OR ( " +

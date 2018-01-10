@@ -33,7 +33,7 @@
                     </u:can>
                 </div>
                 <div class="card">
-                    <%-- TODO show product name in all lang only to merchandiser --%>
+                    <%-- TODO finish list layout --%>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>

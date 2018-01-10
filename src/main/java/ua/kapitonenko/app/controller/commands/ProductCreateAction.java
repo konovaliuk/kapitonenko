@@ -58,7 +58,7 @@ public class ProductCreateAction implements ActionCommand {
 			BigDecimal quantityValue = validator.parseDecimal(quantity, 3, Keys.PRODUCT_QUANTITY);
 			
 			validator
-					.required(lang, Keys.PRODUCT_NAME)
+					.requiredAllLang(lang, Keys.PRODUCT_NAME)
 					.required(quantityValue, Keys.PRODUCT_QUANTITY)
 					.required(priceValue, Keys.PRODUCT_PRICE)
 					.idInList(unitId, units, Keys.PRODUCT_UNIT)

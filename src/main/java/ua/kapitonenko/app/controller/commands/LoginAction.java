@@ -2,9 +2,9 @@ package ua.kapitonenko.app.controller.commands;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
-import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -62,7 +62,7 @@ public class LoginAction implements ActionCommand {
 		return validator
 				       .required(username, Keys.USERNAME)
 				       .required(password, Keys.PASSWORD)
-				       .exists(cashboxId, () -> settingsService.findCashbox(cashboxId) == null, Keys.CASHBOX)
+				       .exists(cashboxId, () -> settingsService.findCashbox(cashboxId) != null, Keys.CASHBOX)
 				       .isValid();
 	}
 	

@@ -5,6 +5,7 @@
     <artifactId>cashregister</artifactId>
     <packaging>war</packaging>
     <version>1.0</version>
+    <name>CashRegister Maven Webapp</name>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -32,8 +33,6 @@
             <artifactId>commons-validator</artifactId>
             <version>1.4.0</version>
         </dependency>
-
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -44,6 +43,12 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -61,17 +66,10 @@
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
         </dependency>
-
-
     </dependencies>
-    <name>CashRegister Maven Webapp</name>
-    <!--<url>http://maven.apache.org</url>-->
-
     <properties>
         <jdk.version>1.8</jdk.version>
     </properties>
-    
-
     <build>
         <finalName>cashregister</finalName>
         <plugins>

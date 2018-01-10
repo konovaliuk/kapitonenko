@@ -56,6 +56,7 @@ public class ReportCreateAction implements ActionCommand {
 			if (validator.isValid()) {
 				report.setCashbox(settingsService.findCashbox(cashboxId));
 				
+				// TODO move to report service
 				List<Receipt> receipts = receiptService.getReceiptList(report.getCashbox().getId());
 				List<TaxCategory> taxCats = settingsService.getTaxCatList();
 				List<PaymentType> paymentTypes = settingsService.getPaymentTypes();

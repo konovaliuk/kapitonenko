@@ -91,6 +91,8 @@ public class ReportServiceImpl implements ReportService {
 				Report report = new Report(record.getCreatedBy());
 				report.setRecord(record);
 				report.setCashbox(cashboxDAO.findOne(record.getCashboxId()));
+				
+				// TODO populate receipts list
 				reportList.add(report);
 			});
 			LOGGER.debug(reportList);

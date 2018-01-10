@@ -7,7 +7,6 @@ import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.domain.Model;
 import ua.kapitonenko.app.domain.records.BaseEntity;
 
 import java.math.BigDecimal;
@@ -34,8 +33,18 @@ public class ValidationBuilder {
 	
 	public static Long parseId(String id) {
 		LongValidator longValidator = LongValidator.getInstance();
-		return longValidator.validate(id);
+		Long value = longValidator.validate(id);
+		return (value == null || value <= 0) ? null : value;
 	}
+	
+	public static <E extends Enum<E>> E parseEnum(Class<E> enumClass, String enumName) {
+		if (!EnumUtils.isValidEnum(enumClass, enumName)) {
+			return null;
+		}
+		return EnumUtils.getEnum(enumClass,
+				enumName.toUpperCase());
+	}
+	
 	
 	public BigDecimal parseDecimal(String value, int precision, String label) {
 		BigDecimalValidator validator = BigDecimalValidator.getInstance();
@@ -55,21 +64,12 @@ public class ValidationBuilder {
 		return decimal;
 	}
 	
-	public static <E extends Enum<E>> E parseEnum(Class<E> enumClass, String enumName) {
-		if (!EnumUtils.isValidEnum(enumClass, enumName)) {
-			return null;
-		}
-		return EnumUtils.getEnum(enumClass,
-				enumName.toUpperCase());
-	}
-	
 	public ValidationBuilder ifValid() {
 		if (!valid) {
 			skip = true;
 		}
 		return this;
 	}
-	
 	
 	public ValidationBuilder required(String value, String label) {
 		if (skip) {
@@ -87,7 +87,6 @@ public class ValidationBuilder {
 		if (skip) {
 			return this;
 		}
-		
 		if (value == null) {
 			alertContainer.addMessage(messageManager.notEmptyMessage(label));
 			valid = false;
@@ -95,7 +94,7 @@ public class ValidationBuilder {
 		return this;
 	}
 	
-	public ValidationBuilder required(List<? extends Model> list, String label) {
+	public ValidationBuilder required(List list, String label) {
 		if (skip) {
 			return this;
 		}
@@ -107,7 +106,7 @@ public class ValidationBuilder {
 		return this;
 	}
 	
-	public ValidationBuilder required(String[] values, String label) {
+	public ValidationBuilder requiredAllLang(String[] values, String label) {
 		if (skip) {
 			return this;
 		}
@@ -119,7 +118,7 @@ public class ValidationBuilder {
 		return this;
 	}
 	
-	public ValidationBuilder requiredAll(Object value, String label) {
+	public ValidationBuilder requiredEach(Object value, String label) {
 		if (skip) {
 			return this;
 		}
@@ -178,13 +177,13 @@ public class ValidationBuilder {
 		return idInSet(id, set, label);
 	}
 	
-	public ValidationBuilder unique(Model model, String username) {
+	public ValidationBuilder unique(Object object, String label) {
 		if (skip) {
 			return this;
 		}
 		
-		if (model != null) {
-			alertContainer.addMessage(messageManager.notUniqueMessage(username));
+		if (object != null) {
+			alertContainer.addMessage(messageManager.notUniqueMessage(label));
 			valid = false;
 		}
 		return this;
@@ -195,7 +194,7 @@ public class ValidationBuilder {
 			return this;
 		}
 		
-		if (id == null || supplier.get()) {
+		if (id == null || !supplier.get()) {
 			alertContainer.addMessage(messageManager.notExists(label));
 			valid = false;
 		}
@@ -203,7 +202,7 @@ public class ValidationBuilder {
 	}
 	
 	
-	public ValidationBuilder listSize(int size, List<? extends Model> list, String messageLess, String messageMore) {
+	public ValidationBuilder listSize(int size, List list, String messageLess, String messageMore) {
 		if (skip) {
 			return this;
 		}

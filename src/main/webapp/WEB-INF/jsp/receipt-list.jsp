@@ -140,7 +140,9 @@
                         </form>
                     </div>
                 </div>
-                <%@ include file="includes/pager.jsp" %>
+                <u:can action="/create-report">
+                    <%@ include file="includes/pager.jsp" %>
+                </u:can>
             </div>
         </div>
     </div>

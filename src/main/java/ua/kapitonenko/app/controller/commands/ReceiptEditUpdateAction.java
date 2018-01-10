@@ -14,7 +14,7 @@ public class ReceiptEditUpdateAction extends ReceiptEditAction {
 		String[] updatedQuantities = request.getParams().get(Keys.PRODUCT_QUANTITY);
 		for (int i = 0; i < updatedQuantities.length; i++) {
 			BigDecimal updated = validator.parseDecimal(updatedQuantities[i], 3, Keys.PRODUCT_QUANTITY);
-			validator.requiredAll(updated, Keys.PRODUCT_QUANTITY);
+			validator.requiredEach(updated, Keys.PRODUCT_QUANTITY);
 			if (updated != null) {
 				receipt.getProducts().get(i).setQuantity(updated);
 			}

@@ -9,6 +9,7 @@ import ua.kapitonenko.app.controller.helpers.PaginationHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.domain.records.Cashbox;
 import ua.kapitonenko.app.service.ReceiptService;
 
 import javax.servlet.ServletException;
@@ -25,7 +26,14 @@ public class ReceiptListAction implements ActionCommand {
 		long noOfRecords = receiptService.getReceiptsCount();
 		PaginationHelper pager = new PaginationHelper(request, noOfRecords);
 		
-		List<Receipt> list = receiptService.getReceiptList(pager.getOffset(), pager.getRecordsPerPage());
+		List<Receipt> list;
+		boolean userIsSenior = Application.allowed(request.getSession().getUser().getUserRoleId(), Actions.REPORT_CREATE);
+		if (userIsSenior) {
+			list = receiptService.getReceiptList(pager.getOffset(), pager.getRecordsPerPage());
+		} else {
+			Long cashboxId = ((Cashbox) request.getSession().get(Keys.CASHBOX)).getId();
+			list = receiptService.getReceiptList(cashboxId);
+		}
 		
 		request.setAttribute(Keys.RECEIPTS, list);
 		return request.forward(Pages.RECEIPT_LIST, Actions.RECEIPTS);

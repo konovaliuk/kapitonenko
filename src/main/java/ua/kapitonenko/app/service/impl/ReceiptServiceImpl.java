@@ -35,19 +35,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 	public static ReceiptServiceImpl getInstance() {
 		return instance;
 	}
-	
-/*	private void setReferences(Receipt record, Connection connection) {
-		SettingsService settingsService = Application.getServiceFactory().getSettingsService();
-		UserService userService = Application.getServiceFactory().getUserService();
-		
-		record.setCashbox(settingsService.findCashbox(record.getCashboxId()));
-		record.setPaymentType(settingsService.findPaymentType(record.getPaymentTypeId()));
-		record.setReceiptType(findReceiptType(record.getReceiptTypeId()));
-		record.setUserCreateBy((userService.findById(record.getCreatedBy())));
-		record.setProducts(findReceiptProducts(record.getId()));
-	}*/
-	
-	// TODO chose implementation
+
 	private void setReferences(ReceiptRecord record, Connection connection) {
 		CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection);
 		PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection);
@@ -62,9 +50,22 @@ public class ReceiptServiceImpl implements ReceiptService {
 		record.setProducts(receiptProductDAO.findAllByReceiptId(record.getId()));
 	}
 	
-	
 	@Override
 	public boolean update(Receipt receipt) {
+		boolean updateStock = !receipt.getRecord().isCancelled();
+		boolean increase = receipt.getRecord().getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN));
+		return update(receipt, updateStock, increase);
+	}
+	
+	@Override
+	public boolean cancel(Long receiptId) {
+		Receipt receipt = findOne(receiptId);
+		receipt.getRecord().setCancelled(true);
+		boolean increase = receipt.getRecord().getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_FISCAL));
+		return update(receipt, true, increase);
+	}
+	
+	private boolean update(Receipt receipt, boolean updateStock, boolean increase) {
 		
 		Connection connection = null;
 		try {
@@ -78,27 +79,32 @@ public class ReceiptServiceImpl implements ReceiptService {
 			
 			if (receiptDAO.update(record)) {
 				
-				ReceiptRecord created = receiptDAO.findOne(record.getId());
+				ReceiptRecord updated = receiptDAO.findOne(record.getId());
+				
+				boolean createRefs = receiptProductDAO.findAllByReceiptId(updated.getId()).isEmpty();
 				
 				receipt.getProducts().forEach(product -> {
-					ReceiptProduct rp = new ReceiptProduct(null, created.getId(), product.getId(), product.getQuantity());
 					
-					LOGGER.debug(rp);
-					
-					receiptProductDAO.insert(rp);
-					Product inStock = productDAO.findOne(product.getId());
-					
-					if (record.getReceiptTypeId().equals(Application.getId(Application.RECEIPT_TYPE_RETURN))) {
-						inStock.addQuantity(product.getQuantity());
-					} else {
-						inStock.addQuantity(product.getQuantity().negate());
+					if (createRefs) {
+						ReceiptProduct rp = new ReceiptProduct(null, updated.getId(), product.getId(), product.getQuantity());
+						receiptProductDAO.insert(rp);
 					}
 					
-					productDAO.update(inStock);
+					if (updateStock) {
+						Product inStock = productDAO.findOne(product.getId());
+						
+						if (increase) {
+							inStock.addQuantity(product.getQuantity());
+						} else {
+							inStock.addQuantity(product.getQuantity().negate());
+						}
+						
+						productDAO.update(inStock);
+					}
 				});
 				
-				setReferences(created, connection);
-				receipt.setRecord(created);
+				setReferences(updated, connection);
+				receipt.setRecord(updated);
 				connection.commit();
 				return true;
 			}
@@ -201,25 +207,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 	}
 	
 	@Override
-	public boolean cancel(Long receiptId) {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-			ReceiptDAO receiptDAO = Application.getDAOFactory().getReceiptDAO(connection);
-			ReceiptRecord receipt = receiptDAO.findOne(receiptId);
-			if (receipt != null) {
-				receipt.setCancelled(true);
-				return receiptDAO.update(receipt);
-			}
-			
-			return false;
-			
-		} finally {
-			pool.close(connection);
-		}
-	}
-	
-	@Override
 	public long getReceiptsCount() {
 		Connection connection = null;
 		try {
@@ -230,30 +217,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 			pool.close(connection);
 		}
 	}
-	
-/*	@Override
-	public List<Receipt> getSales(Long cashboxId) {
-		String temp = "SELECT * FROM receipts\n" +
-				              "WHERE cashbox_id=2\n" +
-				              "      AND created_at > IFNULL(\n" +
-				              "    (SELECT created_at FROM z_reports WHERE cashbox_id=2 ORDER BY id DESC LIMIT 1),\n" +
-				              "    '0000-00-00 00:00:00');"
-		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " + ReceiptsTable.RECEIPT_TYPE_ID + "=?";
-		return getReceiptList(query, ps -> {
-			ps.setLong(1, cashboxId);
-			ps.setLong(2, Application.getId(Application.RECEIPT_TYPE_FISCAL));
-		});
-	}
-	
-	@Override
-	public List<Receipt> getRefunds(Long cashboxId) {
-		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " + ReceiptsTable.RECEIPT_TYPE_ID + "=?";
-		return getReceiptList(query, ps -> {
-			ps.setLong(1, cashboxId);
-			ps.setLong(2, Application.getId(Application.RECEIPT_TYPE_RETURN));
-		});
-	}*/
-	
 	
 	private List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps) {
 		List<Receipt> receiptList = new ArrayList<>();
@@ -290,7 +253,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 		}
 	}
 	
-	
 	public List<ReceiptProduct> findReceiptProducts(Long receiptId) {
 		Connection connection = null;
 		try {
@@ -301,6 +263,4 @@ public class ReceiptServiceImpl implements ReceiptService {
 			pool.close(connection);
 		}
 	}
-	
-	
 }

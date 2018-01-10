@@ -15,10 +15,4 @@ public enum ReportType {
 	public String getLabel() {
 		return label;
 	}
-	
-	
-	@Override
-	public String toString() {
-		return super.toString().toLowerCase();
-	}
 }
