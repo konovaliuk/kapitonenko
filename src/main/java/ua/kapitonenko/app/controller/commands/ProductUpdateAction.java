@@ -25,7 +25,7 @@ public class ProductUpdateAction implements ActionCommand {
 			throw new MethodNotAllowedException("POST");
 		}
 		
-		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+		ValidationBuilder validator = request.getValidator();
 		
 		String id = request.getParameter("id");
 		String quantity = request.getParameter(Keys.PRODUCT_QUANTITY);

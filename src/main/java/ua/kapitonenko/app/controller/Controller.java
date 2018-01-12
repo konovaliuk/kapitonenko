@@ -1,6 +1,7 @@
 package ua.kapitonenko.app.controller;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
@@ -19,6 +20,12 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(Controller.class);
 	private RequestHelper requestHelper = RequestHelper.getInstance();
+	
+	@Override
+	public void init() throws ServletException {
+		Application.init(getServletContext());
+		
+	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

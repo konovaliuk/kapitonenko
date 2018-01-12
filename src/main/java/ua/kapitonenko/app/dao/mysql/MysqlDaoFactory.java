@@ -1,6 +1,8 @@
 package ua.kapitonenko.app.dao.mysql;
 
 import org.apache.log4j.Logger;
+import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
 
 import java.sql.Connection;
@@ -86,5 +88,10 @@ public class MysqlDaoFactory implements DAOFactory {
 	@Override
 	public LocaleDAO getLocaleDAO(Connection connection) {
 		return new MysqlLocaleDAO(connection);
+	}
+	
+	@Override
+	public ConnectionWrapper getConnection() {
+		return Application.getConnection();
 	}
 }

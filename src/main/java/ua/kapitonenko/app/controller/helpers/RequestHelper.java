@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.controller.helpers;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.commands.*;
 import ua.kapitonenko.app.domain.records.User;
@@ -67,11 +67,11 @@ public class RequestHelper {
 		}
 		User user = request.getSession().getUser();
 		
-		if (user == null && !Application.guestAllowed(key)) {
+		if (user == null && !AccessControl.guestAllowed(key)) {
 			return commands.get(Actions.HOME);
 		}
 		
-		if (user != null && !Application.allowed(user.getUserRoleId(), key)) {
+		if (user != null && !AccessControl.allowed(user.getUserRoleId(), key)) {
 			throw new ForbiddenException(key);
 		}
 		

@@ -3,7 +3,6 @@ package ua.kapitonenko.app.controller.filters;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -18,18 +17,11 @@ public class LocaleFilter implements Filter {
 			throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		
-		session.setAttribute(Application.MESSAGE_BUNDLE, Application.getParam(Application.MESSAGE_BUNDLE));
-		session.setAttribute(Application.SETTINGS_BUNDLE, Application.getParam(Application.SETTINGS_BUNDLE));
-		
 		if (session.getAttribute(Keys.LOCALE) == null) {
-			session.setAttribute(Keys.LOCALE, Application.getParam(Application.DEFAULT_LOCALE));
-			session.setAttribute(Keys.LOCALE_ID, Application.getId(Application.DEFAULT_LOCALE));
+			session.setAttribute(Keys.LOCALE, Application.Params.DEFAULT_LOCALE.getValue());
+			session.setAttribute(Keys.LOCALE_ID, Application.Ids.DEFAULT_LOCALE.getValue());
 		}
-		
-		if (session.getAttribute(Keys.LANGUAGES) == null) {
-			SettingsService settingsService = Application.getServiceFactory().getSettingsService();
-			session.setAttribute(Keys.LANGUAGES, settingsService.getSupportedLanguages());
-		}
+
 		chain.doFilter(request, response);
 	}
 	

@@ -45,7 +45,7 @@ public class ReceiptEditAddAction extends ReceiptEditAction {
 				
 				Long typeId = receipt.getRecord().getReceiptTypeId();
 				
-				if (typeId.equals(Application.getId(Application.RECEIPT_TYPE_FISCAL))) {
+				if (typeId.equals(Application.Ids.RECEIPT_TYPE_FISCAL.getValue())) {
 					validator.notGreater(quantityValue, found.getQuantity(), Keys.ERROR_NOT_ENOUGH);
 				}
 				

@@ -1,14 +1,22 @@
 package ua.kapitonenko.app.controller.commands;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.SessionWrapper;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
+import ua.kapitonenko.app.exceptions.NotFoundException;
+import ua.kapitonenko.app.fixtures.TestServiceFactory;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,6 +28,11 @@ public class LanguageActionTest {
 	
 	@Mock
 	private SessionWrapper sessionWrapper;
+	
+	@BeforeClass
+	public static void configApp() {
+		Application.setServiceFactory(TestServiceFactory.getInstance());
+	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -33,4 +46,24 @@ public class LanguageActionTest {
 		
 		action.execute(requestWrapper);
 	}
+	
+	@Test(expected = NotFoundException.class)
+	public void shouldThrowExceptionIfLanguageNotSupported() throws Exception {
+		when(requestWrapper.getParameter(Keys.LANG)).thenReturn("fr");
+		
+		action.execute(requestWrapper);
+	}
+	
+	@Test
+	public void shouldChangeSessionLocaleAndRedirectBack() throws Exception {
+		when(requestWrapper.getParameter(Keys.LANG)).thenReturn("uk");
+		
+		action.execute(requestWrapper);
+		
+		verify(sessionWrapper).set(eq(Keys.LOCALE), any());
+		verify(sessionWrapper).set(eq(Keys.LOCALE_ID), any());
+		verify(requestWrapper).goBack();
+	}
+	
+	
 }

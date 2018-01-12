@@ -45,7 +45,7 @@ public class HomeActionTest {
 	
 	@Test
 	public void shouldRedirectToProductsWhenUserIsMerchandiser() throws Exception {
-		when(user.getUserRoleId()).thenReturn(Application.getId(Application.ROLE_MERCHANDISER));
+		when(user.getUserRoleId()).thenReturn(Application.Ids.ROLE_MERCHANDISER.getValue());
 		
 		homeAction.execute(requestWrapper);
 		
@@ -54,7 +54,7 @@ public class HomeActionTest {
 	
 	@Test
 	public void shouldRedirectToReportsWhenUserIsSenior() throws Exception {
-		when(user.getUserRoleId()).thenReturn(Application.getId(Application.ROLE_SENIOR));
+		when(user.getUserRoleId()).thenReturn(Application.Ids.ROLE_SENIOR.getValue());
 		
 		homeAction.execute(requestWrapper);
 		
@@ -63,7 +63,7 @@ public class HomeActionTest {
 	
 	@Test
 	public void shouldRedirectToReceiptsWhenUserIsCashier() throws Exception {
-		when(user.getUserRoleId()).thenReturn(Application.getId(Application.ROLE_CASHIER));
+		when(user.getUserRoleId()).thenReturn(Application.Ids.ROLE_CASHIER.getValue());
 		
 		homeAction.execute(requestWrapper);
 		

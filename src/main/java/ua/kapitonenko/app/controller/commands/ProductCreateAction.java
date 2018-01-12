@@ -50,7 +50,7 @@ public class ProductCreateAction implements ActionCommand {
 			String tax = request.getParameter(Keys.PRODUCT_TAX);
 			
 			
-			ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+			ValidationBuilder validator = request.getValidator();
 			
 			Long unitId = ValidationBuilder.parseId(unit);
 			Long taxId = ValidationBuilder.parseId(tax);

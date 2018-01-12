@@ -11,6 +11,7 @@ import ua.kapitonenko.app.domain.records.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class ValidationBuilder {
 		BigDecimalValidator validator = BigDecimalValidator.getInstance();
 		BigDecimal decimal = validator.validate(value, messageManager.getLocale());
 		if (decimal == null) {
-			decimal = validator.validate(value, new java.util.Locale(Application.getParam(Application.DEFAULT_LOCALE)));
+			decimal = validator.validate(value, new Locale(Application.Params.DEFAULT_LOCALE.getValue()));
 		}
 		
 		if (decimal != null) {

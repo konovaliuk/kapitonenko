@@ -103,7 +103,7 @@ public class ReportSummary {
 	
 	public BigDecimal getCashAmount() {
 		PaymentType cash = costPerPayType().keySet().stream()
-				                   .filter(paymentType -> paymentType.getId().equals(Application.getId(Application.PAYMENT_TYPE_CASH)))
+				                   .filter(paymentType -> paymentType.getId().equals(Application.Ids.PAYMENT_TYPE_CASH.getValue()))
 				                   .findFirst().orElseGet(null);
 		return costPerPayType().getOrDefault(cash, BigDecimal.ZERO);
 	}

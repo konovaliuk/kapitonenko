@@ -13,13 +13,13 @@ public class RequestWrapper {
 	
 	private HttpServletRequest request;
 	private SessionWrapper sessionWrapper;
-	private MessageProvider messageManager;
+	private MessageProvider messageProvider;
 	private AlertContainer alert;
 	
 	public RequestWrapper(HttpServletRequest request) {
 		this.request = request;
-		this.sessionWrapper = new SessionWrapper(request.getSession());
-		this.messageManager = MessageProvider.get(sessionWrapper.getLocale());
+		sessionWrapper = new SessionWrapper(request.getSession());
+		messageProvider = MessageProvider.get(sessionWrapper.getLocale());
 		initAlert();
 	}
 	
@@ -75,12 +75,12 @@ public class RequestWrapper {
 		request.setAttribute(key, object);
 	}
 	
-	public MessageProvider getMessageManager() {
-		return messageManager;
+	public MessageProvider getMessageProvider() {
+		return messageProvider;
 	}
 	
-	public void setMessageManager(MessageProvider messageManager) {
-		this.messageManager = messageManager;
+	public void setMessageProvider(MessageProvider messageProvider) {
+		this.messageProvider = messageProvider;
 	}
 	
 	public String getUri() {
@@ -115,5 +115,9 @@ public class RequestWrapper {
 	
 	public String getMethod() {
 		return request.getMethod();
+	}
+	
+	public ValidationBuilder getValidator() {
+		return new ValidationBuilder(messageProvider, getAlert());
 	}
 }

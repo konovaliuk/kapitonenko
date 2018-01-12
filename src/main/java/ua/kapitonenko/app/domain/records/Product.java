@@ -32,7 +32,7 @@ public class Product extends BaseEntity {
 	private BigDecimal cost;
 	
 	
-	private Long localeId = Application.getId(Application.DEFAULT_LOCALE);
+	private Long localeId = Application.Ids.DEFAULT_LOCALE.getValue();
 	
 	public Product() {
 	}

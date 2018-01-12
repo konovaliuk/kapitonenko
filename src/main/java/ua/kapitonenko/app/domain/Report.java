@@ -45,10 +45,10 @@ public class Report extends Model implements Serializable {
 		
 		Map<Long, List<Receipt>> map = receipts.stream().collect(Collectors.groupingBy(receipt -> receipt.getRecord().getReceiptTypeId()));
 		
-		List<Receipt> sales = map.getOrDefault(Application.getId(Application.RECEIPT_TYPE_FISCAL), Collections.emptyList());
+		List<Receipt> sales = map.getOrDefault(Application.Ids.RECEIPT_TYPE_FISCAL.getValue(), Collections.emptyList());
 		salesFigures = new ReportSummary(sales, taxCats, paymentTypes);
 		
-		List<Receipt> refunds = map.getOrDefault(Application.getId(Application.RECEIPT_TYPE_RETURN), Collections.emptyList());
+		List<Receipt> refunds = map.getOrDefault(Application.Ids.RECEIPT_TYPE_RETURN.getValue(), Collections.emptyList());
 		refundsFigures = new ReportSummary(refunds, taxCats, paymentTypes);
 		initFields();
 	}

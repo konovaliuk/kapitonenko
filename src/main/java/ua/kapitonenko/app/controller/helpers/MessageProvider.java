@@ -13,7 +13,7 @@ import static ua.kapitonenko.app.config.keys.Keys.*;
 public class MessageProvider {
 	private static final Logger LOGGER = Logger.getLogger(MessageProvider.class);
 	
-	private static final String BUNDLE_NAME = Application.MESSAGE_BUNDLE;
+	private static final String BUNDLE_NAME = Application.Params.MESSAGE_BUNDLE.getValue();
 	private ResourceBundle resourceBundle;
 	private static Map<String, MessageProvider> providers = new HashMap<>();
 	private Locale locale;
@@ -65,11 +65,6 @@ public class MessageProvider {
 		return String.format("%s %s", getProperty(SUCCESS_SIGN_UP), getProperty(next));
 	}
 	
-	public String failureMessage(String action) {
-		return String.format("%s %s", getProperty(FAILED_TO), getProperty(action));
-	}
-	
-	
 	public String notExists(String attribute) {
 		return String.format("%s %s", getProperty(attribute), getProperty(NOT_EXISTS));
 	}
@@ -83,6 +78,6 @@ public class MessageProvider {
 	}
 	
 	public String concat(String message, String attribute) {
-		return String.format(getProperty(ERROR_LESS_ZERO), getProperty(attribute));
+		return String.format(getProperty(message), getProperty(attribute));
 	}
 }

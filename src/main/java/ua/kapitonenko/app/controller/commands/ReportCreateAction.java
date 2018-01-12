@@ -44,7 +44,7 @@ public class ReportCreateAction implements ActionCommand {
 			Long cashboxId = ValidationBuilder.parseId(cashbox);
 			ReportType reportType = ValidationBuilder.parseEnum(ReportType.class, type);
 			
-			ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+			ValidationBuilder validator = request.getValidator();
 			
 			validator.required(cashboxId, Keys.CASHBOX)
 					.required(reportType, Keys.REPORT_TYPE)

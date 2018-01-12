@@ -16,10 +16,9 @@ public interface ProductService extends Service {
 	
 	List<Product> findAllByReceiptId(Long id);
 	
-	long getProductsCount();
+	long getCount();
 	
 	boolean delete(Long prodId, Long userId);
-	
 	
 	boolean update(Product product);
 	

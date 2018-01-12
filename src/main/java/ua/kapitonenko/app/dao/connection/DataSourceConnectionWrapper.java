@@ -34,6 +34,7 @@ public class DataSourceConnectionWrapper implements ConnectionWrapper {
 		if (connection == null) {
 			try {
 				connection = dataSource.getConnection();
+				LOGGER.debug(connection);
 			} catch (SQLException e) {
 				throw new DAOException(e);
 			}
@@ -44,6 +45,7 @@ public class DataSourceConnectionWrapper implements ConnectionWrapper {
 	@Override
 	public void beginTransaction() {
 		try {
+			open();
 			connection.setAutoCommit(false);
 			autoCommit = false;
 		} catch (SQLException e) {

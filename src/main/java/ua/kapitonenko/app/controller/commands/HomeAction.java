@@ -18,11 +18,11 @@ public class HomeAction implements ActionCommand {
 			return request.redirect(Actions.LOGIN);
 		}
 		
-		if (request.getSession().getUser().getUserRoleId().equals(Application.getId(Application.ROLE_MERCHANDISER))) {
+		if (request.getSession().getUser().getUserRoleId().equals(Application.Ids.ROLE_MERCHANDISER.getValue())) {
 			return request.redirect(Actions.PRODUCTS);
 		}
 		
-		if (request.getSession().getUser().getUserRoleId().equals(Application.getId(Application.ROLE_SENIOR))) {
+		if (request.getSession().getUser().getUserRoleId().equals(Application.Ids.ROLE_SENIOR.getValue())) {
 			return request.redirect(Actions.REPORTS);
 		}
 		

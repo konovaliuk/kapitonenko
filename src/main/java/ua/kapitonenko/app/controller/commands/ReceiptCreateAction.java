@@ -86,8 +86,8 @@ public class ReceiptCreateAction implements ActionCommand {
 			User user = request.getSession().getUser();
 			ReceiptRecord record = new ReceiptRecord(null,
 					                                        cashbox.getId(),
-					                                        Application.getId(Application.PAYMENT_TYPE_UNDEFINED),
-					                                        Application.getId(Application.RECEIPT_TYPE_FISCAL),
+					                                        Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue(),
+					                                        Application.Ids.RECEIPT_TYPE_FISCAL.getValue(),
 					                                        true, user.getId());
 			
 			receipt = new Receipt(record);

@@ -5,6 +5,7 @@ import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
+import ua.kapitonenko.app.domain.records.LocaleRecord;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 import ua.kapitonenko.app.service.SettingsService;
@@ -30,9 +31,10 @@ public class LanguageAction implements ActionCommand {
 		if (!supported.contains(lang)) {
 			throw new NotFoundException(request.getUri());
 		}
-
-		request.getSession().set(Keys.LOCALE, settingsService.getSupportedLocales().get(lang).getName());
-		request.getSession().set(Keys.LOCALE_ID, settingsService.getSupportedLocales().get(lang).getId());
+		
+		LocaleRecord localeRecord = settingsService.getSupportedLocales().get(lang);
+		request.getSession().set(Keys.LOCALE, localeRecord.getName());
+		request.getSession().set(Keys.LOCALE_ID, localeRecord.getId());
 		
 		return request.goBack();
 	}

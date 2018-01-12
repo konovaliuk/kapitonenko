@@ -7,10 +7,9 @@ public class LocaleRecord extends BaseEntity {
 	public LocaleRecord() {
 	}
 	
-	public LocaleRecord(Long id, String name, String language) {
+	public LocaleRecord(Long id, String name) {
 		super(id);
 		setName(name);
-		this.language = language;
 	}
 	
 	public String getName() {

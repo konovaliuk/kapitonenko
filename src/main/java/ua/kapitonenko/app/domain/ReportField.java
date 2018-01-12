@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public class ReportField extends Model implements Serializable {
 	private String name;
-	private String bundle = Application.getParam(Application.MESSAGE_BUNDLE);
+	private String bundle = Application.Params.MESSAGE_BUNDLE.getValue();
 	private int fractionalDigits;
 	private BigDecimal salesValue;
 	private BigDecimal refundsValue;

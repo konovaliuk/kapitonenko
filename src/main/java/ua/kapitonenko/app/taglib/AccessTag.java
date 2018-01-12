@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.taglib;
 
 import org.apache.log4j.Logger;
-import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.domain.records.User;
 
@@ -23,7 +23,7 @@ public class AccessTag extends TagSupport {
 		HttpSession session = pageContext.getSession();
 		User user = (User) session.getAttribute(Keys.USER);
 		
-		if (user != null && !Application.allowed(user.getUserRoleId(), action)) {
+		if (user != null && !AccessControl.allowed(user.getUserRoleId(), action)) {
 			return SKIP_BODY;
 		}
 		

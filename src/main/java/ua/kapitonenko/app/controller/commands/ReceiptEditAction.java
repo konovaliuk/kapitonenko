@@ -24,7 +24,7 @@ public abstract class ReceiptEditAction implements ActionCommand {
 		Long localeId = request.getSession().getLocaleId();
 		receipt.setLocalId(localeId);
 		
-		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+		ValidationBuilder validator = request.getValidator();
 		
 		String action = process(receipt, request, validator);
 		

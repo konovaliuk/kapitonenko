@@ -1,6 +1,8 @@
 package ua.kapitonenko.app.dao.interfaces;
 
 
+import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
+
 import java.sql.Connection;
 
 public interface DAOFactory {
@@ -32,4 +34,6 @@ public interface DAOFactory {
 	ZReportDAO getZReportDAO(Connection connection);
 	
 	LocaleDAO getLocaleDAO(Connection connection);
+	
+	ConnectionWrapper getConnection();
 }

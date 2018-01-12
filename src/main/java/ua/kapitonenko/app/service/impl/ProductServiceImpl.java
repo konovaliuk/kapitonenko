@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public long getProductsCount() {
+	public long getCount() {
 		try (ConnectionWrapper connection = Application.getConnection()) {
 			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
 			return productDAO.getCount();

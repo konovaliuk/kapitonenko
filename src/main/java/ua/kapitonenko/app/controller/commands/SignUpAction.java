@@ -2,9 +2,9 @@ package ua.kapitonenko.app.controller.commands;
 
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
-import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -43,16 +43,16 @@ public class SignUpAction implements ActionCommand {
 				
 				if (user.isActive()) {
 					request.getSession().setFlash(Keys.ALERT_CLASS_SUCCESS,
-							request.getMessageManager().registrationSuccess(Keys.LOGIN_FIRST));
+							request.getMessageProvider().registrationSuccess(Keys.LOGIN_FIRST));
 				} else {
 					request.getSession().setFlash(Keys.ALERT_CLASS_SUCCESS,
-							request.getMessageManager().registrationSuccess(Keys.CONTACT_ADMIN));
+							request.getMessageProvider().registrationSuccess(Keys.CONTACT_ADMIN));
 				}
 				
 				return request.redirect(Actions.LOGIN);
 			}
 		}
-		return request.forward(Pages.SIGNUP, Actions.SIGNUP);
+		return request.forward(Pages.USER_FORM, Actions.SIGNUP);
 	}
 	
 	
@@ -69,7 +69,7 @@ public class SignUpAction implements ActionCommand {
 		user.setUserRoleId(roleId);
 		user.setPassword(password);
 		
-		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+		ValidationBuilder validator = request.getValidator();
 		return validator
 				       .required(username, Keys.USERNAME)
 				       .required(password, Keys.PASSWORD)

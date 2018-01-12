@@ -3,6 +3,7 @@ package ua.kapitonenko.app.controller.helpers;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Keys;
+import ua.kapitonenko.app.domain.records.Cashbox;
 import ua.kapitonenko.app.domain.records.User;
 
 import javax.servlet.http.HttpSession;
@@ -75,5 +76,10 @@ public class SessionWrapper {
 	
 	public void remove(String key) {
 		session.removeAttribute(key);
+	}
+	
+	public void login(User user, Cashbox cashbox) {
+		session.setAttribute(Keys.CASHBOX, cashbox);
+		session.setAttribute(Keys.USER, user);
 	}
 }

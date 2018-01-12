@@ -22,7 +22,7 @@ public class ProductListAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		long noOfRecords = productService.getProductsCount();
+		long noOfRecords = productService.getCount();
 		PaginationHelper pager = new PaginationHelper(request, noOfRecords);
 		
 		List<Product> list = productService.getProductsList(pager.getOffset(), pager.getRecordsPerPage(), request.getSession().getLocaleId());

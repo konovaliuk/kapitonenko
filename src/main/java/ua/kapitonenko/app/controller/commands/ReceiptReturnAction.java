@@ -78,7 +78,7 @@ public class ReceiptReturnAction implements ActionCommand {
 			ReceiptRecord updated = new ReceiptRecord(null,
 					                                         existing.getCashboxId(),
 					                                         existing.getPaymentTypeId(),
-					                                         Application.getId(Application.RECEIPT_TYPE_RETURN),
+					                                         Application.Ids.RECEIPT_TYPE_RETURN.getValue(),
 					                                         true,
 					                                         existing.getCreatedBy());
 			receipt.setRecord(updated);

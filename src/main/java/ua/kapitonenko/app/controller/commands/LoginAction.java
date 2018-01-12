@@ -9,7 +9,6 @@ import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.app.domain.records.Cashbox;
-import ua.kapitonenko.app.domain.records.Company;
 import ua.kapitonenko.app.domain.records.User;
 import ua.kapitonenko.app.service.SettingsService;
 import ua.kapitonenko.app.service.UserService;
@@ -42,9 +41,8 @@ public class LoginAction implements ActionCommand {
 				return request.goHome();
 			}
 		}
-		return request.forward(Pages.SIGNUP, Actions.LOGIN);
+		return request.forward(Pages.USER_FORM, Actions.LOGIN);
 	}
-
 	
 	private boolean loadAndValidate(RequestWrapper request) {
 		String username = request.getParameter(Keys.USERNAME);
@@ -58,7 +56,7 @@ public class LoginAction implements ActionCommand {
 		
 		request.setAttribute(Keys.CASHBOX, cashboxId);
 		
-		ValidationBuilder validator = new ValidationBuilder(request.getMessageManager(), request.getAlert());
+		ValidationBuilder validator = request.getValidator();
 		return validator
 				       .required(username, Keys.USERNAME)
 				       .required(password, Keys.PASSWORD)
@@ -70,16 +68,14 @@ public class LoginAction implements ActionCommand {
 		User result = userService.findByLoginAndPassword((User) request.getAttribute(Keys.USER));
 		
 		if (result == null) {
-			request.getAlert().addMessage(request.getMessageManager().getProperty(Keys.ERROR_LOGIN));
+			request.getAlert().addMessage(request.getMessageProvider().getProperty(Keys.ERROR_LOGIN));
 			request.getAlert().setMessageType(Keys.ALERT_CLASS_DANGER);
 			return false;
 		}
 		
 		Cashbox cashbox = settingsService.findCashbox((Long) request.getAttribute(Keys.CASHBOX));
-		Company company = settingsService.findCompany(Application.getId(Application.COMPANY));
-		request.getSession().set(Keys.COMPANY, company);
-		request.getSession().set(Keys.CASHBOX, cashbox);
-		request.getSession().set(Keys.USER, result);
+		
+		request.getSession().login(result, cashbox);
 		
 		return true;
 	}
