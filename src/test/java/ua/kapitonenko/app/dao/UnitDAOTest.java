@@ -1,15 +1,11 @@
 package ua.kapitonenko.app.dao;
 
-import org.junit.After;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.UnitDAO;
-import ua.kapitonenko.app.dao.tables.UnitsTable;
 import ua.kapitonenko.app.domain.records.Unit;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
-import ua.kapitonenko.app.fixtures.TestConnection;
 
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,17 +13,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class UnitDAOTest extends BaseDAOTest {
-	
-	@Override
-	protected String getTableName() {
-		return UnitsTable.NAME;
-	}
-	
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		super.truncateTable();
-	}
 	
 	@Test(expected = UnsupportedOperationException.class)
 	public void testCRUD() throws Exception {
@@ -47,7 +32,10 @@ public class UnitDAOTest extends BaseDAOTest {
 			assertThat(dao.findOne(entities.get(0).getId()), is(equalTo(entities.get(0))));
 			
 			assertThat(dao.insert(entities.get(1)), is(true));
-			assertThat(dao.findAll(), is(equalTo(entities)));
+			
+			List<Unit> list = dao.findAll();
+			assertThat(list.size(), is(greaterThanOrEqualTo(entities.size())));
+			assertThat(list, hasItems(entities.get(0), entities.get(1)));
 			
 			Unit updated = entities.get(0);
 			final String BUNDLE_KEY = "key";
@@ -61,20 +49,6 @@ public class UnitDAOTest extends BaseDAOTest {
 		} finally {
 			connection.rollback();
 			connection.close();
-		}
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		connection = TestConnection.getInstance().getConnection();
-		try (Statement statement = connection.createStatement()) {
-			statement.execute("INSERT INTO units" +
-					                  "(id, name, bundle_name, bundle_key) VALUES" +
-					                  "  (1, 'kilogram', 'settings', 'unit.kg')," +
-					                  "  (2, 'piece', 'settings', 'pc');"
-			);
-		} finally {
-			TestConnection.getInstance().close(connection);
 		}
 	}
 }

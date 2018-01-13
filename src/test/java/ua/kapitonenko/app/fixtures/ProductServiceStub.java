@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.fixtures;
 
+import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.service.ProductService;
 
@@ -53,5 +54,10 @@ public class ProductServiceStub implements ProductService {
 	@Override
 	public Product findOne(Long id) {
 		return null;
+	}
+	
+	@Override
+	public void setDaoFactory(DAOFactory daoFactory) {
+	
 	}
 }

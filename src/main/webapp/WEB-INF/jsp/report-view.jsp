@@ -114,18 +114,19 @@
                 </c:if>
             </div>
 
-            <form class="form" method="POST" action="${action}" autocomplete="off">
-                <div class="form-row d-print-none mt-2 mb-3 ml-3">
-                    <div class=" col-md-2">
-                        <button class="btn btn-primary btn-block" onclick="window.print()">
-                            <fmt:message key="${Keys.PRINT}" bundle="${msg}"/></button>
-                    </div>
-                    <div class=" col-md-2">
+            <div class="form-row d-print-none mt-2 mb-3 ml-3">
+                <div class=" col-md-2">
+                    <button class="btn btn-primary btn-block" onclick="window.print()">
+                        <fmt:message key="${Keys.PRINT}" bundle="${msg}"/></button>
+                </div>
+                <div class=" col-md-2">
+                    <form class="form" method="POST" action="${action}" autocomplete="off">
                         <button type="submit" class="btn btn-secondary btn-block">
                             <fmt:message key="${Keys.CLOSE}" bundle="${msg}"/></button>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+
         </div>
     </div>
 </main>

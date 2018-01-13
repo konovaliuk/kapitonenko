@@ -1,4 +1,3 @@
-<%--@elvariable id="report" type="ua.kapitonenko.app.domain.Report"--%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <%@ taglib prefix="u" uri="/WEB-INF/access.tld" %>
@@ -32,39 +31,63 @@
                         </div>
                     </u:can>
                 </div>
-                <div class="card">
-                    <%-- TODO finish list layout --%>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col" width="50px"><fmt:message key="${Keys.ID}" bundle="${msg}"/></th>
-                                ${report.fields.size()}
-                                <c:forEach var="field" items="${report.fields}">
-                                    <%--<c:if test="${field.showInList}">--%>
-                                    <fmt:setBundle basename="${field.bundle}" var="custom"/>
+                <%--@elvariable id="reports" type="java.util.List<ua.kapitonenko.app.domain.Report>"--%>
+                <c:if test="${not empty reports}">
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col" width="50px"><fmt:message key="${Keys.ID}" bundle="${msg}"/></th>
+                                    <th scope="col" width="50px"><fmt:message key="${Keys.CASHBOX}"
+                                                                              bundle="${msg}"/></th>
 
-                                    <th scope="col">
-                                        <fmt:message key="${field.name}" bundle="${custom}"/><br>
-                                        (<fmt:message key="${Keys.SALES}" bundle="${msg}"/>)
-                                    </th>
+                                    <c:forEach var="field" items="${reports.get(0).fields}">
+                                        <c:if test="${field.showInList}">
+                                            <fmt:setBundle basename="${field.bundle}" var="custom"/>
 
-                                    <th scope="col">
-                                        <fmt:message key="${field.name}" bundle="${custom}"/><br>
-                                        (<fmt:message key="${Keys.REFUNDS}" bundle="${msg}"/>)
-                                    </th>
+                                            <th scope="col" class="text-right">
+                                                <fmt:message key="${field.name}" bundle="${custom}"/><br>
+                                                (<fmt:message key="${Keys.SALES}" bundle="${msg}"/>)
+                                            </th>
 
-                                    <%--</c:if>--%>
+                                            <th scope="col" class="text-right">
+                                                <fmt:message key="${field.name}" bundle="${custom}"/><br>
+                                                (<fmt:message key="${Keys.REFUNDS}" bundle="${msg}"/>)
+                                            </th>
+                                        </c:if>
+                                    </c:forEach>
+                                    <th scope="col" class="text-right"><fmt:message key="${Keys.CASH_IN_SAFE}"
+                                                                                    bundle="${msg}"/></th>
+                                    <th scope="col" class="text-center" width="120px"><fmt:message
+                                            key="${Keys.CREATED_AT}" bundle="${msg}"/></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="report" items="${reports}">
+                                    <tr>
+                                        <th scope="row">${report.record.id}</th>
+                                        <td>${report.record.cashboxId}</td>
+                                        <c:forEach var="field" items="${report.fields}">
+                                            <c:if test="${field.showInList}">
+                                                <fmt:setBundle basename="${field.bundle}" var="custom"/>
+
+                                                <td class="text-right">${field.salesValue}</td>
+
+                                                <td class="text-right">${field.refundsValue}</td>
+
+                                            </c:if>
+                                        </c:forEach>
+                                        <td class="text-right">${report.cashBalance}</td>
+                                        <td><fmt:formatDate type="date" value="${report.createdAt}"/></td>
+                                    </tr>
                                 </c:forEach>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <%@ include file="includes/pager.jsp" %>
+                    <%@ include file="includes/pager.jsp" %>
+                </c:if>
             </div>
         </div>
     </div>

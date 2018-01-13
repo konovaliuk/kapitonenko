@@ -17,11 +17,11 @@ import javax.servlet.ServletContext;
 public class Application {
 	private static final Logger LOGGER = Logger.getLogger(Application.class);
 	private static final int RECORDS_PER_PAGE = 5;
-	private static final boolean AUTO_ACTIVATION = true;
 	
 	private static DAOFactory daoFactory = MysqlDaoFactory.getInstance();
 	private static ServiceFactory serviceFactory = ServiceFactoryImpl.getInstance();
 	private static Class<? extends ConnectionWrapper> connectionClass = DataSourceConnectionWrapper.class;
+	private static boolean autoActivation = true;
 	
 	public static DAOFactory getDAOFactory() {
 		return daoFactory;
@@ -32,6 +32,7 @@ public class Application {
 	}
 	
 	public static ServiceFactory getServiceFactory() {
+		LOGGER.debug(serviceFactory);
 		return serviceFactory;
 	}
 	
@@ -51,8 +52,12 @@ public class Application {
 		}
 	}
 	
+	public static void setAutoActivationMode(boolean enabled) {
+		autoActivation = enabled;
+	}
+	
 	public static boolean isAutoActivationEnabled() {
-		return AUTO_ACTIVATION;
+		return autoActivation;
 	}
 	
 	public static void init(ServletContext context) {

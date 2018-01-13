@@ -42,13 +42,16 @@ public class Report extends Model implements Serializable {
 	
 	public void initSummary(List<Receipt> receipts,
 	                        List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
+		LOGGER.debug(paymentTypes);
 		
 		Map<Long, List<Receipt>> map = receipts.stream().collect(Collectors.groupingBy(receipt -> receipt.getRecord().getReceiptTypeId()));
 		
 		List<Receipt> sales = map.getOrDefault(Application.Ids.RECEIPT_TYPE_FISCAL.getValue(), Collections.emptyList());
+		LOGGER.debug(sales);
 		salesFigures = new ReportSummary(sales, taxCats, paymentTypes);
 		
 		List<Receipt> refunds = map.getOrDefault(Application.Ids.RECEIPT_TYPE_RETURN.getValue(), Collections.emptyList());
+		LOGGER.debug(refunds);
 		refundsFigures = new ReportSummary(refunds, taxCats, paymentTypes);
 		initFields();
 	}

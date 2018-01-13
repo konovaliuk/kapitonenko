@@ -16,14 +16,19 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 	private static final Logger LOGGER = Logger.getLogger(ProductServiceImpl.class);
 	
+	private DAOFactory daoFactory = Application.getDAOFactory();
+	
+	public void setDaoFactory(DAOFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
 	@Override
 	public Product createProduct(Product product) {
 		
-		try (ConnectionWrapper connection = Application.getConnection()) {
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
 			connection.beginTransaction();
 			
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
-			ProductLocaleDAO productLocaleDAO = Application.getDAOFactory().getProductLocaleDAO(connection.open());
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
+			ProductLocaleDAO productLocaleDAO = daoFactory.getProductLocaleDAO(connection.open());
 			productDAO.insert(product);
 			Product created = productDAO.findOne(product.getId());
 			product.getNames().forEach(pl -> {
@@ -38,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getProductsList() {
 		
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			List<Product> products = productDAO.findAll();
 			products.forEach(product -> {
 				setReferences(product, connection.open());
@@ -50,8 +55,8 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public List<Product> getProductsList(int offset, int limit, Long localeId) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			List<Product> products = productDAO.findAllByQuery("ORDER BY " + ProductsTable.ID +
 					                                                   " DESC LIMIT ? OFFSET ?", ps -> {
 				ps.setInt(1, limit);
@@ -68,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			List<Product> products = productDAO.findByIdOrName(localeId, productId, name);
 			products.forEach(product -> setReferences(product, connection.open()));
 			return products;
@@ -78,8 +83,8 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public List<Product> findAllByReceiptId(Long id) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			List<Product> products = productDAO.findAllByReceiptId(id);
 			LOGGER.debug(products);
 			products.forEach(product -> setReferences(product, connection.open()));
@@ -88,10 +93,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	private void setReferences(Product product, Connection connection) {
-		ProductLocaleDAO productLocaleDAO = Application.getDAOFactory().getProductLocaleDAO(connection);
-		TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection);
-		UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection);
-		LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection);
+		ProductLocaleDAO productLocaleDAO = daoFactory.getProductLocaleDAO(connection);
+		TaxCategoryDAO taxCategoryDAO = daoFactory.getTaxCategoryDAO(connection);
+		UnitDAO unitDAO = daoFactory.getUnitDAO(connection);
+		LocaleDAO localeDAO = daoFactory.getLocaleDAO(connection);
 		
 		List<ProductLocale> lang = productLocaleDAO.findByProductAndKey(product.getId(), Keys.PRODUCT_NAME);
 		lang.forEach(pl -> pl.setLocale(localeDAO.findOne(pl.getLocaleId())));
@@ -102,16 +107,16 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public long getCount() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			return productDAO.getCount();
 		}
 	}
 	
 	@Override
 	public boolean delete(Long prodId, Long userId) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			Product product = productDAO.findOne(prodId);
 			return productDAO.delete(product, userId);
 		}
@@ -119,16 +124,16 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	public boolean update(Product product) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			return productDAO.update(product);
 		}
 	}
 	
 	@Override
 	public Product findOne(Long id) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			ProductDAO productDAO = Application.getDAOFactory().getProductDAO(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ProductDAO productDAO = daoFactory.getProductDAO(connection.open());
 			return productDAO.findOne(id);
 		}
 	}

@@ -81,7 +81,6 @@ public class ReceiptServiceTest {
 		when(daoFactory.getReceiptTypeDAO(connection)).thenReturn(receiptTypeDAO);
 		when(daoFactory.getProductDAO(connection)).thenReturn(productDAO);
 		when(receipt.getRecord()).thenReturn(record);
-		
 	}
 	
 	@Test
@@ -142,7 +141,7 @@ public class ReceiptServiceTest {
 		int offset = 20;
 		int limit = 2;
 		List<ReceiptRecord> records = Arrays.asList(new ReceiptRecord(), new ReceiptRecord());
-		when(receiptDAO.findAllByQuery(anyString(), any())).thenReturn(records);
+		when(receiptDAO.findAll(offset, limit)).thenReturn(records);
 		
 		List<Receipt> result = receiptService.getReceiptList(offset, limit);
 		verifyListRefsSet(limit, result);
@@ -154,7 +153,7 @@ public class ReceiptServiceTest {
 		int offset = 20;
 		int limit = 2;
 		List<ReceiptRecord> records = Collections.emptyList();
-		when(receiptDAO.findAllByQuery(anyString(), any())).thenReturn(records);
+		when(receiptDAO.findAll(offset, limit)).thenReturn(records);
 		
 		List<Receipt> result = receiptService.getReceiptList(offset, limit);
 		
@@ -162,11 +161,37 @@ public class ReceiptServiceTest {
 	}
 	
 	@Test
+	public void getReceiptsListByZReportIdShouldReturnListOfReceiptsWithAllDependencies() {
+		Long cashboxId = 8L;
+		Long reportId = 55L;
+		int listSize = 2;
+		List<ReceiptRecord> records = Arrays.asList(new ReceiptRecord(), new ReceiptRecord());
+		when(receiptDAO.findAllByZReportId(reportId, cashboxId)).thenReturn(records);
+		
+		List<Receipt> result = receiptService.getReceiptList(reportId, cashboxId);
+		verifyListRefsSet(listSize, result);
+		
+	}
+	
+	@Test
+	public void getReceiptsListByZReportIdShouldReturnEmptyListWhenNoRecordsFound() {
+		Long cashboxId = 8L;
+		Long reportId = 55L;
+		int listSize = 0;
+		List<ReceiptRecord> records = Collections.emptyList();
+		when(receiptDAO.findAllByZReportId(reportId, cashboxId)).thenReturn(records);
+		
+		List<Receipt> result = receiptService.getReceiptList(reportId, cashboxId);
+		
+		verifyListRefsSet(listSize, result);
+	}
+	
+	@Test
 	public void getReceiptsListByCashbosShouldReturnListOfReceiptsWithAllDependencies() {
 		Long cashboxId = 8L;
 		int listSize = 2;
 		List<ReceiptRecord> records = Arrays.asList(new ReceiptRecord(), new ReceiptRecord());
-		when(receiptDAO.findAllByQuery(anyString(), any())).thenReturn(records);
+		when(receiptDAO.findAllByCashboxId(cashboxId)).thenReturn(records);
 		
 		List<Receipt> result = receiptService.getReceiptList(cashboxId);
 		
@@ -178,7 +203,7 @@ public class ReceiptServiceTest {
 		Long cashboxId = 8L;
 		int listSize = 0;
 		List<ReceiptRecord> records = Collections.emptyList();
-		when(receiptDAO.findAllByQuery(anyString(), any())).thenReturn(records);
+		when(receiptDAO.findAllByCashboxId(cashboxId)).thenReturn(records);
 		
 		List<Receipt> result = receiptService.getReceiptList(cashboxId);
 		

@@ -79,6 +79,7 @@ public class SessionWrapper {
 	}
 	
 	public void login(User user, Cashbox cashbox) {
+		LOGGER.debug(cashbox);
 		session.setAttribute(Keys.CASHBOX, cashbox);
 		session.setAttribute(Keys.USER, user);
 	}

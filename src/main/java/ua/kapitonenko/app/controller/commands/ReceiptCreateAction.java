@@ -13,6 +13,7 @@ import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.records.Cashbox;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 import ua.kapitonenko.app.domain.records.User;
+import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -81,6 +82,10 @@ public class ReceiptCreateAction implements ActionCommand {
 		Receipt receipt = (Receipt) request.getSession().get(Keys.RECEIPT);
 		
 		if (receipt == null) {
+			if (!request.isPost()) {
+				throw new MethodNotAllowedException("");
+			}
+			
 			LOGGER.debug("new receipt created");
 			Cashbox cashbox = (Cashbox) request.getSession().get(Keys.CASHBOX);
 			User user = request.getSession().getUser();

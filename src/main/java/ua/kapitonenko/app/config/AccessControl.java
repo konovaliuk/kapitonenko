@@ -53,7 +53,6 @@ public class AccessControl {
 						Actions.REPORTS,
 						Actions.REPORT_CREATE,
 						Actions.REPORT_VIEW,
-						Actions.RECEIPT_CANCEL,
 						Actions.RECEIPT_RETURN,
 						Actions.RECEIPTS,
 						

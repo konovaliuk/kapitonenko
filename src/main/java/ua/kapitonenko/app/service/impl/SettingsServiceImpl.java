@@ -13,86 +13,82 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static ua.kapitonenko.app.config.keys.Keys.*;
+
 public class SettingsServiceImpl implements SettingsService {
 	private static final Logger LOGGER = Logger.getLogger(SettingsService.class);
 	
-	// TODO add to cache
+	private DAOFactory daoFactory = Application.getDAOFactory();
+	
+	public void setDaoFactory(DAOFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+	
 	private HashMap<String, Object> cache = new HashMap<>();
 	
 	@Override
-	public List<UserRole> getRoleList() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			UserRoleDAO roleDAO = Application.getDAOFactory().getUserRoleDAO(connection.open());
-			List<UserRole> list = roleDAO.findAll();
-			return list;
-		}
+	public void clearCache() {
+		cache = new HashMap<>();
 	}
 	
 	@Override
-	public Map<Long, String> getTaxMap() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection.open());
-			List<TaxCategory> list = taxCategoryDAO.findAll();
-			LOGGER.debug(list);
-			return list.stream().collect(
-					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
+	public List<UserRole> getRoleList() {
+		if (!cache.containsKey(ROLE_LIST)) {
+			
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				UserRoleDAO roleDAO = daoFactory.getUserRoleDAO(connection.open());
+				List<UserRole> list = roleDAO.findAll();
+				cache.put(ROLE_LIST, list);
+			}
 		}
+		return (List<UserRole>) cache.get(ROLE_LIST);
 	}
+	
 	
 	@Override
 	public List<TaxCategory> getTaxCatList() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			TaxCategoryDAO taxCategoryDAO = Application.getDAOFactory().getTaxCategoryDAO(connection.open());
-			List<TaxCategory> list = taxCategoryDAO.findAll();
-			return list;
+		if (!cache.containsKey(TAX_CAT_LIST)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				TaxCategoryDAO taxCategoryDAO = daoFactory.getTaxCategoryDAO(connection.open());
+				List<TaxCategory> list = taxCategoryDAO.findAll();
+				cache.put(TAX_CAT_LIST, list);
+			}
 		}
-	}
-	
-	@Override
-	public Map<Long, String> getUnitMap() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection.open());
-			List<Unit> list = unitDAO.findAll();
-			
-			return list.stream().collect(
-					Collectors.toMap(BaseEntity::getId, BaseLocalizedEntity::getBundleKey));
-		}
+		return (List<TaxCategory>) cache.get(TAX_CAT_LIST);
 	}
 	
 	@Override
 	public List<Unit> getUnitList() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			UnitDAO unitDAO = Application.getDAOFactory().getUnitDAO(connection.open());
-			List<Unit> list = unitDAO.findAll();
-			return list;
+		if (!cache.containsKey(UNIT_LIST)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				UnitDAO unitDAO = daoFactory.getUnitDAO(connection.open());
+				List<Unit> list = unitDAO.findAll();
+				cache.put(UNIT_LIST, list);
+			}
 		}
+		return (List<Unit>) cache.get(UNIT_LIST);
 	}
 	
 	@Override
 	public Cashbox findCashbox(Long id) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection.open());
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			CashboxDAO cashboxDAO = daoFactory.getCashboxDao(connection.open());
 			return cashboxDAO.findOne(id);
 		}
 	}
 	
-	@Override
-	public PaymentType findPaymentType(Long id) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection.open());
-			return paymentTypeDAO.findOne(id);
-		}
-	}
 	
 	@Override
 	public List<LocaleRecord> getLocaleList() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			LocaleDAO localeDAO = Application.getDAOFactory().getLocaleDAO(connection.open());
-			
-			List<LocaleRecord> list = localeDAO.findAll();
-			
-			return list;
+		if (!cache.containsKey(LANGUAGES)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				LocaleDAO localeDAO = daoFactory.getLocaleDAO(connection.open());
+				List<LocaleRecord> list = localeDAO.findAll();
+				
+				cache.put(LANGUAGES, list);
+			}
 		}
+		return (List<LocaleRecord>) cache.get(LANGUAGES);
 	}
 	
 	@Override
@@ -108,31 +104,38 @@ public class SettingsServiceImpl implements SettingsService {
 	
 	@Override
 	public Company findCompany(Long id) {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			CompanyDAO companyDAO = Application.getDAOFactory().getCompanyDAO(connection.open());
-			return companyDAO.findOne(id);
+		if (!cache.containsKey(COMPANY)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				CompanyDAO companyDAO = daoFactory.getCompanyDAO(connection.open());
+				cache.put(COMPANY, companyDAO.findOne(id));
+			}
 		}
+		return (Company) cache.get(COMPANY);
 	}
 	
 	@Override
 	public List<PaymentType> getPaymentTypes() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			PaymentTypeDAO paymentTypeDAO = Application.getDAOFactory().getPaymentTypeDAO(connection.open());
-			
-			List<PaymentType> list = paymentTypeDAO.findAll();
-			
-			return list;
+		if (!cache.containsKey(PAYMENT_TYPES)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				PaymentTypeDAO paymentTypeDAO = daoFactory.getPaymentTypeDAO(connection.open());
+				
+				List<PaymentType> list = paymentTypeDAO.findAll();
+				cache.put(PAYMENT_TYPES, list);
+			}
 		}
+		return (List<PaymentType>) cache.get(PAYMENT_TYPES);
 	}
 	
 	@Override
 	public List<Cashbox> getCashboxList() {
-		try (ConnectionWrapper connection = Application.getConnection()) {
-			CashboxDAO cashboxDAO = Application.getDAOFactory().getCashboxDao(connection.open());
-			
-			List<Cashbox> list = cashboxDAO.findAll();
-			
-			return list;
+		if (!cache.containsKey(CASHBOX_LIST)) {
+			try (ConnectionWrapper connection = daoFactory.getConnection()) {
+				CashboxDAO cashboxDAO = daoFactory.getCashboxDao(connection.open());
+				
+				List<Cashbox> list = cashboxDAO.findAll();
+				cache.put(CASHBOX_LIST, list);
+			}
 		}
+		return (List<Cashbox>) cache.get(CASHBOX_LIST);
 	}
 }

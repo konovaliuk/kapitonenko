@@ -3,7 +3,6 @@ package ua.kapitonenko.app.dao;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.CompanyDAO;
-import ua.kapitonenko.app.dao.tables.CompaniesTable;
 import ua.kapitonenko.app.domain.records.Company;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 
@@ -14,11 +13,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class CompanyDAOTest extends BaseDAOTest {
-	
-	@Override
-	protected String getTableName() {
-		return CompaniesTable.NAME;
-	}
+
 	
 	@Override
 	public void setUp() throws Exception {
@@ -41,9 +36,11 @@ public class CompanyDAOTest extends BaseDAOTest {
 			assertThat(dao.insert(entities.get(0)), is(true));
 			assertThat(entities.get(0).getId(), is(notNullValue()));
 			assertThat(dao.findOne(entities.get(0).getId()), is(equalTo(entities.get(0))));
-			
 			assertThat(dao.insert(entities.get(1)), is(true));
-			assertThat(dao.findAll(), is(equalTo(entities)));
+			
+			List<Company> list = dao.findAll();
+			assertThat(list.size(), is(greaterThanOrEqualTo(entities.size())));
+			assertThat(list, hasItems(entities.get(0), entities.get(1)));
 			
 			Company updated = entities.get(0);
 			final String BUNDLE_KEY = "key";

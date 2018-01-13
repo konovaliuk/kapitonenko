@@ -3,7 +3,6 @@ package ua.kapitonenko.app.dao;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
-import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.records.ZReport;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 
@@ -16,17 +15,6 @@ import static org.junit.Assert.assertThat;
 
 public class ZReportDAOTest extends BaseDAOTest {
 	
-	@Override
-	protected String getTableName() {
-		return ZReportsTable.NAME;
-	}
-	
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		super.truncateTable();
-	}
-	
 	@Test(expected = UnsupportedOperationException.class)
 	public void testCRUD() throws Exception {
 		
@@ -35,8 +23,8 @@ public class ZReportDAOTest extends BaseDAOTest {
 		ZReportDAO dao = Application.getDAOFactory().getZReportDAO(connection);
 		
 		List<ZReport> entities = Arrays.asList(
-				new ZReport(null, CASHBOX, BigDecimal.valueOf(0.99), USER_ID),
-				new ZReport(null, CASHBOX, BigDecimal.valueOf(1000.01), USER_ID)
+				new ZReport(null, CASHBOX_2, BigDecimal.valueOf(0.99), USER_ID),
+				new ZReport(null, CASHBOX_2, BigDecimal.valueOf(1000.01), USER_ID)
 		);
 		
 		try {
@@ -45,7 +33,10 @@ public class ZReportDAOTest extends BaseDAOTest {
 			assertThat(dao.findOne(entities.get(0).getId()), is(equalTo(entities.get(0))));
 			
 			assertThat(dao.insert(entities.get(1)), is(true));
-			assertThat(dao.findAll(), is(equalTo(entities)));
+			
+			List<ZReport> list = dao.findAll();
+			assertThat(list.size(), is(greaterThanOrEqualTo(entities.size())));
+			assertThat(list, hasItems(entities.get(0), entities.get(1)));
 			
 			ZReport updated = entities.get(0);
 			final BigDecimal CASH = new BigDecimal("0.00");

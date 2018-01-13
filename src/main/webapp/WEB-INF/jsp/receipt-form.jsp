@@ -16,10 +16,20 @@
     <div class="container">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title mb-4">
-                    <fmt:message key="${receipt.record.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
-                    <fmt:message key="${Keys.ID}" bundle="${msg}"/>${receipt.record.id}
-                </h5>
+                <div class="row">
+                    <div class="col-8">
+                        <h5 class="card-title mb-4">
+                            <fmt:message key="${receipt.record.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
+                            <fmt:message key="${Keys.ID}" bundle="${msg}"/>${receipt.record.id}
+                        </h5>
+                    </div>
+                    <c:if test="${receipt.printVisible}">
+                        <div class="col-2 pl-0 ml-auto mb-4 d-print-none">
+                            <button class="btn btn-secondary btn-block" onclick="window.print()">
+                                <fmt:message key="${Keys.PRINT}" bundle="${msg}"/></button>
+                        </div>
+                    </c:if>
+                </div>
                 <form class="form" method="POST" action="${action}" autocomplete="off" id="receipt-form">
                     <input type="hidden" name="${Keys.PRODUCT_ID}" id="productId">
                     <input type="hidden" name="button" id="buttonId">
@@ -198,13 +208,12 @@
                         </div>
                     </c:if>
                     <div class="form-row d-print-none">
-                        <div class="col-xs-6 col-md-2">
+                        <div class="col-xs-4 col-md-2">
                             <button type="submit" class="btn btn-primary btn-block"
                                     name="button" value="button.save">
                                 <fmt:message key="${Keys.SAVE}" bundle="${msg}"/></button>
                         </div>
-
-                        <div class="col-xs-6 col-md-2">
+                        <div class="col-xs-4 col-md-2">
                             <button type="submit" class="btn btn-secondary btn-block"
                                     name="button" value="button.cancel">
                                 <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/></button>

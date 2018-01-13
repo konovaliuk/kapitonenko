@@ -4,9 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
-import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.dao.tables.ReceiptsTable;
-import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.domain.records.ReceiptProduct;
@@ -24,10 +21,17 @@ public class ReceiptServiceImpl implements ReceiptService {
 	private static final Logger LOGGER = Logger.getLogger(ReceiptServiceImpl.class);
 	
 	private DAOFactory daoFactory = Application.getDAOFactory();
-	private ServiceFactory serviceFactory = Application.getServiceFactory();
+	private ServiceFactory serviceFactory;
 	
 	public void setServiceFactory(ServiceFactory serviceFactory) {
 		this.serviceFactory = serviceFactory;
+	}
+	
+	private ServiceFactory getServiceFactory() {
+		if (serviceFactory == null) {
+			serviceFactory = Application.getServiceFactory();
+		}
+		return serviceFactory;
 	}
 	
 	public void setDaoFactory(DAOFactory daoFactory) {
@@ -67,35 +71,55 @@ public class ReceiptServiceImpl implements ReceiptService {
 	
 	@Override
 	public List<Receipt> getReceiptList(int offset, int limit) {
-		return getReceiptList("ORDER BY " + ReceiptsTable.ID +
-				                      " DESC LIMIT ? OFFSET ?", ps -> {
-			ps.setInt(1, limit);
-			ps.setInt(2, offset);
-		});
+		List<Receipt> receiptList = new ArrayList<>();
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ReceiptDAO receiptDAO = daoFactory.getReceiptDAO(connection.open());
+			List<ReceiptRecord> list = receiptDAO.findAll(offset, limit);
+			fillList(receiptList, list, connection.open());
+			LOGGER.debug(receiptList);
+			return receiptList;
+		}
 	}
 	
 	@Override
 	public List<Receipt> getReceiptList(Long cashboxId) {
-		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " +
-				               ReceiptsTable.CREATED_AT + " > IFNULL((SELECT " +
-				               ZReportsTable.CREATED_AT + " FROM " +
-				               ZReportsTable.NAME + " WHERE " +
-				               ZReportsTable.CASHBOX_ID + "=? ORDER BY " +
-				               ZReportsTable.ID + " DESC LIMIT 1), '0000-00-00 00:00:00')";
-		
-		return getReceiptList(query, ps -> {
-			ps.setLong(1, cashboxId);
-			ps.setLong(2, cashboxId);
-		});
+		List<Receipt> receiptList = new ArrayList<>();
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ReceiptDAO receiptDAO = daoFactory.getReceiptDAO(connection.open());
+			List<ReceiptRecord> list = receiptDAO.findAllByCashboxId(cashboxId);
+			fillList(receiptList, list, connection.open());
+			LOGGER.debug(receiptList);
+			return receiptList;
+		}
 	}
 	
+	@Override
+	public List<Receipt> getReceiptList(Long reportId, Long cashboxId) {
+		List<Receipt> receiptList = new ArrayList<>();
+		try (ConnectionWrapper connection = daoFactory.getConnection()) {
+			ReceiptDAO receiptDAO = daoFactory.getReceiptDAO(connection.open());
+			List<ReceiptRecord> list = receiptDAO.findAllByZReportId(reportId, cashboxId);
+			fillList(receiptList, list, connection.open());
+			LOGGER.debug(receiptList);
+			return receiptList;
+		}
+	}
+	
+	private void fillList(List<Receipt> receipts, List<ReceiptRecord> records, Connection connection) {
+		records.forEach(record -> {
+			setReferences(record, connection);
+			Receipt receipt = new Receipt(record);
+			setReferences(receipt, record);
+			receipts.add(receipt);
+		});
+	}
 	
 	@Override
 	public Receipt findOne(Long receiptId) {
 		try (ConnectionWrapper connection = daoFactory.getConnection()) {
 			ReceiptDAO receiptDAO = daoFactory.getReceiptDAO(connection.open());
-			ProductService productService = serviceFactory.getProductService();
-			SettingsService settingsService = serviceFactory.getSettingsService();
+			ProductService productService = getServiceFactory().getProductService();
+			SettingsService settingsService = getServiceFactory().getSettingsService();
 			ReceiptRecord record = receiptDAO.findOne(receiptId);
 			
 			setReferences(record, connection.open());
@@ -118,26 +142,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 		}
 	}
 	
-	
-	private List<Receipt> getReceiptList(String sql, PreparedStatementSetter ps) {
-		List<Receipt> receiptList = new ArrayList<>();
-		try (ConnectionWrapper connection = daoFactory.getConnection()) {
-			ReceiptDAO receiptDAO = daoFactory.getReceiptDAO(connection.open());
-			ProductService productService = serviceFactory.getProductService();
-			SettingsService settingsService = serviceFactory.getSettingsService();
-			List<ReceiptRecord> list = receiptDAO.findAllByQuery(sql, ps);
-			
-			list.forEach(record -> {
-				setReferences(record, connection.open());
-				Receipt receipt = new Receipt(record);
-				receipt.setProducts(productService.findAllByReceiptId(record.getId()));
-				receipt.setCategories(settingsService.getTaxCatList());
-				receiptList.add(receipt);
-			});
-			LOGGER.debug(receiptList);
-			return receiptList;
-		}
-	}
 	
 	private boolean update(Receipt receipt, boolean updateStock, boolean increase) {
 		try (ConnectionWrapper connection = daoFactory.getConnection()) {
@@ -189,6 +193,13 @@ public class ReceiptServiceImpl implements ReceiptService {
 			}
 			productDAO.update(inStock);
 		}
+	}
+	
+	private void setReferences(Receipt receipt, ReceiptRecord record) {
+		ProductService productService = getServiceFactory().getProductService();
+		SettingsService settingsService = getServiceFactory().getSettingsService();
+		receipt.setProducts(productService.findAllByReceiptId(record.getId()));
+		receipt.setCategories(settingsService.getTaxCatList());
 	}
 	
 	private void setReferences(ReceiptRecord record, Connection connection) {

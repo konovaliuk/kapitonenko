@@ -33,6 +33,7 @@ public class ReceiptListAction implements ActionCommand {
 			list = receiptService.getReceiptList(pager.getOffset(), pager.getRecordsPerPage());
 		} else {
 			Long cashboxId = ((Cashbox) request.getSession().get(Keys.CASHBOX)).getId();
+			LOGGER.debug(cashboxId);
 			list = receiptService.getReceiptList(cashboxId);
 		}
 		

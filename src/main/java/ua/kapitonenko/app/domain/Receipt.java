@@ -124,5 +124,10 @@ public class Receipt extends Model implements Serializable {
 				       && record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_CASH.getValue());
 	}
 	
+	public boolean isPrintVisible() {
+		return !record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue())
+				       && !products.isEmpty();
+	}
+	
 	
 }

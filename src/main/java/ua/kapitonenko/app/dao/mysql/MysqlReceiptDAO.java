@@ -4,9 +4,11 @@ import ua.kapitonenko.app.dao.interfaces.ReceiptDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
+import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.records.ReceiptRecord;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class MysqlReceiptDAO extends BaseDAO<ReceiptRecord> implements ReceiptDAO {
 	private static final String UPDATE = "UPDATE " +
@@ -88,4 +90,57 @@ public class MysqlReceiptDAO extends BaseDAO<ReceiptRecord> implements ReceiptDA
 		};
 	}
 	
+	/*	SELECT * FROM receipts
+		WHERE created_at <= (
+			SELECT created_at FROM z_reports
+				WHERE z_reports.id = 2) AND created_at > IFNULL(
+					(SELECT created_at FROM z_reports
+				        WHERE cashbox_id=2 AND z_reports.id < 2
+				        ORDER BY z_reports.id  DESC LIMIT 1),
+				'0000-00-00 00:00:00');
+	*/
+	@Override
+	public List<ReceiptRecord> findAllByZReportId(Long zReportId, Long cashboxId) {
+		String query = "WHERE " + ReceiptsTable.CREATED_AT + " <= (" +
+				               "  SELECT " + ZReportsTable.CREATED_AT +
+				               "  FROM " + ZReportsTable.NAME +
+				               "  WHERE " + ZReportsTable.ID + " = ?)" +
+				               "  AND " + ReceiptsTable.CREATED_AT + " > IFNULL(" +
+				               "  (SELECT " + ZReportsTable.CREATED_AT +
+				               "  FROM " + ZReportsTable.NAME +
+				               "  WHERE " + ZReportsTable.CASHBOX_ID + "=? " +
+				               "  AND " + ZReportsTable.ID + " < ?" +
+				               "  ORDER BY " + ZReportsTable.ID + "  DESC LIMIT 1)," +
+				               "  '0000-00-00 00:00:00')";
+		
+		return findAllByQuery(query, ps -> {
+			ps.setLong(1, zReportId);
+			ps.setLong(2, cashboxId);
+			ps.setLong(3, zReportId);
+		});
+	}
+	
+	@Override
+	public List<ReceiptRecord> findAllByCashboxId(Long cashboxId) {
+		String query = "WHERE " + ReceiptsTable.CASHBOX_ID + "=? AND " +
+				               ReceiptsTable.CREATED_AT + " > IFNULL((SELECT " +
+				               ZReportsTable.CREATED_AT + " FROM " +
+				               ZReportsTable.NAME + " WHERE " +
+				               ZReportsTable.CASHBOX_ID + "=? ORDER BY " +
+				               ZReportsTable.ID + " DESC LIMIT 1), '0000-00-00 00:00:00')";
+		
+		return findAllByQuery(query, ps -> {
+			ps.setLong(1, cashboxId);
+			ps.setLong(2, cashboxId);
+		});
+	}
+	
+	@Override
+	public List<ReceiptRecord> findAll(int offset, int limit) {
+		return findAllByQuery("ORDER BY " + ReceiptsTable.ID +
+				                      " DESC LIMIT ? OFFSET ?", ps -> {
+			ps.setInt(1, limit);
+			ps.setInt(2, offset);
+		});
+	}
 }

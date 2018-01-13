@@ -52,6 +52,7 @@ public class RequestWrapper {
 	}
 	
 	public ResponseParams goHome() {
+		LOGGER.debug("go home");
 		return new ResponseParams("/", true);
 	}
 	

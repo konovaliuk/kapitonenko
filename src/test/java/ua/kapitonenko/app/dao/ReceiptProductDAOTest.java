@@ -1,10 +1,10 @@
 package ua.kapitonenko.app.dao;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ReceiptProductDAO;
-import ua.kapitonenko.app.dao.tables.ReceiptProductsTable;
 import ua.kapitonenko.app.domain.records.ReceiptProduct;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 import ua.kapitonenko.app.fixtures.TestConnection;
@@ -19,15 +19,19 @@ import static org.junit.Assert.assertThat;
 
 public class ReceiptProductDAOTest extends BaseDAOTest {
 	
-	@Override
-	protected String getTableName() {
-		return ReceiptProductsTable.NAME;
-	}
-	
-	@Override
+	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		super.truncateTable();
+		
+		try (Statement statement = connection.createStatement()) {
+			statement.execute("INSERT INTO receipts\n" +
+					                  "(id, cashbox_id, payment_type_id, receipt_type_id, cancelled, created_at, created_by)\n" +
+					                  "VALUES (1, 1, 1, 1, 0, NOW(), 1)");
+			statement.execute("INSERT INTO products\n" +
+					                  "(id, unit_id, price, tax_category_id, quantity, created_at, created_by, deleted_at, deleted_by)\n" +
+					                  "VALUES (1, 1, 9.99, 1, 999.999, NOW(), 1, NULL, NULL)"
+			);
+		}
 	}
 	
 	@Test(expected = UnsupportedOperationException.class)
@@ -70,10 +74,8 @@ public class ReceiptProductDAOTest extends BaseDAOTest {
 	public void tearDown() throws Exception {
 		connection = TestConnection.getInstance().getConnection();
 		try (Statement statement = connection.createStatement()) {
-			statement.execute("INSERT INTO `receipt_products` " +
-					                  "(id, receipt_id, product_id, quantity) " +
-					                  "VALUES " +
-					                  "  (1, 1, 1 , 111.111)");
+			statement.execute("DELETE FROM receipts");
+			statement.execute("DELETE FROM products");
 		} finally {
 			TestConnection.getInstance().close(connection);
 		}

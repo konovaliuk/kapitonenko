@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.fixtures;
 
+import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.domain.records.*;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -12,24 +13,21 @@ public class SettingsServiceStub implements SettingsService {
 	public static final int TAX_CAT_COUNT = 3;
 	
 	@Override
-	public List<UserRole> getRoleList() {
-		return null;
+	public void clearCache() {
+	
 	}
 	
 	@Override
-	public Map<Long, String> getTaxMap() {
+	public List<UserRole> getRoleList() {
 		return null;
 	}
+
 	
 	@Override
 	public List<TaxCategory> getTaxCatList() {
 		return Arrays.asList(new TaxCategory(), new TaxCategory(), new TaxCategory());
 	}
 	
-	@Override
-	public Map<Long, String> getUnitMap() {
-		return null;
-	}
 	
 	@Override
 	public List<Unit> getUnitList() {
@@ -41,10 +39,6 @@ public class SettingsServiceStub implements SettingsService {
 		return null;
 	}
 	
-	@Override
-	public PaymentType findPaymentType(Long id) {
-		return null;
-	}
 	
 	@Override
 	public List<LocaleRecord> getLocaleList() {
@@ -77,5 +71,10 @@ public class SettingsServiceStub implements SettingsService {
 	@Override
 	public List<Cashbox> getCashboxList() {
 		return null;
+	}
+	
+	@Override
+	public void setDaoFactory(DAOFactory daoFactory) {
+	
 	}
 }

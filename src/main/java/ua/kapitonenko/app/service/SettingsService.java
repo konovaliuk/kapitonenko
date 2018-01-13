@@ -6,19 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 public interface SettingsService extends Service {
+	
+	public void clearCache();
+	
 	List<UserRole> getRoleList();
 	
-	Map<Long, String> getTaxMap();
-	
 	List<TaxCategory> getTaxCatList();
-	
-	Map<Long, String> getUnitMap();
 	
 	List<Unit> getUnitList();
 	
 	Cashbox findCashbox(Long id);
-	
-	PaymentType findPaymentType(Long id);
 	
 	List<LocaleRecord> getLocaleList();
 	
