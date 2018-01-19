@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.dao.mysql;
 
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
+import ua.kapitonenko.app.dao.records.BaseLocalizedEntity;
 import ua.kapitonenko.app.dao.tables.BaseTable;
-import ua.kapitonenko.app.domain.records.BaseLocalizedEntity;
 
 import java.sql.Connection;
 

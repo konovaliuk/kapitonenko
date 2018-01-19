@@ -1,10 +1,9 @@
-package ua.kapitonenko.app.domain.records;
+package ua.kapitonenko.app.dao.records;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Date;
-import java.util.List;
 
 public class ReceiptRecord extends BaseEntity {
 	
@@ -14,12 +13,6 @@ public class ReceiptRecord extends BaseEntity {
 	private boolean cancelled;
 	private Date createdAt;
 	private Long createdBy;
-	
-	private Cashbox cashbox;
-	private PaymentType paymentType;
-	private ReceiptType receiptType;
-	private User userCreateBy;
-	private List<ReceiptProduct> products;
 	
 	public ReceiptRecord() {
 	}
@@ -31,38 +24,6 @@ public class ReceiptRecord extends BaseEntity {
 		this.receiptTypeId = receiptTypeId;
 		this.cancelled = cancelled;
 		this.createdBy = createdBy;
-	}
-	
-	public Cashbox getCashbox() {
-		return cashbox;
-	}
-	
-	public void setCashbox(Cashbox cashbox) {
-		this.cashbox = cashbox;
-	}
-	
-	public PaymentType getPaymentType() {
-		return paymentType;
-	}
-	
-	public void setPaymentType(PaymentType paymentType) {
-		this.paymentType = paymentType;
-	}
-	
-	public ReceiptType getReceiptType() {
-		return receiptType;
-	}
-	
-	public void setReceiptType(ReceiptType receiptType) {
-		this.receiptType = receiptType;
-	}
-	
-	public User getUserCreateBy() {
-		return userCreateBy;
-	}
-	
-	public void setUserCreateBy(User userCreateBy) {
-		this.userCreateBy = userCreateBy;
 	}
 	
 	public Long getPaymentTypeId() {
@@ -154,13 +115,5 @@ public class ReceiptRecord extends BaseEntity {
 				       .append(", createdBy=").append(createdBy)
 				       .append("}")
 				       .toString();
-	}
-	
-	public List<ReceiptProduct> getProducts() {
-		return products;
-	}
-	
-	public void setProducts(List<ReceiptProduct> products) {
-		this.products = products;
 	}
 }

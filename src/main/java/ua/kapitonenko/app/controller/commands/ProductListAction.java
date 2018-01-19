@@ -8,7 +8,7 @@ import ua.kapitonenko.app.config.keys.Pages;
 import ua.kapitonenko.app.controller.helpers.PaginationHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
-import ua.kapitonenko.app.domain.records.Product;
+import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class ProductListAction implements ActionCommand {
-	
 	private static final Logger LOGGER = Logger.getLogger(ProductListAction.class);
+	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
 	@Override
@@ -25,7 +25,8 @@ public class ProductListAction implements ActionCommand {
 		long noOfRecords = productService.getCount();
 		PaginationHelper pager = new PaginationHelper(request, noOfRecords);
 		
-		List<Product> list = productService.getProductsList(pager.getOffset(), pager.getRecordsPerPage(), request.getSession().getLocaleId());
+		List<Product> list = productService.getProductsList(pager.getOffset(),
+				pager.getRecordsPerPage(), request.getSession().getLocaleId());
 		request.setAttribute(Keys.PRODUCTS, list);
 		
 		return request.forward(Pages.PRODUCT_LIST, Actions.PRODUCTS);

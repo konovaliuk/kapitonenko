@@ -3,7 +3,6 @@
 
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="${messages}" var="msg"/>
-<fmt:setBundle basename="${settings}" var="settings"/>
 
 <head>
     <meta charset="UTF-8"/>

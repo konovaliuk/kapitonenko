@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.controller.commands;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import ua.kapitonenko.app.controller.helpers.SessionWrapper;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 import ua.kapitonenko.app.fixtures.TestServiceFactory;
+import ua.kapitonenko.app.service.ServiceFactory;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -29,9 +31,17 @@ public class LanguageActionTest {
 	@Mock
 	private SessionWrapper sessionWrapper;
 	
+	private static ServiceFactory appServiceFactory;
+	
 	@BeforeClass
 	public static void configApp() {
+		appServiceFactory = Application.getServiceFactory();
 		Application.setServiceFactory(TestServiceFactory.getInstance());
+	}
+	
+	@AfterClass
+	public static void resetConfig() {
+		Application.setServiceFactory(appServiceFactory);
 	}
 	
 	@Before

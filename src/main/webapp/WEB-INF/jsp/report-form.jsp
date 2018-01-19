@@ -20,7 +20,7 @@
                             <label><fmt:message key="${Keys.CASHBOX}" bundle="${msg}"/></label>
                             <select class="form-control" name="report.cashbox">
                                 <option></option>
-                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.app.domain.records.Cashbox>"--%>
+                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.app.dao.records.Cashbox>"--%>
                                 <c:forEach items="${cashboxList}" var="option">
                                     <option value="${option.id}" ${report.cashbox.id.equals(option.id) ? "selected" : ""}>
                                             ${option.id}

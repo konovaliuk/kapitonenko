@@ -2,9 +2,9 @@ package ua.kapitonenko.app.dao.mysql;
 
 import ua.kapitonenko.app.dao.interfaces.ReceiptTypeDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.ReceiptType;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.ReceiptTypesTable;
-import ua.kapitonenko.app.domain.records.ReceiptType;
 
 import java.sql.Connection;
 

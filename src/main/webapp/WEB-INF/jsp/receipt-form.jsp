@@ -1,7 +1,6 @@
-<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
+<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.impl.ProductImpl"/>
+<%-- TODO replace useBean--%>
 <%--@elvariable id="receipt" type="ua.kapitonenko.app.domain.Receipt"--%>
-<%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
-<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
@@ -19,11 +18,12 @@
                 <div class="row">
                     <div class="col-8">
                         <h5 class="card-title mb-4">
-                            <fmt:message key="${receipt.record.receiptType.bundleKey}" bundle="${settings}"/>&nbsp;
-                            <fmt:message key="${Keys.ID}" bundle="${msg}"/>${receipt.record.id}
+                            <fmt:setBundle basename="${receipt.receiptType.bundleName}" var="recBundle"/>
+                            <fmt:message key="${receipt.receiptType.bundleKey}" bundle="${recBundle}"/>&nbsp;
+                            <fmt:message key="${Keys.ID}" bundle="${msg}"/>${receipt.id}
                         </h5>
                     </div>
-                    <c:if test="${receipt.printVisible}">
+                    <c:if test="${receipt.printAllowed}">
                         <div class="col-2 pl-0 ml-auto mb-4 d-print-none">
                             <button class="btn btn-secondary btn-block" onclick="window.print()">
                                 <fmt:message key="${Keys.PRINT}" bundle="${msg}"/></button>
@@ -36,18 +36,18 @@
                     <div class="row mb-4">
                         <div class="col-2">
                             <label><fmt:message key="${Keys.CASHBOX}" bundle="${msg}"/>:</label>
-                            <b>${receipt.record.cashboxId}</b>
+                            <b>${receipt.cashbox.id}</b>
                         </div>
                         <div class="col-3">
                             <label><fmt:message key="${Keys.CASHBOX_FN}" bundle="${msg}"/>:</label>
-                            <b>${receipt.record.cashbox.fnNumber}</b>
+                            <b>${receipt.cashbox.fnNumber}</b>
                         </div>
                         <div class="col-4">
                             <label><fmt:message key="${Keys.CASHBOX_ZN}" bundle="${msg}"/>:</label>
-                            <b>${receipt.record.cashbox.znNumber}</b>
+                            <b>${receipt.cashbox.znNumber}</b>
                         </div>
                         <div class="col-3 text-right">
-                            <fmt:formatDate type="both" value="${receipt.record.createdAt}"/>
+                            <fmt:formatDate type="both" value="${receipt.createdAt}"/>
 
                         </div>
                     </div>
@@ -108,12 +108,15 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <fmt:setBundle basename="${product.unit.bundleName}" var="unitBundle"/>
                                             <td class="text-center"><fmt:message key="${product.unit.bundleKey}"
-                                                                                 bundle="${settings}"/></td>
+                                                                                 bundle="${unitBundle}"/></td>
 
                                             <td class="text-center">
+                                                <fmt:setBundle basename="${product.taxCategory.bundleName}"
+                                                               var="taxBundle"/>
                                                 <fmt:message key="${product.taxCategory.bundleKey}"
-                                                             bundle="${settings}"/>
+                                                             bundle="${taxBundle}"/>
                                             </td>
 
                                             <td class="text-right">
@@ -148,7 +151,7 @@
                                 <dl class="row" id="total">
                                     <c:forEach var="taxCatEntry" items="${receipt.taxByCategory.entrySet()}">
                                         <dt class="col-2 offset-8 col-md-2 offset-md-8">
-                                            <fmt:message key="${taxCatEntry.key.bundleKey}" bundle="${settings}"/></dt>
+                                            <fmt:message key="${taxCatEntry.key.bundleKey}" bundle="${taxBundle}"/></dt>
                                         <dd class="col-2 col-md-2">${taxCatEntry.value}</dd>
                                     </c:forEach>
 
@@ -199,9 +202,10 @@
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="payment"
                                            id="payment-${payType.id}"
-                                           value="${payType.id}" ${receipt.record.paymentTypeId.equals(payType.id) ? "checked" : ""}>
+                                           value="${payType.id}" ${receipt.paymentType.id.equals(payType.id) ? "checked" : ""}>
                                     <label class="form-check-label" for="payment-${payType.id}">
-                                        <fmt:message key="${payType.bundleKey}" bundle="${settings}"/>
+                                        <fmt:setBundle basename="${payType.bundleName}" var="payBundle"/>
+                                        <fmt:message key="${payType.bundleKey}" bundle="${payBundle}"/>
                                     </label>
                                 </div>
                             </c:forEach>

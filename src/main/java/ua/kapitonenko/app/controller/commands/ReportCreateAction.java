@@ -8,13 +8,9 @@ import ua.kapitonenko.app.config.keys.Pages;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.dao.records.Cashbox;
 import ua.kapitonenko.app.domain.Report;
 import ua.kapitonenko.app.domain.ReportType;
-import ua.kapitonenko.app.domain.records.Cashbox;
-import ua.kapitonenko.app.domain.records.PaymentType;
-import ua.kapitonenko.app.domain.records.TaxCategory;
-import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.ReportService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -27,15 +23,13 @@ public class ReportCreateAction implements ActionCommand {
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReportService reportService = Application.getServiceFactory().getReportService();
-	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
-	
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		ReportType[] types = ReportType.values();
 		List<Cashbox> cashboxList = settingsService.getCashboxList();
 		
-		Report report = new Report(request.getSession().getUserId());
+		Report report = Application.getModelFactory().createReport(request.getSession().getUserId());
 		
 		if (request.isPost()) {
 			String cashbox = request.getParameter(Keys.REPORT_CASHBOX);
@@ -54,20 +48,12 @@ public class ReportCreateAction implements ActionCommand {
 			report.setType(reportType);
 			
 			if (validator.isValid()) {
-				report.setCashbox(settingsService.findCashbox(cashboxId));
+				report.setCashboxId(cashboxId);
+				report.setType(reportType);
 				
-				// TODO move to report service
-				List<Receipt> receipts = receiptService.getReceiptList(report.getCashbox().getId());
-				List<TaxCategory> taxCats = settingsService.getTaxCatList();
-				List<PaymentType> paymentTypes = settingsService.getPaymentTypes();
-				report.initSummary(receipts, taxCats, paymentTypes);
-				
-				if (reportType == ReportType.Z_REPORT) {
-					
-					reportService.createZReport(report);
-				}
-				
+				reportService.create(report);
 				request.getSession().set(Keys.REPORT, report);
+				
 				return request.redirect(Actions.REPORT_VIEW);
 			}
 		}

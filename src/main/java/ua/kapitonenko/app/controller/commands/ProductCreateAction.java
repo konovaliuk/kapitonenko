@@ -8,14 +8,15 @@ import ua.kapitonenko.app.config.keys.Pages;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.domain.records.*;
+import ua.kapitonenko.app.dao.records.TaxCategory;
+import ua.kapitonenko.app.dao.records.Unit;
+import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.service.ProductService;
 import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductCreateAction implements ActionCommand {
@@ -26,21 +27,10 @@ public class ProductCreateAction implements ActionCommand {
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
-		// TODO split to smaller methods
-		
 		List<TaxCategory> taxes = settingsService.getTaxCatList();
 		List<Unit> units = settingsService.getUnitList();
 		
-		Product product = new Product();
-		List<ProductLocale> names = new ArrayList<>();
-		List<LocaleRecord> locales = settingsService.getLocaleList();
-		
-		if (!request.isPost()) {
-			for (int i = 0; i < locales.size(); i++) {
-				names.add(new ProductLocale(product, locales.get(i), Keys.PRODUCT_NAME, null));
-			}
-			product.setNames(names);
-		}
+		Product product = productService.newProduct();
 		
 		if (request.isPost()) {
 			String[] lang = request.getParams().get(Keys.PRODUCT_NAME);
@@ -70,11 +60,7 @@ public class ProductCreateAction implements ActionCommand {
 			product.setPrice(priceValue);
 			product.setTaxCategoryId(taxId);
 			product.setUnitId(unitId);
-			
-			for (int i = 0; i < locales.size(); i++) {
-				names.add(new ProductLocale(product, locales.get(i), Keys.PRODUCT_NAME, lang[i].trim()));
-			}
-			product.setNames(names);
+			product.fillNames(lang);
 			product.setCreatedBy(request.getSession().getUser().getId());
 			
 			if (validator.isValid()) {

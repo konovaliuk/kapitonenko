@@ -1,23 +1,15 @@
 package ua.kapitonenko.app.fixtures;
 
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
-import ua.kapitonenko.app.domain.records.Product;
+import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.service.ProductService;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductServiceStub implements ProductService {
-	public static final int COUNT_PROD_BY_REC = 2;
-	
 	
 	@Override
 	public Product createProduct(Product product) {
-		return null;
-	}
-	
-	@Override
-	public List<Product> getProductsList() {
 		return null;
 	}
 	
@@ -33,7 +25,7 @@ public class ProductServiceStub implements ProductService {
 	
 	@Override
 	public List<Product> findAllByReceiptId(Long id) {
-		return Arrays.asList(new Product(), new Product());
+		return null;
 	}
 	
 	@Override
@@ -53,6 +45,11 @@ public class ProductServiceStub implements ProductService {
 	
 	@Override
 	public Product findOne(Long id) {
+		return null;
+	}
+	
+	@Override
+	public Product newProduct() {
 		return null;
 	}
 	

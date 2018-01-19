@@ -3,9 +3,9 @@ package ua.kapitonenko.app.dao.mysql;
 import ua.kapitonenko.app.dao.interfaces.UserDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.UsersTable;
-import ua.kapitonenko.app.domain.records.User;
 
 import java.sql.Connection;
 

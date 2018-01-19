@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ReceiptDAO;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
+import ua.kapitonenko.app.dao.records.ReceiptRecord;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 import ua.kapitonenko.app.fixtures.TestConnection;
 

@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.domain.records;
+package ua.kapitonenko.app.dao.records;
 
 public class LocaleRecord extends BaseEntity {
 	private String name;
@@ -24,7 +24,6 @@ public class LocaleRecord extends BaseEntity {
 	public String getLanguage() {
 		return language;
 	}
-	
 	
 	@Override
 	public String toString() {

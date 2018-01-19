@@ -9,7 +9,7 @@ import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.dao.interfaces.UserDAO;
-import ua.kapitonenko.app.domain.records.User;
+import ua.kapitonenko.app.dao.records.User;
 
 import java.sql.Connection;
 
@@ -22,7 +22,6 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 	
 	private UserService userService;
-	
 	@Mock
 	private User inMemoryUserMock;
 	@Mock

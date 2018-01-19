@@ -1,4 +1,4 @@
-<%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
+<%--@elvariable id="product" type="ua.kapitonenko.app.domain.Product"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
@@ -39,8 +39,9 @@
                             <select class="form-control" name="${Keys.PRODUCT_UNIT}">
                                 <option></option>
                                 <c:forEach items="${unitList}" var="option">
+                                    <fmt:setBundle basename="${option.bundleName}" var="custom"/>
                                     <option value="${option.id}" ${product.unitId.equals(option.id) ? "selected" : ""}>
-                                        <fmt:message key="${option.bundleKey}" bundle="${settings}"/>
+                                        <fmt:message key="${option.bundleKey}" bundle="${custom}"/>
                                     </option>
                                 </c:forEach>
                             </select>
@@ -58,8 +59,9 @@
                             <select class="form-control" name="${Keys.PRODUCT_TAX}">
                                 <option></option>
                                 <c:forEach items="${taxList}" var="option">
+                                    <fmt:setBundle basename="${option.bundleName}" var="custom"/>
                                     <option value="${option.id}" ${product.taxCategoryId.equals(option.id) ? "selected" : ""}>
-                                        <fmt:message key="${option.bundleKey}" bundle="${settings}"/>
+                                        <fmt:message key="${option.bundleKey}" bundle="${custom}"/>
                                     </option>
                                 </c:forEach>
                             </select>

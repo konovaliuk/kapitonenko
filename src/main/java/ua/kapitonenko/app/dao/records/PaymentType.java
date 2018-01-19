@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.domain.records;
+package ua.kapitonenko.app.dao.records;
 
 public class PaymentType extends BaseLocalizedEntity {
 	

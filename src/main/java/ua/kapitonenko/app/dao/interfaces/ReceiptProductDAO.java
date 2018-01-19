@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.dao.interfaces;
 
 
-import ua.kapitonenko.app.domain.records.ReceiptProduct;
+import ua.kapitonenko.app.dao.records.ReceiptProduct;
 
 import java.util.List;
 

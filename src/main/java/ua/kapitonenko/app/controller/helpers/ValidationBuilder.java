@@ -7,7 +7,7 @@ import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.domain.records.BaseEntity;
+import ua.kapitonenko.app.dao.records.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.List;

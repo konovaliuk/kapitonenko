@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.service;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,20 +8,23 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.CashboxDAO;
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
+import ua.kapitonenko.app.dao.records.ZReport;
+import ua.kapitonenko.app.domain.ModelFactory;
 import ua.kapitonenko.app.domain.Report;
-import ua.kapitonenko.app.domain.records.Cashbox;
-import ua.kapitonenko.app.domain.records.ZReport;
+import ua.kapitonenko.app.domain.ReportType;
+import ua.kapitonenko.app.fixtures.ReportStub;
+import ua.kapitonenko.app.fixtures.TestModelFactory;
+import ua.kapitonenko.app.fixtures.TestServiceFactory;
 
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -31,6 +35,10 @@ import static org.mockito.Mockito.*;
 public class ReportServiceTest {
 	
 	private ReportService reportService;
+	
+	private ServiceFactory appServiceFactory;
+	private ModelFactory appModelFactory;
+	
 	@Mock
 	private DAOFactory daoFactoryMock;
 	@Mock
@@ -40,47 +48,51 @@ public class ReportServiceTest {
 	@Mock
 	private ZReportDAO zReportDAOMock;
 	@Mock
-	private Report reportMock;
-	@Mock
-	private ReceiptService receiptServiceMock;
-	@Mock
-	private ServiceFactory serviceFactoryMock;
-	@Mock
-	private SettingsService settingsServiceMock;
-	@Mock
-	private ZReport inMemoryZReportMock;
-	@Mock
-	private ZReport persistentZReportMock;
-	@Mock
-	private CashboxDAO cashboxDAOMock;
+	private ZReport zReportMock;
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		reportService = Application.getServiceFactory().getReportService();
 		reportService.setDaoFactory(daoFactoryMock);
-		reportService.setServiceFactory(serviceFactoryMock);
 		when(daoFactoryMock.getConnection()).thenReturn(wrapperMock);
-		when(daoFactoryMock.getCashboxDao(connectionMock)).thenReturn(cashboxDAOMock);
 		when(wrapperMock.open()).thenReturn(connectionMock);
 		when(daoFactoryMock.getZReportDAO(connectionMock)).thenReturn(zReportDAOMock);
-		when(serviceFactoryMock.getSettingsService()).thenReturn(settingsServiceMock);
-		when(serviceFactoryMock.getReceiptService()).thenReturn(receiptServiceMock);
+		
+		appServiceFactory = Application.getServiceFactory();
+		Application.setServiceFactory(TestServiceFactory.getInstance());
+		appModelFactory = Application.getModelFactory();
+		Application.setModelFactory(new TestModelFactory());
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		Application.setServiceFactory(appServiceFactory);
+		Application.setModelFactory(appModelFactory);
+	}
+	
+	@Test
+	public void createZReportShouldInsertZReportRecordAndSetItToReport() throws Exception {
+		when(zReportDAOMock.insert(any(ZReport.class))).thenReturn(true);
+		when(zReportDAOMock.findOne(anyLong())).thenReturn(zReportMock);
+		Report report = new ReportStub();
+		
+		boolean actual = reportService.createZReport(report);
+		assertThat(actual, is(true));
+		assertThat(report.getRecord(), is(equalTo(zReportMock)));
 	}
 	
 	@Test
 	public void createZReportShouldReturnFalseIfInsertionFailed() throws Exception {
 		when(zReportDAOMock.insert(any(ZReport.class))).thenReturn(false);
-		when(reportMock.getCashbox()).thenReturn(mock(Cashbox.class));
-		when(reportMock.getUserId()).thenReturn(null);
-		when(reportMock.getCashBalance()).thenReturn(null);
+		Report report = new ReportStub();
 		
-		boolean actual = reportService.createZReport(reportMock);
+		boolean actual = reportService.createZReport(report);
 		assertThat(actual, is(false));
 	}
 	
 	@Test
-	public void getCountShouldReturnNumberOfRecords() {
+	public void getCount() throws Exception {
 		long expected = 3333333337777779977L;
 		when(zReportDAOMock.getCount()).thenReturn(expected);
 		
@@ -89,33 +101,58 @@ public class ReportServiceTest {
 	}
 	
 	@Test
-	public void getReportListShouldReturnReportsWithAllDependencies() throws Exception {
-		int offset = 20;
-		int limit = 2;
+	public void getReportListShouldReturnReportsWithDependencies() throws Exception {
+		int size = 14;
+		List<ZReport> zReportList = Stream.generate(() -> zReportMock)
+				                            .limit(size)
+				                            .collect(Collectors.toList());
+		when(zReportDAOMock.findAllByQuery(anyString(), any())).thenReturn(zReportList);
+		when(zReportMock.getCreatedBy()).thenReturn(1L);
 		
-		when(zReportDAOMock.findAllByQuery(anyString(), any())).thenReturn(Arrays.asList(persistentZReportMock, persistentZReportMock));
-		
-		List<Report> result = reportService.getReportList(offset, limit);
-		verifyListRefsSet(limit, result);
+		List<Report> reports = reportService.getReportList(size, size);
+		assertThat(reports.size(), is(equalTo(size)));
+		reports.forEach(this::verifyDependencies);
 	}
 	
 	@Test
-	public void getReportListShouldReturnEmptyListWhenNoRecordsFound() throws Exception {
-		int offset = 20;
-		int limit = 2;
-		
+	public void getReportListShouldReturnEmptyListWhenRecordsNotFound() throws Exception {
 		when(zReportDAOMock.findAllByQuery(anyString(), any())).thenReturn(Collections.emptyList());
+		when(zReportMock.getCreatedBy()).thenReturn(1L);
 		
-		List<Report> result = reportService.getReportList(offset, limit);
-		verifyListRefsSet(0, result);
+		List<Report> reports = reportService.getReportList(20, 5);
+		assertThat(reports.isEmpty(), is(true));
+		
 	}
 	
-	private void verifyListRefsSet(int listSize, List<Report> result) {
-		verify(settingsServiceMock, times(listSize)).getTaxCatList();
-		verify(settingsServiceMock, times(listSize)).getPaymentTypes();
-		verify(receiptServiceMock, times(listSize)).getReceiptList(anyLong(), anyLong());
-		verify(persistentZReportMock, times(listSize)).getCreatedBy();
-		assertThat(result.size(), is(equalTo(listSize)));
+	@Test
+	public void createShouldSetReportsDependencies() throws Exception {
+		ReportStub report = new ReportStub();
+		reportService.create(report);
+		
+		verifyDependencies(report);
+	}
+	
+	@Test
+	public void createShouldInsertZReportOnZReportType() throws Exception {
+		ReportStub report = new ReportStub();
+		report.setType(ReportType.Z_REPORT);
+		reportService.create(report);
+		
+		verify(zReportDAOMock).insert(any(ZReport.class));
+	}
+	
+	@Test
+	public void createShouldNotInsertZReportOnXReportType() throws Exception {
+		ReportStub report = new ReportStub();
+		report.setType(ReportType.X_REPORT);
+		reportService.create(report);
+		
+		verify(zReportDAOMock, never()).insert(any(ZReport.class));
+	}
+	
+	private void verifyDependencies(Report report) {
+		assertThat(report.getCashbox(), is(not(nullValue())));
+		assertThat(((ReportStub) report).isSummaryInitialized(), is(true));
 	}
 	
 }

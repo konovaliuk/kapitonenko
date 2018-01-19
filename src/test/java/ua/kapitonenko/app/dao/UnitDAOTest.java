@@ -3,7 +3,7 @@ package ua.kapitonenko.app.dao;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.UnitDAO;
-import ua.kapitonenko.app.domain.records.Unit;
+import ua.kapitonenko.app.dao.records.Unit;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 
 import java.util.Arrays;

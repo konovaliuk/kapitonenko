@@ -1,133 +1,60 @@
 package ua.kapitonenko.app.domain;
 
-import org.apache.log4j.Logger;
-import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.domain.records.Product;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
-import ua.kapitonenko.app.domain.records.TaxCategory;
+import ua.kapitonenko.app.dao.records.*;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Receipt extends Model implements Serializable {
-	private static final Logger LOGGER = Logger.getLogger(Receipt.class);
+public interface Receipt extends Model {
+	Long getTypeId();
 	
-	private ReceiptRecord record;
-	private List<Product> products = new ArrayList<>();
-	private Long localId;
-
-	private List<TaxCategory> categories;
-	private Map<TaxCategory, BigDecimal> taxByCategory = new HashMap<>();
-	private Map<TaxCategory, BigDecimal> costByCategory = new HashMap<>();
+	void setProducts(List<Product> products);
 	
-	public Receipt() {
-	}
+	ReceiptRecord getRecord();
 	
-	public Receipt(ReceiptRecord record) {
-		this.record = record;
-	}
+	PaymentType getPaymentType();
 	
-	public ReceiptRecord getRecord() {
-		return record;
-	}
+	void setPaymentType(PaymentType type);
 	
-	public void setRecord(ReceiptRecord record) {
-		this.record = record;
-	}
+	void setRecord(ReceiptRecord record);
 	
-	public Long getLocalId() {
-		return localId;
-	}
+	Long getLocalId();
 	
-	public void setLocalId(Long localId) {
-		this.localId = localId;
-		for (Product product : products) {
-			product.setLocaleId(localId);
-		}
-	}
+	void setLocalId(Long localId);
 	
-	public List<Product> getProducts() {
-		return products;
-	}
+	List<Product> getProducts();
 	
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
+	Map<TaxCategory, BigDecimal> getTaxByCategory();
 	
-	public void addProduct(Product product) {
-		if (products.contains(product)) {
-			Product existing = products.get(products.indexOf(product));
-			existing.addQuantity(product.getQuantity());
-		} else {
-			product.setLocaleId(localId);
-			products.add(product);
-		}
-	}
+	Map<TaxCategory, BigDecimal> getCostByCategory();
 	
-	public Map<TaxCategory, BigDecimal> getTaxByCategory() {
-		for (TaxCategory cat : categories) {
-			taxByCategory.put(cat, new BigDecimal("0.00"));
-		}
-		
-		for (Product product : products) {
-			TaxCategory cat = product.getTaxCategory();
-			taxByCategory.put(cat, taxByCategory.get(cat).add(product.getTax()));
-		}
-		return taxByCategory;
-	}
+	void setCategories(List<TaxCategory> taxCats);
 	
-	public Map<TaxCategory, BigDecimal> getCostByCategory() {
-		for (TaxCategory cat : categories) {
-			costByCategory.put(cat, new BigDecimal("0.00"));
-		}
-		
-		for (Product product : products) {
-			TaxCategory cat = product.getTaxCategory();
-			costByCategory.put(cat, costByCategory.get(cat).add(product.getCost()));
-		}
-		return costByCategory;
-	}
+	BigDecimal getTotalCost();
 	
-	public void setCategories(List<TaxCategory> taxCats) {
-		this.categories = taxCats;
-	}
+	BigDecimal getTaxAmount();
 	
-	public BigDecimal getTotalCost() {
-		return products.stream()
-				       .map(Product::getCost)
-				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
-		
-	}
+	void addProduct(Product product);
 	
-	public BigDecimal getTaxAmount() {
-		return products.stream()
-				       .map(Product::getTax)
-				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
-	}
+	void remove(Long productId);
 	
-	public void remove(Long productId) {
-		Product found = null;
-		for (Product product : products) {
-			if (product.getId().equals(productId)) {
-				found = product;
-			}
-		}
-		products.remove(found);
-	}
+	boolean isReturnAllowed();
 	
-	public boolean isReturnVisible() {
-		return !record.getReceiptTypeId().equals(Application.Ids.RECEIPT_TYPE_RETURN.getValue())
-				       && record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_CASH.getValue());
-	}
+	boolean isPrintAllowed();
 	
-	public boolean isPrintVisible() {
-		return !record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue())
-				       && !products.isEmpty();
-	}
+	Date getCreatedAt();
 	
+	Long getId();
 	
+	boolean isCancelled();
+	
+	void setReceiptType(ReceiptType type);
+	
+	ReceiptType getReceiptType();
+	
+	void setCashbox(Cashbox one);
+	
+	Cashbox getCashbox();
 }

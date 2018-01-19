@@ -6,7 +6,9 @@ import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.connection.DataSourceConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.dao.mysql.MysqlDaoFactory;
-import ua.kapitonenko.app.domain.records.Company;
+import ua.kapitonenko.app.dao.records.Company;
+import ua.kapitonenko.app.domain.ModelFactory;
+import ua.kapitonenko.app.domain.impl.ModelFactoryImpl;
 import ua.kapitonenko.app.exceptions.AppException;
 import ua.kapitonenko.app.service.ServiceFactory;
 import ua.kapitonenko.app.service.SettingsService;
@@ -20,8 +22,13 @@ public class Application {
 	
 	private static DAOFactory daoFactory = MysqlDaoFactory.getInstance();
 	private static ServiceFactory serviceFactory = ServiceFactoryImpl.getInstance();
+	private static ModelFactory modelFactory = ModelFactoryImpl.getInstance();
 	private static Class<? extends ConnectionWrapper> connectionClass = DataSourceConnectionWrapper.class;
 	private static boolean autoActivation = true;
+	
+	private Application() {
+	
+	}
 	
 	public static DAOFactory getDAOFactory() {
 		return daoFactory;
@@ -38,6 +45,14 @@ public class Application {
 	
 	public static void setServiceFactory(ServiceFactory impl) {
 		serviceFactory = impl;
+	}
+	
+	public static ModelFactory getModelFactory() {
+		return modelFactory;
+	}
+	
+	public static void setModelFactory(ModelFactory impl) {
+		modelFactory = impl;
 	}
 	
 	public static <E extends ConnectionWrapper> void setConnectionClass(Class<E> className) {
@@ -67,7 +82,6 @@ public class Application {
 		
 		context.setAttribute(Keys.COMPANY, company);
 		context.setAttribute(Params.MESSAGE_BUNDLE.getValue(), Params.MESSAGE_BUNDLE.getValue());
-		context.setAttribute(Params.SETTINGS_BUNDLE.getValue(), Params.SETTINGS_BUNDLE.getValue());
 		context.setAttribute(Keys.LANGUAGES, settingsService.getSupportedLanguages());
 	}
 	
@@ -101,7 +115,6 @@ public class Application {
 	public enum Params {
 		
 		MESSAGE_BUNDLE("messages"),
-		SETTINGS_BUNDLE("settings"),
 		DEFAULT_LOCALE("en_US"),
 		ENCODING("UTF-8");
 		

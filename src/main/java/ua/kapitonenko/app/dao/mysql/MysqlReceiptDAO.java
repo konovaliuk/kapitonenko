@@ -3,9 +3,9 @@ package ua.kapitonenko.app.dao.mysql;
 import ua.kapitonenko.app.dao.interfaces.ReceiptDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.ReceiptRecord;
 import ua.kapitonenko.app.dao.tables.ReceiptsTable;
 import ua.kapitonenko.app.dao.tables.ZReportsTable;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
 
 import java.sql.Connection;
 import java.util.List;

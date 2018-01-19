@@ -3,8 +3,8 @@ package ua.kapitonenko.app.dao.mysql;
 import ua.kapitonenko.app.dao.interfaces.ProductLocaleDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.ProductLocale;
 import ua.kapitonenko.app.dao.tables.ProductLocaleTable;
-import ua.kapitonenko.app.domain.records.ProductLocale;
 
 import java.sql.Connection;
 import java.util.List;

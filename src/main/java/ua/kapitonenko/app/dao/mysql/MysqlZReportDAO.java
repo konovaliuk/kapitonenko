@@ -3,8 +3,8 @@ package ua.kapitonenko.app.dao.mysql;
 import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.ZReport;
 import ua.kapitonenko.app.dao.tables.ZReportsTable;
-import ua.kapitonenko.app.domain.records.ZReport;
 
 import java.sql.Connection;
 

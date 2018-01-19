@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.commands.*;
-import ua.kapitonenko.app.domain.records.User;
+import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.exceptions.ForbiddenException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 

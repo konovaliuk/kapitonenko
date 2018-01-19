@@ -10,7 +10,6 @@ import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.app.domain.Receipt;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -66,23 +65,11 @@ public class ReceiptReturnAction implements ActionCommand {
 		Receipt receipt = (Receipt) request.getSession().get(Keys.RECEIPT);
 		
 		if (receipt == null) {
-			LOGGER.debug("new return receipt construction ...");
 			String id = request.getParameter("id");
 			Long receiptId = ValidationBuilder.parseId(id);
 			
 			receipt = receiptService.findOne(receiptId);
-			
-			LOGGER.debug(receipt.getProducts());
-			
-			ReceiptRecord existing = receipt.getRecord();
-			ReceiptRecord updated = new ReceiptRecord(null,
-					                                         existing.getCashboxId(),
-					                                         existing.getPaymentTypeId(),
-					                                         Application.Ids.RECEIPT_TYPE_RETURN.getValue(),
-					                                         true,
-					                                         existing.getCreatedBy());
-			receipt.setRecord(updated);
-			receiptService.create(receipt);
+			receiptService.createReturn(receipt);
 			
 			request.getSession().set(Keys.RECEIPT, receipt);
 			request.getSession().set(Keys.PAYMENT_TYPES, settingsService.getPaymentTypes());

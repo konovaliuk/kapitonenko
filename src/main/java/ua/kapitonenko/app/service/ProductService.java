@@ -1,14 +1,12 @@
 package ua.kapitonenko.app.service;
 
-import ua.kapitonenko.app.domain.records.Product;
+import ua.kapitonenko.app.domain.Product;
 
 import java.util.List;
 
 public interface ProductService extends Service {
 	
 	Product createProduct(Product product);
-	
-	List<Product> getProductsList();
 	
 	List<Product> getProductsList(int offset, int limit, Long localeId);
 	
@@ -23,4 +21,6 @@ public interface ProductService extends Service {
 	boolean update(Product product);
 	
 	Product findOne(Long id);
+	
+	Product newProduct();
 }

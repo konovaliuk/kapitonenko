@@ -14,7 +14,6 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	private HashMap<ServiceName, Service> services = new HashMap<>();
 	
 	private ServiceFactoryImpl() {
-		LOGGER.debug("init service factory");
 		initServices();
 	}
 	

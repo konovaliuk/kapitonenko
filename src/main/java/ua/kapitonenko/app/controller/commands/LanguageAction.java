@@ -5,7 +5,7 @@ import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
-import ua.kapitonenko.app.domain.records.LocaleRecord;
+import ua.kapitonenko.app.dao.records.LocaleRecord;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 import ua.kapitonenko.app.service.SettingsService;

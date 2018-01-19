@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.dao.interfaces;
 
-import ua.kapitonenko.app.domain.records.UserRole;
+import ua.kapitonenko.app.dao.records.UserRole;
 
 public interface UserRoleDAO extends DAO<UserRole> {
 }

@@ -4,16 +4,16 @@ import org.apache.log4j.Logger;
 import ua.kapitonenko.app.dao.interfaces.LocaleDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.LocaleRecord;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.LocaleTable;
-import ua.kapitonenko.app.domain.records.LocaleRecord;
 
 import java.sql.Connection;
 
 public class MysqlLocaleDAO extends BaseDAO<LocaleRecord> implements LocaleDAO {
 	private static final Logger LOGGER = Logger.getLogger(MysqlLocaleDAO.class);
 	
-	public MysqlLocaleDAO(Connection connection) {
+	MysqlLocaleDAO(Connection connection) {
 		super(connection);
 	}
 	

@@ -5,8 +5,8 @@ import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
+import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.domain.Receipt;
-import ua.kapitonenko.app.domain.records.Product;
 import ua.kapitonenko.app.service.ProductService;
 
 import java.math.BigDecimal;

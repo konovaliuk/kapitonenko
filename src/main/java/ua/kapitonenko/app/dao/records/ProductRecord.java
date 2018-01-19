@@ -1,18 +1,14 @@
-package ua.kapitonenko.app.domain.records;
+package ua.kapitonenko.app.dao.records;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
-import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.config.keys.Keys;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class Product extends BaseEntity {
-	private static final Logger LOGGER = Logger.getLogger(Product.class);
+public class ProductRecord extends BaseEntity {
+	private static final Logger LOGGER = Logger.getLogger(ProductRecord.class);
 	
 	private Long unitId;
 	private BigDecimal price;
@@ -23,81 +19,15 @@ public class Product extends BaseEntity {
 	private Date deletedAt;
 	private Long deletedBy;
 	
-	private TaxCategory taxCategory;
-	private Unit unit;
-	private User userCreatedBy;
-	private User userDeletedBy;
-	private List<ProductLocale> names;
-	private String name;
-	private BigDecimal cost;
-	
-	
-	private Long localeId = Application.Ids.DEFAULT_LOCALE.getValue();
-	
-	public Product() {
+	public ProductRecord() {
 	}
 	
-	public Product(Long unitId, BigDecimal price, Long taxCategoryId, BigDecimal quantity, Long createdBy) {
+	public ProductRecord(Long unitId, BigDecimal price, Long taxCategoryId, BigDecimal quantity, Long createdBy) {
 		this.unitId = unitId;
 		this.price = price;
 		this.taxCategoryId = taxCategoryId;
 		this.quantity = quantity;
 		this.createdBy = createdBy;
-	}
-	
-	public Long getLocaleId() {
-		return localeId;
-	}
-	
-	public void setLocaleId(Long localeId) {
-		this.localeId = localeId;
-	}
-	
-	public String getName() {
-		if (this.name == null && names != null && !names.isEmpty()) {
-			
-			return names.stream()
-					       .filter(pl -> pl.getLocaleId().equals(localeId) && pl.getPropertyName().equals(Keys.PRODUCT_NAME))
-					       .map(ProductLocale::getPropertyValue).collect(Collectors.joining());
-		}
-		
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public TaxCategory getTaxCategory() {
-		return taxCategory;
-	}
-	
-	public void setTaxCategory(TaxCategory taxCategory) {
-		this.taxCategory = taxCategory;
-	}
-	
-	public Unit getUnit() {
-		return unit;
-	}
-	
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-	
-	public User getUserCreatedBy() {
-		return userCreatedBy;
-	}
-	
-	public void setUserCreatedBy(User userCreatedBy) {
-		this.userCreatedBy = userCreatedBy;
-	}
-	
-	public User getUserDeletedBy() {
-		return userDeletedBy;
-	}
-	
-	public void setUserDeletedBy(User userDeletedBy) {
-		this.userDeletedBy = userDeletedBy;
 	}
 	
 	public Long getUnitId() {
@@ -115,23 +45,6 @@ public class Product extends BaseEntity {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	
-	public BigDecimal getCost() {
-		
-		this.cost = price.multiply(quantity).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-		return this.cost;
-	}
-	
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
-	}
-	
-	public BigDecimal getTax() {
-		return getCost().movePointLeft(2)
-				       .multiply(taxCategory.getRate())
-				       .setScale(2, BigDecimal.ROUND_HALF_EVEN);
-	}
-	
 	
 	public Long getTaxCategoryId() {
 		return this.taxCategoryId;
@@ -181,25 +94,13 @@ public class Product extends BaseEntity {
 		this.deletedBy = deletedBy;
 	}
 	
-	public List<ProductLocale> getNames() {
-		return names;
-	}
-	
-	public void setNames(List<ProductLocale> names) {
-		this.names = names;
-	}
-	
-	public void addQuantity(BigDecimal q) {
-		quantity = quantity.add(q);
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		
 		if (o == null || getClass() != o.getClass()) return false;
 		
-		Product product = (Product) o;
+		ProductRecord product = (ProductRecord) o;
 		
 		return new EqualsBuilder()
 				       .append(getId(), product.getId())
@@ -234,6 +135,4 @@ public class Product extends BaseEntity {
 				       .append("}")
 				       .toString();
 	}
-	
-	
 }

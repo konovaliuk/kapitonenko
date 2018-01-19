@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.dao.interfaces;
 
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
-import ua.kapitonenko.app.domain.records.BaseEntity;
+import ua.kapitonenko.app.dao.records.BaseEntity;
 
 import java.util.List;
 

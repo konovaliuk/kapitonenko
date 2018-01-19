@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.kapitonenko.app.domain.records.Cashbox;
+import ua.kapitonenko.app.dao.records.Cashbox;
 
 import java.math.BigDecimal;
 import java.util.*;

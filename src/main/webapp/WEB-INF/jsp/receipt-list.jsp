@@ -1,5 +1,3 @@
-<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.records.Product"/>
-<%--@elvariable id="product" type="ua.kapitonenko.app.domain.records.Product"--%>
 <%--@elvariable id="receipts" type="java.util.List<ua.kapitonenko.app.domain.Receipt>"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
@@ -87,38 +85,45 @@
                                     </thead>
                                     <tbody>
 
-                                    <c:forEach var="calculator" items="${receipts}">
+                                    <c:forEach var="receipt" items="${receipts}">
                                         <tr>
-                                            <th scope="row">${calculator.record.id}</th>
-                                            <td><fmt:message key="${calculator.record.receiptType.bundleKey}"
-                                                             bundle="${settings}"/></td>
-                                            <td class="text-centert">${calculator.record.cashboxId}</td>
-                                            <td><fmt:message key="${calculator.record.paymentType.bundleKey}"
-                                                             bundle="${settings}"/></td>
-                                            <td class="text-centert">${calculator.products.size()}</td>
+                                            <fmt:setBundle basename="${receipt.receiptType.bundleName}"
+                                                           var="recTypeBundle"/>
+                                            <fmt:setBundle basename="${receipt.paymentType.bundleName}"
+                                                           var="payTypeBundle"/>
+
+                                            <th scope="row">${receipt.id}</th>
+                                            <td><fmt:message key="${receipt.receiptType.bundleKey}"
+                                                             bundle="${recTypeBundle}"/></td>
+
+                                            <td class="text-centert">${receipt.cashbox.id}</td>
+                                            <td><fmt:message key="${receipt.paymentType.bundleKey}"
+                                                             bundle="${payTypeBundle}"/></td>
+
+                                            <td class="text-centert">${receipt.products.size()}</td>
                                             <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
                                                                                      maxFractionDigits="2"
                                                                                      minFractionDigits="2"
-                                                                                     value="${calculator.taxAmount}"/></td>
+                                                                                     value="${receipt.taxAmount}"/></td>
                                             <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
                                                                                      maxFractionDigits="2"
                                                                                      minFractionDigits="2"
-                                                                                     value="${calculator.totalCost}"/></td>
+                                                                                     value="${receipt.totalCost}"/></td>
                                             <td><fmt:formatDate type="both"
-                                                                value="${calculator.record.createdAt}"/></td>
+                                                                value="${receipt.createdAt}"/></td>
                                             <td>
-                                                <c:if test="${calculator.record.cancelled}">
+                                                <c:if test="${receipt.cancelled}">
                                                     <fmt:message key="${Keys.CANCELLED}" bundle="${msg}"/>
                                                 </c:if>
                                             </td>
 
                                             <td class="text-center">
-                                                <c:if test="${!calculator.record.cancelled}">
-                                                    <c:if test="${calculator.returnVisible}">
+                                                <c:if test="${!receipt.cancelled}">
+                                                    <c:if test="${receipt.returnAllowed}">
                                                         <u:can action="/return-receipt">
                                                             <button type="button" class="btn btn-link"
                                                                     onclick="var form = $('#receipt-list-form');
-                                                                            $('#rId').val(${calculator.record.id});
+                                                                            $('#rId').val(${receipt.id});
                                                                             form.attr('action', '/return-receipt');
                                                                             form.submit();">
                                                                 <fmt:message key="${Keys.RETURN}" bundle="${msg}"/>
@@ -128,7 +133,7 @@
                                                     <u:can action="/cancel-receipt">
                                                         <button type="button" class="btn btn-link"
                                                                 onclick="var form = $('#receipt-list-form');
-                                                                        $('#rId').val(${calculator.record.id});
+                                                                        $('#rId').val(${receipt.id});
                                                                         form.attr('action', '/cancel-receipt');
                                                                         form.submit();">
                                                             <fmt:message key="${Keys.CANCEL}" bundle="${msg}"/>

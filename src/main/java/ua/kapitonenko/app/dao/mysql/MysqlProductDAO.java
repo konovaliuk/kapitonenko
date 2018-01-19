@@ -5,15 +5,15 @@ import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.interfaces.ProductDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.ProductRecord;
 import ua.kapitonenko.app.dao.tables.ProductLocaleTable;
 import ua.kapitonenko.app.dao.tables.ProductsTable;
 import ua.kapitonenko.app.dao.tables.ReceiptProductsTable;
-import ua.kapitonenko.app.domain.records.Product;
 
 import java.sql.Connection;
 import java.util.List;
 
-public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
+public class MysqlProductDAO extends BaseDAO<ProductRecord> implements ProductDAO {
 	private static final Logger LOGGER = Logger.getLogger(MysqlProductDAO.class);
 	
 	private static final String UPDATE = "UPDATE " +
@@ -82,18 +82,18 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 		return super.getCountQuery() + WHERE_NOT_DELETED;
 	}
 	
-	public Product findOne(final Long id) {
+	public ProductRecord findOne(final Long id) {
 		return getRow(getSelectOneNotDeletedQuery(),
 				ps -> ps.setLong(1, id),
 				getResultSetExtractor());
 	}
 	
-	public List<Product> findAll() {
+	public List<ProductRecord> findAll() {
 		return getList(getSelectAllNotDeletedQuery(), getResultSetExtractor());
 	}
 	
 	@Override
-	protected PreparedStatementSetter getInsertStatementSetter(final Product entity) {
+	protected PreparedStatementSetter getInsertStatementSetter(final ProductRecord entity) {
 		return ps -> {
 			ps.setLong(1, entity.getUnitId());
 			ps.setBigDecimal(2, entity.getPrice());
@@ -104,7 +104,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	}
 	
 	@Override
-	protected PreparedStatementSetter getUpdateStatementSetter(final Product entity) {
+	protected PreparedStatementSetter getUpdateStatementSetter(final ProductRecord entity) {
 		return ps -> {
 			ps.setLong(1, entity.getUnitId());
 			ps.setBigDecimal(2, entity.getPrice());
@@ -116,7 +116,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	
 	
 	@Override
-	public boolean delete(final Product entity, Long userId) {
+	public boolean delete(final ProductRecord entity, Long userId) {
 		entity.setDeletedBy(userId);
 		int result = executeUpdate(DELETE, ps -> {
 			ps.setLong(1, entity.getDeletedBy());
@@ -126,9 +126,9 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	}
 	
 	@Override
-	protected ResultSetExtractor<Product> getResultSetExtractor() {
+	protected ResultSetExtractor<ProductRecord> getResultSetExtractor() {
 		return rs -> {
-			Product row = new Product();
+			ProductRecord row = new ProductRecord();
 			row.setId(rs.getLong(ProductsTable.ID));
 			row.setUnitId(rs.getLong(ProductsTable.UNIT));
 			row.setPrice(rs.getBigDecimal(ProductsTable.PRICE));
@@ -143,7 +143,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	}
 	
 	@Override
-	public List<Product> findByIdOrName(Long localeId, Long productId, String name) {
+	public List<ProductRecord> findByIdOrName(Long localeId, Long productId, String name) {
 		LOGGER.debug(localeId + " " + productId + " " + name);
 		return getList(SELECT_BY_ID_OR_NAME, ps -> {
 			ps.setString(1, Keys.PRODUCT_NAME);
@@ -155,7 +155,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	}
 	
 	@Override
-	public List<Product> findAllByReceiptId(Long receiptId) {
+	public List<ProductRecord> findAllByReceiptId(Long receiptId) {
 		return getList(SELECT_BY_RECEIPT_ID, ps -> {
 			ps.setLong(1, receiptId);
 			
@@ -163,7 +163,7 @@ public class MysqlProductDAO extends BaseDAO<Product> implements ProductDAO {
 	}
 	
 	@Override
-	public List<Product> findAllByQuery(String query, PreparedStatementSetter pss) {
+	public List<ProductRecord> findAllByQuery(String query, PreparedStatementSetter pss) {
 		return getList(getSelectAllNotDeletedQuery() + " " + query, pss, getResultSetExtractor());
 	}
 	

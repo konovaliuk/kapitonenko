@@ -1,10 +1,8 @@
-package ua.kapitonenko.app.domain.records;
-
-import ua.kapitonenko.app.domain.Model;
+package ua.kapitonenko.app.dao.records;
 
 import java.io.Serializable;
 
-public abstract class BaseEntity extends Model implements Serializable, Comparable<BaseEntity> {
+public abstract class BaseEntity implements Serializable, Comparable<BaseEntity> {
 	
 	private Long id;
 	

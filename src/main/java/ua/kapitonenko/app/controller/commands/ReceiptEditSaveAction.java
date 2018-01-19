@@ -5,8 +5,8 @@ import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
+import ua.kapitonenko.app.dao.records.PaymentType;
 import ua.kapitonenko.app.domain.Receipt;
-import ua.kapitonenko.app.domain.records.PaymentType;
 import ua.kapitonenko.app.service.ReceiptService;
 
 import java.util.List;

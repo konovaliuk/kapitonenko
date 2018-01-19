@@ -1,4 +1,4 @@
-<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.records.Product>"--%>
+<%--@elvariable id="products" type="java.util.List<ua.kapitonenko.app.domain.Product>"--%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <%@ taglib prefix="u" uri="/WEB-INF/access.tld" %>
@@ -114,17 +114,18 @@
                                                                                      value="${product.quantity}"/></td>
                                         </u:can>
 
-
+                                        <fmt:setBundle basename="${product.unit.bundleName}" var="unitBundle"/>
                                         <td class="text-center"><fmt:message key="${product.unit.bundleKey}"
-                                                                             bundle="${settings}"/></td>
+                                                                             bundle="${unitBundle}"/></td>
 
                                         <td class="text-right"><fmt:formatNumber type="number" groupingUsed="false"
                                                                                  maxFractionDigits="2"
                                                                                  minFractionDigits="2"
                                                                                  value="${product.price}"/></td>
 
+                                        <fmt:setBundle basename="${product.taxCategory.bundleName}" var="taxBundle"/>
                                         <td class="text-center"><fmt:message key="${product.taxCategory.bundleKey}"
-                                                                             bundle="${settings}"/></td>
+                                                                             bundle="${taxBundle}"/></td>
                                         <td class="text-center">
                                             <u:can action="/delete-product">
                                                 <form action="/delete-product" method="POST" role="form">

@@ -17,11 +17,12 @@
                 </ul>
             </form>
         </div>
-        <%--@elvariable id="company" type="ua.kapitonenko.app.domain.records.Company"--%>
+        <%--@elvariable id="company" type="ua.kapitonenko.app.dao.records.Company"--%>
         <c:if test="${not empty user.id}">
             <p class="company pull-right mb-0">
-                <fmt:message key="${company.bundleKeyName}" bundle="${settings}"/>&nbsp;
-                <fmt:message key="${company.bundleKeyAddress}" bundle="${settings}"/>&nbsp;
+                <fmt:setBundle basename="${company.bundleName}" var="comBundle"/>
+                <fmt:message key="${company.bundleKeyName}" bundle="${comBundle}"/>&nbsp;
+                <fmt:message key="${company.bundleKeyAddress}" bundle="${comBundle}"/>&nbsp;
                 <fmt:message key="${Keys.COMPANY_PN}" bundle="${msg}"/>&nbsp;${company.pnNumber}
             </p>
         </c:if>

@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.controller.commands;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,9 +14,10 @@ import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
 import ua.kapitonenko.app.controller.helpers.*;
-import ua.kapitonenko.app.domain.records.User;
+import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.fixtures.AnswerWithSelf;
 import ua.kapitonenko.app.fixtures.TestServiceFactory;
+import ua.kapitonenko.app.service.ServiceFactory;
 import ua.kapitonenko.app.service.UserService;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -47,10 +49,17 @@ public class LoginActionTest {
 	
 	private ValidationBuilder validator;
 	
+	private static ServiceFactory appServiceFactory;
 	
 	@BeforeClass
 	public static void configApp() {
+		appServiceFactory = Application.getServiceFactory();
 		Application.setServiceFactory(TestServiceFactory.getInstance());
+	}
+	
+	@AfterClass
+	public static void resetConfig() {
+		Application.setServiceFactory(appServiceFactory);
 	}
 	
 	@Before

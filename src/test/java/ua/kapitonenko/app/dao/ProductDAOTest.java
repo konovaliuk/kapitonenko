@@ -3,7 +3,7 @@ package ua.kapitonenko.app.dao;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ProductDAO;
-import ua.kapitonenko.app.domain.records.Product;
+import ua.kapitonenko.app.dao.records.ProductRecord;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 
 import java.math.BigDecimal;
@@ -22,9 +22,9 @@ public class ProductDAOTest extends BaseDAOTest {
 		
 		ProductDAO dao = Application.getDAOFactory().getProductDAO(connection);
 		
-		List<Product> entities = Arrays.asList(
-				new Product(UNIT, new BigDecimal("9.99"), TAX_1, new BigDecimal("999.999"), USER_ID),
-				new Product(UNIT, new BigDecimal("33.33"), TAX_2, new BigDecimal("1000.000"), USER_ID)
+		List<ProductRecord> entities = Arrays.asList(
+				new ProductRecord(UNIT, new BigDecimal("9.99"), TAX_1, new BigDecimal("999.999"), USER_ID),
+				new ProductRecord(UNIT, new BigDecimal("33.33"), TAX_2, new BigDecimal("1000.000"), USER_ID)
 		);
 		
 		try {
@@ -33,11 +33,11 @@ public class ProductDAOTest extends BaseDAOTest {
 			assertThat(dao.findOne(entities.get(0).getId()), is(equalTo(entities.get(0))));
 			assertThat(dao.insert(entities.get(1)), is(true));
 			
-			List<Product> list = dao.findAll();
+			List<ProductRecord> list = dao.findAll();
 			assertThat(list.size(), is(greaterThanOrEqualTo(entities.size())));
 			assertThat(list, hasItems(entities.get(0), entities.get(1)));
 			
-			Product updated = entities.get(0);
+			ProductRecord updated = entities.get(0);
 			final BigDecimal PRICE = new BigDecimal("0.00");
 			updated.setPrice(PRICE);
 			assertThat(dao.update(updated), is(true));

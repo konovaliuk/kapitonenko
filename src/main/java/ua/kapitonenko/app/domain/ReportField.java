@@ -1,67 +1,23 @@
 package ua.kapitonenko.app.domain;
 
-import org.apache.commons.lang3.StringUtils;
-import ua.kapitonenko.app.config.Application;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ReportField extends Model implements Serializable {
-	private String name;
-	private String bundle = Application.Params.MESSAGE_BUNDLE.getValue();
-	private int fractionalDigits;
-	private BigDecimal salesValue;
-	private BigDecimal refundsValue;
-	private boolean showInList;
+public interface ReportField extends Model {
+	String getBundle();
 	
-	public ReportField() {
-	}
+	String getName();
 	
-	public ReportField(boolean showInList, String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
-		this.name = name;
-		this.salesValue = salesValue;
-		this.refundsValue = refundsValue;
-		this.fractionalDigits = fractionalDigits;
-		this.showInList = showInList;
-		
-		if (!StringUtils.isEmpty(bundle)) {
-			this.bundle = bundle;
-		}
-	}
+	void setName(String name);
 	
-	public String getBundle() {
-		return bundle;
-	}
+	BigDecimal getSalesValue();
 	
-	public String getName() {
-		return name;
-	}
+	void setSalesValue(BigDecimal salesValue);
 	
-	public void setName(String name) {
-		this.name = name;
-	}
+	BigDecimal getRefundsValue();
 	
-	public BigDecimal getSalesValue() {
-		return salesValue;
-	}
+	void setRefundsValue(BigDecimal refundsValue);
 	
-	public void setSalesValue(BigDecimal salesValue) {
-		this.salesValue = salesValue;
-	}
+	int getFractionalDigits();
 	
-	public BigDecimal getRefundsValue() {
-		return refundsValue;
-	}
-	
-	public void setRefundsValue(BigDecimal refundsValue) {
-		this.refundsValue = refundsValue;
-	}
-	
-	public int getFractionalDigits() {
-		return fractionalDigits;
-	}
-	
-	public boolean isShowInList() {
-		return showInList;
-	}
+	boolean isShowInList();
 }

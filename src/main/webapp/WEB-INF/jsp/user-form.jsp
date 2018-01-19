@@ -1,4 +1,4 @@
-<%--@elvariable id="user" type="ua.kapitonenko.app.domain.records.User"--%>
+<%--@elvariable id="user" type="ua.kapitonenko.app.dao.records.User"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
@@ -44,16 +44,17 @@
                                        placeholder="<fmt:message key="${Keys.CONFIRM_PASS}" bundle="${msg}"/> ..."/>
                             </div>
 
-                            <%--@elvariable id="roleList" type="java.util.List<ua.kapitonenko.app.domain.records.UserRole>"--%>
+                            <%--@elvariable id="roleList" type="java.util.List<ua.kapitonenko.app.dao.records.UserRole>"--%>
                             <c:if test="${not empty roleList}">
                                 <div class="form-group option-list">
                                     <c:forEach items="${roleList}" var="option">
                                         <div class="form-check">
                                             <label class="form-check-label">
+                                                <fmt:setBundle basename="${option.bundleName}" var="custom"/>
                                                 <input class="form-check-input" type="radio"
                                                        name="${Keys.ROLE}"
                                                        value="${option.id}" ${user.userRoleId.equals(option.id) ? "checked" : ""}/>
-                                                <fmt:message key="${option.bundleKey}" bundle="${settings}"/>
+                                                <fmt:message key="${option.bundleKey}" bundle="${custom}"/>
                                             </label>
                                         </div>
                                     </c:forEach>

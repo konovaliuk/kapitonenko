@@ -2,9 +2,9 @@ package ua.kapitonenko.app.dao.mysql;
 
 import ua.kapitonenko.app.dao.interfaces.UnitDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
+import ua.kapitonenko.app.dao.records.Unit;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.dao.tables.UnitsTable;
-import ua.kapitonenko.app.domain.records.Unit;
 
 import java.sql.Connection;
 

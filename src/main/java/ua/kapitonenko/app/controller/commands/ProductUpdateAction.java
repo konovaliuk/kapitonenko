@@ -6,7 +6,7 @@ import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.domain.records.Product;
+import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.service.ProductService;
 

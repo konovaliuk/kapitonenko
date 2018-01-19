@@ -3,7 +3,7 @@ package ua.kapitonenko.app.dao;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
-import ua.kapitonenko.app.domain.records.ZReport;
+import ua.kapitonenko.app.dao.records.ZReport;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 
 import java.math.BigDecimal;

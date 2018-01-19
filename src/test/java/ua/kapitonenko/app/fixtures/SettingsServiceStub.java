@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.fixtures;
 
 import ua.kapitonenko.app.dao.interfaces.DAOFactory;
-import ua.kapitonenko.app.domain.records.*;
+import ua.kapitonenko.app.dao.records.*;
 import ua.kapitonenko.app.service.SettingsService;
 
 import java.util.Arrays;
@@ -10,40 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SettingsServiceStub implements SettingsService {
-	public static final int TAX_CAT_COUNT = 3;
-	
-	@Override
-	public void clearCache() {
-	
-	}
-	
-	@Override
-	public List<UserRole> getRoleList() {
-		return null;
-	}
-
-	
-	@Override
-	public List<TaxCategory> getTaxCatList() {
-		return Arrays.asList(new TaxCategory(), new TaxCategory(), new TaxCategory());
-	}
-	
-	
-	@Override
-	public List<Unit> getUnitList() {
-		return null;
-	}
-	
-	@Override
-	public Cashbox findCashbox(Long id) {
-		return null;
-	}
-	
-	
-	@Override
-	public List<LocaleRecord> getLocaleList() {
-		return null;
-	}
 	
 	@Override
 	public List<String> getSupportedLanguages() {
@@ -56,6 +22,37 @@ public class SettingsServiceStub implements SettingsService {
 		map.put("en", new LocaleRecord(1L, "en_US"));
 		map.put("uk", new LocaleRecord(2L, "uk_UA"));
 		return map;
+	}
+	
+	@Override
+	public List<TaxCategory> getTaxCatList() {
+		return Arrays.asList(new TaxCategory(), new TaxCategory(), new TaxCategory());
+	}
+	
+	@Override
+	public void clearCache() {
+	
+	}
+	
+	@Override
+	public List<UserRole> getRoleList() {
+		return null;
+	}
+	
+	@Override
+	public List<Unit> getUnitList() {
+		return null;
+	}
+	
+	@Override
+	public Cashbox findCashbox(Long id) {
+		return new Cashbox();
+	}
+	
+	
+	@Override
+	public List<LocaleRecord> getLocaleList() {
+		return Arrays.asList(new LocaleRecord(), new LocaleRecord());
 	}
 	
 	@Override

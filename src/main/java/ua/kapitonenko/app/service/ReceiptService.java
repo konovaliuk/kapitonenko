@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ReceiptService extends Service {
 	
-	void setServiceFactory(ServiceFactory serviceFactory);
-	
 	boolean update(Receipt receipt);
 	
 	boolean create(Receipt receipt);
@@ -23,4 +21,6 @@ public interface ReceiptService extends Service {
 	boolean cancel(Long receiptId);
 	
 	long getCount();
+	
+	boolean createReturn(Receipt receipt);
 }

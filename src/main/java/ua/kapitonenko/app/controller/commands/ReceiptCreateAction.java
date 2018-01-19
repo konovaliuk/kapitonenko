@@ -9,10 +9,9 @@ import ua.kapitonenko.app.config.keys.Pages;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
+import ua.kapitonenko.app.dao.records.Cashbox;
+import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.domain.Receipt;
-import ua.kapitonenko.app.domain.records.Cashbox;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
-import ua.kapitonenko.app.domain.records.User;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
@@ -89,16 +88,14 @@ public class ReceiptCreateAction implements ActionCommand {
 			LOGGER.debug("new receipt created");
 			Cashbox cashbox = (Cashbox) request.getSession().get(Keys.CASHBOX);
 			User user = request.getSession().getUser();
-			ReceiptRecord record = new ReceiptRecord(null,
-					                                        cashbox.getId(),
-					                                        Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue(),
-					                                        Application.Ids.RECEIPT_TYPE_FISCAL.getValue(),
-					                                        true, user.getId());
 			
-			receipt = new Receipt(record);
-			receipt.setCategories(settingsService.getTaxCatList());
+			receipt = Application.getModelFactory().createReceipt(cashbox.getId(),
+					Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue(),
+					Application.Ids.RECEIPT_TYPE_FISCAL.getValue(),
+					true, user.getId());
 			
 			receiptService.create(receipt);
+			
 			request.getSession().set(Keys.RECEIPT, receipt);
 			request.getSession().set(Keys.PAYMENT_TYPES, settingsService.getPaymentTypes());
 		}

@@ -1,5 +1,6 @@
 package ua.kapitonenko.app.service;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,19 +9,21 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
+import ua.kapitonenko.app.dao.records.ProductRecord;
+import ua.kapitonenko.app.dao.records.ReceiptRecord;
+import ua.kapitonenko.app.domain.ModelFactory;
 import ua.kapitonenko.app.domain.Receipt;
-import ua.kapitonenko.app.domain.records.Product;
-import ua.kapitonenko.app.domain.records.ReceiptProduct;
-import ua.kapitonenko.app.domain.records.ReceiptRecord;
+import ua.kapitonenko.app.fixtures.ModelUtils;
+import ua.kapitonenko.app.fixtures.ReceiptStub;
+import ua.kapitonenko.app.fixtures.TestModelFactory;
+import ua.kapitonenko.app.fixtures.TestServiceFactory;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -31,12 +34,10 @@ public class ReceiptServiceTest {
 	
 	private ReceiptService receiptService;
 	
-	@Mock
 	private Receipt receipt;
-	@Mock
-	private ReceiptRecord record;
-	@Mock
-	private ReceiptRecord inserted;
+	private ServiceFactory appServiceFactory;
+	private ModelFactory appModelFactory;
+	
 	@Mock
 	private DAOFactory daoFactory;
 	@Mock
@@ -46,59 +47,76 @@ public class ReceiptServiceTest {
 	@Mock
 	private ReceiptDAO receiptDAO;
 	@Mock
+	private ReceiptProductDAO receiptProductDAO;
+	@Mock
+	private ProductDAO productDAO;
+	@Mock
 	private CashboxDAO cashboxDAO;
 	@Mock
 	private PaymentTypeDAO paymentTypeDAO;
 	@Mock
 	private ReceiptTypeDAO receiptTypeDAO;
 	@Mock
-	private ReceiptProductDAO receiptProductDAO;
+	private ReceiptRecord record;
 	@Mock
-	private UserDAO userDAO;
-	@Mock
-	private ProductService productService;
-	@Mock
-	private SettingsService settingsService;
-	@Mock
-	private ServiceFactory serviceFactory;
-	@Mock
-	private ProductDAO productDAO;
+	private ReceiptRecord inserted;
+	
 	
 	@Before
 	public void setUp() throws Exception {
+		receipt = new ReceiptStub(record);
+		
 		receiptService = Application.getServiceFactory().getReceiptService();
 		receiptService.setDaoFactory(daoFactory);
-		receiptService.setServiceFactory(serviceFactory);
-		when(serviceFactory.getProductService()).thenReturn(productService);
-		when(serviceFactory.getSettingsService()).thenReturn(settingsService);
 		when(daoFactory.getConnection()).thenReturn(wrapper);
 		when(wrapper.open()).thenReturn(connection);
+		
 		when(daoFactory.getReceiptDAO(connection)).thenReturn(receiptDAO);
-		when(daoFactory.getCashboxDao(connection)).thenReturn(cashboxDAO);
-		when(daoFactory.getUserDAO(connection)).thenReturn(userDAO);
 		when(daoFactory.getReceiptProductDAO(connection)).thenReturn(receiptProductDAO);
-		when(daoFactory.getPaymentTypeDAO(connection)).thenReturn(paymentTypeDAO);
-		when(daoFactory.getReceiptTypeDAO(connection)).thenReturn(receiptTypeDAO);
 		when(daoFactory.getProductDAO(connection)).thenReturn(productDAO);
-		when(receipt.getRecord()).thenReturn(record);
+		when(daoFactory.getCashboxDao(connection)).thenReturn(cashboxDAO);
+		when(daoFactory.getReceiptTypeDAO(connection)).thenReturn(receiptTypeDAO);
+		when(daoFactory.getPaymentTypeDAO(connection)).thenReturn(paymentTypeDAO);
+		
+		appServiceFactory = Application.getServiceFactory();
+		Application.setServiceFactory(TestServiceFactory.getInstance());
+		appModelFactory = Application.getModelFactory();
+		Application.setModelFactory(new TestModelFactory());
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		Application.setServiceFactory(appServiceFactory);
+		Application.setModelFactory(appModelFactory);
 	}
 	
 	@Test
-	public void createShouldInsertReceiptRecordAndUpdateAllRefferences() throws Exception {
-		final Long ID = 13L;
+	public void updateShouldUpdateRecordInsertProductsAndUpdateStock() throws Exception {
+		Long recordId = 14L;
+		int prodSize = 5;
+		when(inserted.getId()).thenReturn(recordId);
+		when(record.getId()).thenReturn(recordId);
+		when(receiptDAO.update(record)).thenReturn(true);
+		when(receiptDAO.findOne(recordId)).thenReturn(inserted);
+		when(receiptProductDAO.findAllByReceiptId(recordId)).thenReturn(Collections.emptyList());
+		when(productDAO.findOne(anyLong())).thenReturn(mock(ProductRecord.class));
+		receipt.setProducts(ModelUtils.generateProductList(prodSize));
+		
+		receiptService.update(receipt);
+		verify(receiptDAO).update(record);
+		verify(receiptProductDAO, times(prodSize)).insert(any());
+		verify(productDAO, times(prodSize)).update(any());
+	}
+	
+	@Test
+	public void createShouldInsertReceiptRecordAndUpdateRecord() throws Exception {
+		when(inserted.getId()).thenReturn(87L);
 		when(receiptDAO.insert(record)).thenReturn(true);
 		when(receiptDAO.findOne(anyLong())).thenReturn(inserted);
-		when(record.getId()).thenReturn(ID);
 		
 		boolean result = receiptService.create(receipt);
-		
-		verify(receiptDAO).insert(record);
-		verify(receiptDAO).findOne(ID);
-		verifyReferencesSet(inserted);
-		verify(receipt).setRecord(inserted);
-		verify(wrapper).close();
-		
 		assertThat(result, is(true));
+		assertThat(receipt.getRecord().getId(), is(not(equalTo(record.getId()))));
 	}
 	
 	@Test
@@ -106,34 +124,16 @@ public class ReceiptServiceTest {
 		when(receiptDAO.insert(record)).thenReturn(false);
 		
 		boolean result = receiptService.create(receipt);
-		
-		verify(receiptDAO).insert(record);
-		verify(receiptDAO, never()).findOne(anyLong());
-		verify(wrapper).close();
-		
 		assertThat(result, is(false));
 	}
 	
 	@Test
-	public void getCountShouldReturnNumberOfRecords() {
-		long expected = 477L;
-		when(receiptDAO.getCount()).thenReturn(expected);
-		
-		assertThat(receiptService.getCount(), is(equalTo(expected)));
-	}
-	
-	@Test
-	public void findOneByRecordIdShouldReturnReceiptWithAllDependencies() {
-		Long id = 963L;
-		when(receiptDAO.findOne(id)).thenReturn(record);
-		when(record.getId()).thenReturn(id);
-		
-		Receipt receipt = receiptService.findOne(id);
-		verifyReferencesSet(record);
-		verify(productService).findAllByReceiptId(id);
-		verify(settingsService).getTaxCatList();
-		
-		assertThat(receipt.getRecord().getId(), is(equalTo(id)));
+	public void createReturnShouldCopyRecordSetReturnTypeAndInsert() throws Exception {
+		boolean result = receiptService.createReturn(receipt);
+		ReceiptRecord returnRecord = receipt.getRecord();
+		assertThat(result, is(false));
+		assertThat(returnRecord.getReceiptTypeId(), is(equalTo(Application.Ids.RECEIPT_TYPE_RETURN.getValue())));
+		verify(receiptDAO).insert(returnRecord);
 	}
 	
 	@Test
@@ -210,66 +210,29 @@ public class ReceiptServiceTest {
 		verifyListRefsSet(listSize, result);
 	}
 	
-	@Test
-	public void cancelShouldUpdateRecordStatusAndReturnTrueOnExistingRecord() {
-		Long receiptId = 88L;
-		when(receiptDAO.findOne(receiptId)).thenReturn(record);
-		when(record.getId()).thenReturn(receiptId);
-		when(receiptDAO.update(record)).thenReturn(true);
-		
-		
-		boolean result = receiptService.cancel(receiptId);
-		verify(record).setCancelled(true);
-		verify(receiptDAO).update(record);
-		assertThat(result, is(true));
-	}
-	
-	@Test
-	public void updateShouldUpdateRecordAndAllRefsAndReturnTrue() {
-		Long receiptId = 1000L;
-		List<Product> products = Arrays.asList(new Product(), new Product());
-		when(receiptDAO.findOne(receiptId)).thenReturn(record);
-		when(record.getId()).thenReturn(receiptId);
-		when(receiptDAO.update(record)).thenReturn(true);
-		when(productDAO.findOne(anyLong())).thenReturn(null);
-		when(receipt.getProducts()).thenReturn(products);
-		
-		boolean result = receiptService.update(receipt);
-		verify(receiptDAO).update(record);
-		verify(receiptProductDAO, times(2)).insert(any(ReceiptProduct.class));
-		assertThat(result, is(true));
-	}
-	
-	@Test
-	public void updateShouldUpdateQuantityInStock() {
-		Long receiptId = 1L;
-		Product product = mock(Product.class);
-		List<Product> products = Arrays.asList(product, product);
-		when(product.getQuantity()).thenReturn(BigDecimal.ONE);
-		when(receiptDAO.findOne(receiptId)).thenReturn(record);
-		when(record.getId()).thenReturn(receiptId);
-		when(receiptDAO.update(record)).thenReturn(true);
-		when(productDAO.findOne(anyLong())).thenReturn(product);
-		when(receipt.getProducts()).thenReturn(products);
-		
-		boolean result = receiptService.update(receipt);
-		verify(receiptDAO).update(record);
-		verify(productDAO, times(2)).update(product);
-		assertThat(result, is(true));
-	}
-	
 	private void verifyListRefsSet(int listSize, List<Receipt> result) {
-		verify(productService, times(listSize)).findAllByReceiptId(anyLong());
-		verify(settingsService, times(listSize)).getTaxCatList();
+		verify(cashboxDAO, times(listSize)).findOne(anyLong());
+		verify(paymentTypeDAO, times(listSize)).findOne(anyLong());
+		verify(receiptTypeDAO, times(listSize)).findOne(anyLong());
 		assertThat(result.size(), is(equalTo(listSize)));
 	}
 	
-	private void verifyReferencesSet(ReceiptRecord record) {
-		verify(record).setCashbox(any());
-		verify(record).setPaymentType(any());
-		verify(record).setReceiptType(any());
-		verify(record).setUserCreateBy(any());
-		verify(record).setProducts(any());
+	@Test
+	public void findOneByRecordIdShouldReturnReceiptWithRecore() {
+		Long id = 963L;
+		when(receiptDAO.findOne(id)).thenReturn(record);
+		when(record.getId()).thenReturn(id);
+		
+		Receipt receipt = receiptService.findOne(id);
+		
+		assertThat(receipt.getRecord().getId(), is(equalTo(id)));
 	}
 	
+	@Test
+	public void getCountShouldReturnNumberOfRecords() {
+		long expected = 477L;
+		when(receiptDAO.getCount()).thenReturn(expected);
+		
+		assertThat(receiptService.getCount(), is(equalTo(expected)));
+	}
 }

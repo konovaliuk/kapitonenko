@@ -1,13 +1,13 @@
 package ua.kapitonenko.app.service;
 
-import ua.kapitonenko.app.domain.records.*;
+import ua.kapitonenko.app.dao.records.*;
 
 import java.util.List;
 import java.util.Map;
 
 public interface SettingsService extends Service {
 	
-	public void clearCache();
+	void clearCache();
 	
 	List<UserRole> getRoleList();
 	

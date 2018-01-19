@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.domain.records;
+package ua.kapitonenko.app.dao.records;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -11,12 +11,12 @@ public class ProductLocale extends BaseEntity {
 	private String propertyValue;
 	
 	private LocaleRecord locale;
-	private Product product;
+	private ProductRecord product;
 	
 	public ProductLocale() {
 	}
 	
-	public ProductLocale(Product product, LocaleRecord locale, String propertyName, String propertyValue) {
+	public ProductLocale(ProductRecord product, LocaleRecord locale, String propertyName, String propertyValue) {
 		this.propertyName = propertyName;
 		this.propertyValue = propertyValue;
 		setLocale(locale);
@@ -73,11 +73,11 @@ public class ProductLocale extends BaseEntity {
 		}
 	}
 	
-	public Product getProduct() {
+	public ProductRecord getProduct() {
 		return product;
 	}
 	
-	public void setProduct(Product product) {
+	public void setProduct(ProductRecord product) {
 		this.product = product;
 		if (product != null && product.getId() != null){
 			productId = product.getId();

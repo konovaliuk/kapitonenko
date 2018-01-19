@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.interfaces.ProductLocaleDAO;
-import ua.kapitonenko.app.domain.records.ProductLocale;
+import ua.kapitonenko.app.dao.records.ProductLocale;
 import ua.kapitonenko.app.fixtures.BaseDAOTest;
 import ua.kapitonenko.app.fixtures.TestConnection;
 
