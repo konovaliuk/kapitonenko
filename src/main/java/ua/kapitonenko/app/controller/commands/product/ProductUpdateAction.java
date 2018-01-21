@@ -1,8 +1,10 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.product;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -12,17 +14,18 @@ import ua.kapitonenko.app.service.ProductService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 
 public class ProductUpdateAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ProductUpdateAction.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (!request.isPost()) {
-			throw new MethodNotAllowedException("POST");
+			throw new MethodNotAllowedException();
 		}
 		
 		ValidationBuilder validator = request.getValidator();
@@ -41,11 +44,14 @@ public class ProductUpdateAction implements ActionCommand {
 		
 		if (validator.isValid()) {
 			Product product = productService.findOne(productId);
+			BigDecimal oldQuantity = product.getQuantity();
 			product.setQuantity(quantityValue);
 			productService.update(product);
+			logger.info("Updated quantity of product id={} from {} to {}", productId, oldQuantity, quantityValue);
 			
 		} else {
 			request.getSession().setFlash(request.getAlert().getMessageType(), request.getAlert().joinMessages());
+			logger.warn("Product update validation error: message='{}', {}", request.getAlert().joinMessages(), request.paramsToString());
 		}
 		
 		return request.goBack();

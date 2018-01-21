@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.taglib;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.records.User;
@@ -10,7 +9,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 public class AccessTag extends TagSupport {
-	private static final Logger LOGGER = Logger.getLogger(AccessTag.class);
 	
 	private String action;
 	

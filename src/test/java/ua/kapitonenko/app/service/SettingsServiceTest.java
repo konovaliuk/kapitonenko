@@ -96,7 +96,7 @@ public class SettingsServiceTest {
 	@Test
 	public void findCashbox() throws Exception {
 		when(cashboxDAO.findOne(anyLong())).thenReturn(mock(Cashbox.class));
-		assertThat(settingsService.findCashbox(ModelUtils.anyId()), is(notNullValue()));
+		assertThat(settingsService.findCashbox(ModelUtils.anyLong()), is(notNullValue()));
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class SettingsServiceTest {
 		int listSize = 9;
 		List<LocaleRecord> list = Stream.generate(() -> {
 			LocaleRecord record = mock(LocaleRecord.class);
-			when(record.getLanguage()).thenReturn(ModelUtils.anyId().toString());
+			when(record.getLanguage()).thenReturn(ModelUtils.anyLong().toString());
 			return record;
 		}).limit(listSize).collect(Collectors.toList());
 		
@@ -125,7 +125,7 @@ public class SettingsServiceTest {
 	@Test
 	public void findCompany() throws Exception {
 		when(companyDAO.findOne(anyLong())).thenReturn(mock(Company.class));
-		assertThat(settingsService.findCompany(ModelUtils.anyId()), is(notNullValue()));
+		assertThat(settingsService.findCompany(ModelUtils.anyLong()), is(notNullValue()));
 	}
 	
 	@Test

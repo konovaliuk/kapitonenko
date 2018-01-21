@@ -1,18 +1,19 @@
 package ua.kapitonenko.app.dao.connection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.exceptions.DAOException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DataSourceConnectionWrapper implements ConnectionWrapper {
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
-	private static final Logger LOGGER = Logger.getLogger(DataSourceConnectionWrapper.class);
 	private static final String RES_NAME = "java:/comp/env/jdbc/cashregister";
 	private static DataSource dataSource;
 	
@@ -34,7 +35,6 @@ public class DataSourceConnectionWrapper implements ConnectionWrapper {
 		if (connection == null) {
 			try {
 				connection = dataSource.getConnection();
-				LOGGER.debug(connection);
 			} catch (SQLException e) {
 				throw new DAOException(e);
 			}

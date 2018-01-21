@@ -1,9 +1,9 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.report;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.domain.Report;
@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 public class ReportViewAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ReportViewAction.class);
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
@@ -21,7 +20,7 @@ public class ReportViewAction implements ActionCommand {
 		Report report = (Report) request.getSession().get(Keys.REPORT);
 		
 		if (report == null || !report.getUserId().equals(request.getSession().getUserId())) {
-			throw new NotFoundException("");
+			throw new NotFoundException();
 		}
 		
 		if (request.isPost()) {

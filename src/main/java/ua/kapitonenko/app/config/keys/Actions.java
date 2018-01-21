@@ -1,7 +1,6 @@
 package ua.kapitonenko.app.config.keys;
 
 public class Actions {
-	
 	public static final String LOGIN = "/login";
 	public static final String SIGNUP = "/signup";
 	public static final String LOGOUT = "/logout";

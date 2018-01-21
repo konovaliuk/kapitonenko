@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.dao.mysql;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.dao.interfaces.PaymentTypeDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
 import ua.kapitonenko.app.dao.records.PaymentType;
@@ -10,7 +9,6 @@ import ua.kapitonenko.app.dao.tables.PaymentTypesTable;
 import java.sql.Connection;
 
 public class MysqlPaymentTypeDAO extends BaseLocalizedDAO<PaymentType> implements PaymentTypeDAO {
-	private static final Logger LOGGER = Logger.getLogger(MysqlPaymentTypeDAO.class);
 	
 	MysqlPaymentTypeDAO(Connection connection) {
 		super(connection);

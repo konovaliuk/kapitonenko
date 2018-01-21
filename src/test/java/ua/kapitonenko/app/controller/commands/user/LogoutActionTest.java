@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.user;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

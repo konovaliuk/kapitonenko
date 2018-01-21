@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 
 <footer class="footer">
     <div class="container">

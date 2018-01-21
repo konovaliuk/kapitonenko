@@ -1,11 +1,11 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.receipt;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.PaginationHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
@@ -19,7 +19,6 @@ import java.util.List;
 
 public class ReceiptListAction implements ActionCommand {
 	
-	private static final Logger LOGGER = Logger.getLogger(ReceiptListAction.class);
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
 	@Override
@@ -33,7 +32,6 @@ public class ReceiptListAction implements ActionCommand {
 			list = receiptService.getReceiptList(pager.getOffset(), pager.getRecordsPerPage());
 		} else {
 			Long cashboxId = ((Cashbox) request.getSession().get(Keys.CASHBOX)).getId();
-			LOGGER.debug(cashboxId);
 			list = receiptService.getReceiptList(cashboxId);
 		}
 		

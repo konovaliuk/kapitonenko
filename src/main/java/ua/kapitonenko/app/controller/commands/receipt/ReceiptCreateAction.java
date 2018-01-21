@@ -1,11 +1,12 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.receipt;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -18,11 +19,11 @@ import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.stream.Stream;
 
 public class ReceiptCreateAction implements ActionCommand {
-	
-	private static final Logger LOGGER = Logger.getLogger(ReceiptCreateAction.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
@@ -52,7 +53,6 @@ public class ReceiptCreateAction implements ActionCommand {
 					return request.redirect(Actions.RECEIPT_CREATE);
 			}
 		}
-		
 		return request.forward(Pages.RECEIPT_FORM, Actions.RECEIPT_CREATE);
 	}
 	
@@ -68,9 +68,7 @@ public class ReceiptCreateAction implements ActionCommand {
 	private String getCommand(RequestWrapper request) {
 		String[] buttons = request.getParams().get(Keys.BUTTON);
 		if (buttons != null) {
-			String command = Stream.of(buttons).filter(StringUtils::isNotEmpty).findFirst().orElse("");
-			LOGGER.debug("command: " + command);
-			return command;
+			return Stream.of(buttons).filter(StringUtils::isNotEmpty).findFirst().orElse("");
 		}
 		return "";
 	}
@@ -82,10 +80,9 @@ public class ReceiptCreateAction implements ActionCommand {
 		
 		if (receipt == null) {
 			if (!request.isPost()) {
-				throw new MethodNotAllowedException("");
+				throw new MethodNotAllowedException();
 			}
-			
-			LOGGER.debug("new receipt created");
+
 			Cashbox cashbox = (Cashbox) request.getSession().get(Keys.CASHBOX);
 			User user = request.getSession().getUser();
 			
@@ -94,10 +91,14 @@ public class ReceiptCreateAction implements ActionCommand {
 					Application.Ids.RECEIPT_TYPE_FISCAL.getValue(),
 					true, user.getId());
 			
-			receiptService.create(receipt);
+			boolean created = receiptService.create(receipt);
 			
+			if (created) {
+				logger.info("New receipt created: {}", receipt);
+			}
 			request.getSession().set(Keys.RECEIPT, receipt);
 			request.getSession().set(Keys.PAYMENT_TYPES, settingsService.getPaymentTypes());
+			request.setAttribute(Keys.NEW_PRODUCT, Application.getModelFactory().createProduct());
 		}
 		
 		receipt.setLocalId(localeId);

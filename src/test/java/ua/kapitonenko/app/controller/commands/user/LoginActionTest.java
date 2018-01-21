@@ -1,24 +1,14 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.user;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
-import ua.kapitonenko.app.controller.helpers.*;
 import ua.kapitonenko.app.dao.records.User;
-import ua.kapitonenko.app.fixtures.AnswerWithSelf;
-import ua.kapitonenko.app.fixtures.TestServiceFactory;
-import ua.kapitonenko.app.service.ServiceFactory;
-import ua.kapitonenko.app.service.UserService;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -29,49 +19,10 @@ import static org.mockito.Mockito.*;
 import static ua.kapitonenko.app.config.keys.Keys.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LoginActionTest {
-	
-	@Mock
-	private RequestWrapper requestWrapper;
-	@Mock
-	private SessionWrapper sessionWrapper;
-	@Mock
-	private UserService userService;
-	@Mock
-	private AlertContainer alertContainer;
-	@Mock
-	private MessageProvider messageProvider;
-	@Mock
-	private User user;
+public class LoginActionTest extends UserActionTest {
 	
 	@InjectMocks
 	private LoginAction action = new LoginAction();
-	
-	private ValidationBuilder validator;
-	
-	private static ServiceFactory appServiceFactory;
-	
-	@BeforeClass
-	public static void configApp() {
-		appServiceFactory = Application.getServiceFactory();
-		Application.setServiceFactory(TestServiceFactory.getInstance());
-	}
-	
-	@AfterClass
-	public static void resetConfig() {
-		Application.setServiceFactory(appServiceFactory);
-	}
-	
-	@Before
-	public void setUp() throws Exception {
-		validator = mock(ValidationBuilder.class, new AnswerWithSelf(ValidationBuilder.class));
-		when(requestWrapper.getValidator()).thenReturn(validator);
-		when(requestWrapper.getSession()).thenReturn(sessionWrapper);
-		when(requestWrapper.getAlert()).thenReturn(alertContainer);
-		when(requestWrapper.getMessageProvider()).thenReturn(messageProvider);
-		
-		when(sessionWrapper.userIsGuest()).thenReturn(true);
-	}
 	
 	@Test
 	public void shouldRedirectHomeIfUserLoggedIn() throws Exception {

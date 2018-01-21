@@ -1,7 +1,6 @@
 package ua.kapitonenko.app.controller.helpers;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Keys;
 
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AlertContainer implements Serializable {
-	private static final Logger LOGGER = Logger.getLogger(AlertContainer.class);
 	
 	private String messageType;
 	private List<String> messageList = new ArrayList<>();

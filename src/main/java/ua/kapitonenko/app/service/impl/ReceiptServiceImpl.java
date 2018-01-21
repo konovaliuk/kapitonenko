@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.service.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiptServiceImpl extends BaseService implements ReceiptService {
-	private static final Logger LOGGER = Logger.getLogger(ReceiptServiceImpl.class);
 	
 	ReceiptServiceImpl() {
 	}
@@ -35,6 +33,7 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 			if (receiptDAO.insert(record)) {
 				ReceiptRecord created = receiptDAO.findOne(record.getId());
 				receipt.setRecord(created);
+				setReferences(receipt, created, connection.open());
 				return true;
 			}
 			return false;
@@ -77,7 +76,6 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 			ReceiptDAO receiptDAO = getDaoFactory().getReceiptDAO(connection.open());
 			List<ReceiptRecord> list = receiptDAO.findAll(offset, limit);
 			fillList(receiptList, list, connection.open());
-			LOGGER.debug(receiptList);
 			return receiptList;
 		}
 	}
@@ -89,7 +87,6 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 			ReceiptDAO receiptDAO = getDaoFactory().getReceiptDAO(connection.open());
 			List<ReceiptRecord> list = receiptDAO.findAllByCashboxId(cashboxId);
 			fillList(receiptList, list, connection.open());
-			LOGGER.debug(receiptList);
 			return receiptList;
 		}
 	}
@@ -101,7 +98,6 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 			ReceiptDAO receiptDAO = getDaoFactory().getReceiptDAO(connection.open());
 			List<ReceiptRecord> list = receiptDAO.findAllByZReportId(reportId, cashboxId);
 			fillList(receiptList, list, connection.open());
-			LOGGER.debug(receiptList);
 			return receiptList;
 		}
 	}
@@ -148,7 +144,6 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 	
 	private void updateReferences(ReceiptRecord record, List<Product> products,
 	                              boolean updateStock, boolean increase, Connection connection) {
-		LOGGER.debug(products);
 		ReceiptProductDAO receiptProductDAO = getDaoFactory().getReceiptProductDAO(connection);
 		boolean createRefs = receiptProductDAO
 				                     .findAllByReceiptId(record.getId())

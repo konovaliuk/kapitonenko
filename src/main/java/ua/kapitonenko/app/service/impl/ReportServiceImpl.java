@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.service.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
 import ua.kapitonenko.app.dao.records.ZReport;
@@ -12,11 +12,12 @@ import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.ReportService;
 import ua.kapitonenko.app.service.SettingsService;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReportServiceImpl extends BaseService implements ReportService {
-	private static final Logger LOGGER = Logger.getLogger(ReportServiceImpl.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	ReportServiceImpl() {
 	}
@@ -69,21 +70,25 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 	
 	@Override
 	public void create(Report report) {
-		setReferences(report);
-		
 		if (report.getType() == ReportType.Z_REPORT) {
 			createZReport(report);
 		}
+		
+		setReferences(report);
 	}
 	
 	private void setReferences(Report report) {
 		SettingsService settingsService = getServiceFactory().getSettingsService();
 		ReceiptService receiptService = getServiceFactory().getReceiptService();
 		
-		report.setCashbox(settingsService.findCashbox(report.getCashboxId()));
-		
-		List<Receipt> receipts = receiptService.getReceiptList(
-				report.getCashboxId());
+		List<Receipt> receipts;
+		if (report.getRecord() != null) {
+			report.setCashbox(settingsService.findCashbox(report.getRecord().getCashboxId()));
+			receipts = receiptService.getReceiptList(report.getRecord().getId(), report.getRecord().getCashboxId());
+		} else {
+			report.setCashbox(settingsService.findCashbox(report.getCashboxId()));
+			receipts = receiptService.getReceiptList(report.getCashboxId());
+		}
 		
 		report.initSummary(receipts, settingsService.getTaxCatList(), settingsService.getPaymentTypes());
 	}

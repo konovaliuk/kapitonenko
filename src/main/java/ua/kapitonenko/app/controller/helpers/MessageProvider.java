@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.controller.helpers;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.ResourceBundle;
 import static ua.kapitonenko.app.config.keys.Keys.*;
 
 public class MessageProvider {
-	private static final Logger LOGGER = Logger.getLogger(MessageProvider.class);
 	
 	private static final String BUNDLE_NAME = Application.Params.MESSAGE_BUNDLE.getValue();
 	private ResourceBundle resourceBundle;

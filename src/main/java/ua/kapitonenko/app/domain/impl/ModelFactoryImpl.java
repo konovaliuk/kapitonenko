@@ -20,6 +20,11 @@ public class ModelFactoryImpl implements ModelFactory {
 	}
 	
 	@Override
+	public Product createProduct() {
+		return new ProductImpl(new ProductRecord());
+	}
+	
+	@Override
 	public Product createProduct(ProductRecord record) {
 		return new ProductImpl(record);
 	}

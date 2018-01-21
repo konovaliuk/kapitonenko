@@ -127,7 +127,7 @@ public class ModelUtils {
 		return list;
 	}
 	
-	public static Long anyId() {
+	public static Long anyLong() {
 		return new Random().nextLong();
 	}
 }

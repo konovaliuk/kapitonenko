@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ModelFactory {
 	
+	Product createProduct();
+	
 	Product createProduct(ProductRecord record);
 	
 	Receipt createReceipt(ReceiptRecord record);

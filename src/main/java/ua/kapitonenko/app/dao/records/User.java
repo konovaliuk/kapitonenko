@@ -113,7 +113,6 @@ public class User extends BaseEntity {
 				       .append("id=").append(getId())
 				       .append(", userRoleId=").append(userRoleId)
 				       .append(", username=").append(username)
-				       .append(", passwordHash=").append(passwordHash)
 				       .append(", active=").append(active)
 				       .append(", createdAt=").append(createdAt)
 				       .append(", deletedAt=").append(deletedAt)

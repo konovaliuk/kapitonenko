@@ -1,10 +1,10 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.product;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.PaginationHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class ProductListAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ProductListAction.class);
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	

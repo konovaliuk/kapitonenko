@@ -1,10 +1,11 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.user;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -15,10 +16,11 @@ import ua.kapitonenko.app.service.UserService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 
 public class LoginAction implements ActionCommand {
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
-	private static final Logger LOGGER = Logger.getLogger(LoginAction.class);
 	private UserService userService = Application.getServiceFactory().getUserService();
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	
@@ -57,11 +59,17 @@ public class LoginAction implements ActionCommand {
 		request.setAttribute(Keys.CASHBOX, cashboxId);
 		
 		ValidationBuilder validator = request.getValidator();
-		return validator
-				       .required(username, Keys.USERNAME)
-				       .required(password, Keys.PASSWORD)
-				       .exists(cashboxId, () -> settingsService.findCashbox(cashboxId) != null, Keys.CASHBOX)
-				       .isValid();
+		boolean valid = validator
+				                .required(username, Keys.USERNAME)
+				                .required(password, Keys.PASSWORD)
+				                .exists(cashboxId, () -> settingsService.findCashbox(cashboxId) != null, Keys.CASHBOX)
+				                .isValid();
+		
+		if (!valid) {
+			logger.warn("Login validation error: message='{}', {}", request.getAlert().joinMessages(), request.paramsToString());
+		}
+		
+		return valid;
 	}
 	
 	private boolean login(RequestWrapper request) {
@@ -70,13 +78,14 @@ public class LoginAction implements ActionCommand {
 		if (result == null) {
 			request.getAlert().addMessage(request.getMessageProvider().getProperty(Keys.ERROR_LOGIN));
 			request.getAlert().setMessageType(Keys.ALERT_CLASS_DANGER);
+			logger.warn("User not found: {}", request.paramsToString());
 			return false;
 		}
 		
 		Cashbox cashbox = settingsService.findCashbox((Long) request.getAttribute(Keys.CASHBOX));
 		
 		request.getSession().login(result, cashbox);
-		
+		logger.info("Logging In: Cashbox={} {}", cashbox.getId(), result);
 		return true;
 	}
 }

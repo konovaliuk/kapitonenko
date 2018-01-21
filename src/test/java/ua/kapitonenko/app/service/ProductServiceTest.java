@@ -115,7 +115,7 @@ public class ProductServiceTest {
 		int limit = 2;
 		when(productDAO.findAllByQuery(anyString(), any())).thenReturn(Arrays.asList(productRecord, productRecord));
 		
-		List<Product> products = productService.getProductsList(offset, limit, ModelUtils.anyId());
+		List<Product> products = productService.getProductsList(offset, limit, ModelUtils.anyLong());
 		assertThat(products.size(), is(equalTo(limit)));
 		products.forEach(p -> ((ProductMock) p).verifyDependencies());
 		
@@ -127,7 +127,7 @@ public class ProductServiceTest {
 		int limit = 2;
 		when(productDAO.findAllByQuery(anyString(), any())).thenReturn(Collections.emptyList());
 		
-		List<Product> products = productService.getProductsList(offset, limit, ModelUtils.anyId());
+		List<Product> products = productService.getProductsList(offset, limit, ModelUtils.anyLong());
 		assertThat(products.isEmpty(), is(true));
 	}
 	
@@ -135,7 +135,7 @@ public class ProductServiceTest {
 	public void findByIdOrNameShouldReturnListOfInitializedProducts() throws Exception {
 		when(productDAO.findByIdOrName(anyLong(), anyLong(), anyString())).thenReturn(Arrays.asList(productRecord, productRecord));
 		
-		List<Product> products = productService.findByIdOrName(ModelUtils.anyId(), ModelUtils.anyId(), "");
+		List<Product> products = productService.findByIdOrName(ModelUtils.anyLong(), ModelUtils.anyLong(), "");
 		assertThat(products.size(), is(equalTo(2)));
 		products.forEach(p -> ((ProductMock) p).verifyDependencies());
 	}
@@ -144,7 +144,7 @@ public class ProductServiceTest {
 	public void findAllByReceiptIdShouldReturnListOfInitializedProducts() throws Exception {
 		when(productDAO.findAllByReceiptId(anyLong())).thenReturn(Arrays.asList(productRecord, productRecord));
 		
-		List<Product> products = productService.findAllByReceiptId(ModelUtils.anyId());
+		List<Product> products = productService.findAllByReceiptId(ModelUtils.anyLong());
 		assertThat(products.size(), is(equalTo(2)));
 		products.forEach(p -> ((ProductMock) p).verifyDependencies());
 	}

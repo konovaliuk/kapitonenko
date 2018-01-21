@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.controller.commands;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
@@ -10,7 +9,6 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 public class HomeAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
 	
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {

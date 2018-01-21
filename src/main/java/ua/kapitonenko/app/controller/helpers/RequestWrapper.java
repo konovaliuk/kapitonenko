@@ -1,20 +1,24 @@
 package ua.kapitonenko.app.controller.helpers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.lang.System.lineSeparator;
+
 public class RequestWrapper {
-	private static final Logger LOGGER = Logger.getLogger(RequestWrapper.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private HttpServletRequest request;
 	private SessionWrapper sessionWrapper;
 	private MessageProvider messageProvider;
-	private AlertContainer alert;
 	
 	public RequestWrapper(HttpServletRequest request) {
 		this.request = request;
@@ -37,7 +41,7 @@ public class RequestWrapper {
 	}
 	
 	public ResponseParams goBack() {
-		String referer = request.getHeader("referer");
+		String referer = request.getHeader(Keys.REFERER);
 		
 		if (referer == null) {
 			return goHome();
@@ -46,14 +50,11 @@ public class RequestWrapper {
 		String[] parts = referer.split("/");
 		referer = String.format("/%s", parts[3]);
 		
-		LOGGER.debug("referer: " + referer);
-		
 		return new ResponseParams(referer, true);
 	}
 	
 	public ResponseParams goHome() {
-		LOGGER.debug("go home");
-		return new ResponseParams("/", true);
+		return new ResponseParams(Actions.HOME, true);
 	}
 	
 	public boolean isPost() {
@@ -80,25 +81,17 @@ public class RequestWrapper {
 		return messageProvider;
 	}
 	
-	public void setMessageProvider(MessageProvider messageProvider) {
-		this.messageProvider = messageProvider;
-	}
-	
 	public String getUri() {
 		return request.getRequestURI();
 	}
 	
-	public String paramsToString() {
-		return request.getParameterMap().entrySet()
-				       .stream()
-				       .map(e -> e.getKey() + "=" + Arrays.toString(e.getValue()))
-				       .collect(Collectors.joining(", ", "request params: ", ""));
+	public String getUrl() {
+		return request.getRequestURL().toString();
 	}
 	
 	private void initAlert() {
-		LOGGER.debug("init alert ");
 		if (request.getAttribute(Keys.ALERT) == null) {
-			alert = new AlertContainer();
+			AlertContainer alert = new AlertContainer();
 			
 			FlashMessage flash = sessionWrapper.getFlash();
 			if (flash != null) {
@@ -121,4 +114,25 @@ public class RequestWrapper {
 	public ValidationBuilder getValidator() {
 		return new ValidationBuilder(messageProvider, getAlert());
 	}
+	
+	public String headersToString() {
+		return Collections.list(request.getHeaderNames())
+				       .stream()
+				       .map(n -> "        " + n + "=" + request.getHeader(n))
+				       .collect(Collectors.joining(lineSeparator(), "Headers:" + lineSeparator(), ""));
+	}
+	
+	public String paramsToString() {
+		return request.getParameterMap().entrySet()
+				       .stream()
+				       .map(e -> e.getKey() + "=" + Arrays.toString(e.getValue()))
+				       .collect(Collectors.joining(", ", "Params: ", ""));
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s: %s%n    %s%n    Remote address: %s%n    %s%n    %s",
+				getMethod(), request.getRequestURL(), paramsToString(), request.getRemoteAddr(), headersToString(), sessionWrapper);
+	}
+
 }

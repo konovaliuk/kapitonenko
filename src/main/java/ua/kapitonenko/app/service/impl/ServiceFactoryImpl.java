@@ -1,13 +1,10 @@
 package ua.kapitonenko.app.service.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.service.*;
 
 import java.util.HashMap;
 
 public class ServiceFactoryImpl implements ServiceFactory {
-	
-	private static final Logger LOGGER = Logger.getLogger(ServiceFactoryImpl.class);
 	
 	private static ServiceFactoryImpl instance = new ServiceFactoryImpl();
 	

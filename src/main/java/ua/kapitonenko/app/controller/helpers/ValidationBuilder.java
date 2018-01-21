@@ -4,7 +4,6 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.records.BaseEntity;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ValidationBuilder {
-	private static final Logger LOGGER = Logger.getLogger(ValidationBuilder.class);
 	
 	private boolean valid = true;
 	private boolean allValid = true;

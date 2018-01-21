@@ -1,10 +1,10 @@
 package ua.kapitonenko.app.config.keys;
 
 public class Keys {
-	
 	public static final String ALERT_CLASS_SUCCESS = "success";
 	public static final String ALERT_CLASS_DANGER = "danger";
 	public static final String ALERT_CLASS_INFO = "info";
+	public static final String ALERT = "alert";
 	public static final String FLASH = "flash";
 	
 	public static final String SIGN_UP = "button.signup";
@@ -20,7 +20,6 @@ public class Keys {
 	public static final String CREATE = "button.create";
 	public static final String PRINT = "button.print";
 	
-	
 	public static final String LOGIN_FIRST = "guide.login.first";
 	public static final String CONTACT_ADMIN = "guide.contact.admin";
 	
@@ -32,6 +31,7 @@ public class Keys {
 	public static final String ERROR_ONE_EMPTY = "error.one.empty";
 	public static final String ERROR_NOT_EQUALS = "error.not.equals";
 	public static final String ERROR_DECIMAL_FORMAT = "error.decimal.format";
+	public static final String ERROR_NOT_FOUND = "error.not.found";
 	
 	public static final String ERROR_LOGIN = "error.login";
 	public static final String ERROR_NOT_UNIQUE = "error.not.unique";
@@ -59,10 +59,10 @@ public class Keys {
 	public static final String PRODUCT_NAMES = "product.names";
 	public static final String PRODUCT_LANG_NAME = "product.lang.name";
 	public static final String PRODUCT_TAX = "product.tax";
-	public static final String PRODUCT_NEW= "product.new";
+	public static final String PRODUCT_NEW = "product.new";
 	public static final String PRODUCT_CREATE = "product.create";
 	public static final String PRODUCT_ID = "product.id";
-	
+	public static final String NEW_PRODUCT = "newProduct";
 	public static final String NEW_PRODUCT_NAME = "new.product.name";
 	public static final String NEW_PRODUCT_QUANTITY = "new.product.quantity";
 	public static final String NEW_PRODUCT_ID = "new.product.id";
@@ -83,9 +83,6 @@ public class Keys {
 	public static final String ACTION = "action";
 	public static final String LINK = "link";
 	public static final String BUTTON = "button";
-
-	public static final String ALERT = "alert";
-	
 	
 	public static final String ID = "id";
 	public static final String TYPE = "type";
@@ -113,7 +110,6 @@ public class Keys {
 	public static final String CUR_PAGE = "currentPage";
 	public static final String PAGE = "page";
 	
-	
 	public static final String ERROR_SEARCH_FAIL = "error.search.fail";
 	public static final String GUIDE_SPECIFY_REQUEST = "guide.specify.request";
 	public static final String ERROR_NOT_ENOUGH = "error.not.enough";
@@ -123,25 +119,28 @@ public class Keys {
 	public static final String REPORT_TYPES = "reportTypes";
 	public static final String REPORT_TYPE = "report.type";
 	public static final String CASHBOX_LIST = "cashboxList";
+	
 	public static final String REPORTS = "reports";
 	public static final String REPORT = "report";
 	public static final String REPORT_LIST = "report.list";
 	public static final String REPORT_NEW = "report.new";
-	
 	public static final String REPORT_CASHBOX = "report.cashbox";
 	public static final String SALES = "sales";
 	public static final String REFUNDS = "refunds";
-	
 	public static final String NO_RECEIPTS = "receipts.number";
 	public static final String NO_CANCELLED = "cancelled.number";
 	public static final String TURNOVER_BY_TAX_CAT = "turnover.tax";
 	public static final String TOTAL_TURNOVER = "total.turnover";
 	public static final String TAX_BY_TAX_CAT = "tax.tax";
-	
 	public static final String DEPOSIT = "deposit";
 	public static final String WITHDRAWAL = "withdrawal";
 	public static final String CASH_IN_SAFE = "cash.in.safe";
-	
 	public static final String FISCAL = "fiscal";
+	
 	public static final String LANG = "l";
+	public static final String REFERER = "referer";
+	
+	public static final String ERROR_METHOD = "error.method.not.allowed";
+	public static final String ERROR_FORBIDDEN = "error.forbidden";
+	public static final String ERROR_INTERNAL = "error.server.internal";
 }

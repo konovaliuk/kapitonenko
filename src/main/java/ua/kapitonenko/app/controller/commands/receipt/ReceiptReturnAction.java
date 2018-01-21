@@ -1,11 +1,13 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.receipt;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -15,11 +17,11 @@ import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.stream.Stream;
 
 public class ReceiptReturnAction implements ActionCommand {
-	
-	private static final Logger LOGGER = Logger.getLogger(ReceiptReturnAction.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
@@ -46,15 +48,14 @@ public class ReceiptReturnAction implements ActionCommand {
 			}
 		}
 		
+		request.setAttribute(Keys.NEW_PRODUCT, Application.getModelFactory().createProduct());
 		return request.forward(Pages.RECEIPT_FORM, Actions.RECEIPT_RETURN);
 	}
 	
 	private String getCommand(RequestWrapper request) {
 		String[] buttons = request.getParams().get(Keys.BUTTON);
 		if (buttons != null) {
-			String command = Stream.of(buttons).filter(StringUtils::isNotEmpty).findFirst().orElse("");
-			LOGGER.debug("command: " + command);
-			return command;
+			return Stream.of(buttons).filter(StringUtils::isNotEmpty).findFirst().orElse("");
 		}
 		return "";
 	}
@@ -69,7 +70,11 @@ public class ReceiptReturnAction implements ActionCommand {
 			Long receiptId = ValidationBuilder.parseId(id);
 			
 			receipt = receiptService.findOne(receiptId);
-			receiptService.createReturn(receipt);
+			boolean created = receiptService.createReturn(receipt);
+			
+			if (created) {
+				logger.info("New return receipt created: {}", receipt);
+			}
 			
 			request.getSession().set(Keys.RECEIPT, receipt);
 			request.getSession().set(Keys.PAYMENT_TYPES, settingsService.getPaymentTypes());

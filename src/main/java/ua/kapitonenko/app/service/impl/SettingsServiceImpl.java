@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.service.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
 import ua.kapitonenko.app.dao.records.*;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 import static ua.kapitonenko.app.config.keys.Keys.*;
 
 public class SettingsServiceImpl extends BaseService implements SettingsService {
-	private static final Logger LOGGER = Logger.getLogger(SettingsService.class);
 	
 	SettingsServiceImpl() {
 	}

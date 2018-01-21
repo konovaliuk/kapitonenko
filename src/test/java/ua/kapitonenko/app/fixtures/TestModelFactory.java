@@ -12,6 +12,11 @@ import java.util.List;
 public class TestModelFactory implements ModelFactory {
 	
 	@Override
+	public Product createProduct() {
+		return null;
+	}
+	
+	@Override
 	public Product createProduct(ProductRecord record) {
 		Product product = new ProductMock();
 		product.setRecord(record);

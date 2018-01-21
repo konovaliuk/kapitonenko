@@ -2,13 +2,11 @@ package ua.kapitonenko.app.dao.records;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProductRecord extends BaseEntity {
-	private static final Logger LOGGER = Logger.getLogger(ProductRecord.class);
 	
 	private Long unitId;
 	private BigDecimal price;

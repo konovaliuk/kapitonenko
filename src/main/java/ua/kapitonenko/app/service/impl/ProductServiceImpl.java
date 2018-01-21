@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.service.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.interfaces.*;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl extends BaseService implements ProductService {
-	private static final Logger LOGGER = Logger.getLogger(ProductServiceImpl.class);
 	
 	ProductServiceImpl() {
 	}
@@ -31,7 +29,6 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 			ProductDAO productDAO = getDaoFactory().getProductDAO(connection.open());
 			ProductLocaleDAO productLocaleDAO = getDaoFactory().getProductLocaleDAO(connection.open());
 			
-			LOGGER.debug(product.getRecord());
 			productDAO.insert(product.getRecord());
 			
 			ProductRecord created = productDAO.findOne(product.getRecord().getId());
@@ -104,11 +101,9 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 		LocaleDAO localeDAO = getDaoFactory().getLocaleDAO(connection);
 		
 		List<ProductLocale> lang = productLocaleDAO.findByProductAndKey(record.getId(), Keys.PRODUCT_NAME);
-		LOGGER.debug(lang);
 		lang.forEach(pl -> pl.setLocale(localeDAO.findOne(pl.getLocaleId())));
 		product.setNames(lang);
 		
-		LOGGER.debug(product.getNames());
 		product.setTaxCategory(taxCategoryDAO.findOne(record.getTaxCategoryId()));
 		product.setUnit(unitDAO.findOne(record.getUnitId()));
 		

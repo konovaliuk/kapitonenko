@@ -1,6 +1,5 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.receipt;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ReceiptEditAddAction extends ReceiptEditAction {
-	private static final Logger LOGGER = Logger.getLogger(ReceiptEditAddAction.class);
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
@@ -41,7 +39,6 @@ public class ReceiptEditAddAction extends ReceiptEditAction {
 			
 			if (validator.isValid()) {
 				Product found = foundList.get(0);
-				LOGGER.debug(quantityValue + " " + found.getQuantity());
 				
 				Long typeId = receipt.getRecord().getReceiptTypeId();
 				

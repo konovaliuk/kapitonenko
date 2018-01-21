@@ -1,10 +1,12 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.report;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -16,10 +18,11 @@ import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 public class ReportCreateAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ReportCreateAction.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReportService reportService = Application.getServiceFactory().getReportService();
@@ -54,8 +57,14 @@ public class ReportCreateAction implements ActionCommand {
 				reportService.create(report);
 				request.getSession().set(Keys.REPORT, report);
 				
+				if (reportType == ReportType.Z_REPORT) {
+					logger.info("New Z-Tape report created: {}", report);
+				}
 				return request.redirect(Actions.REPORT_VIEW);
 			}
+			
+			logger.warn("Report create validation error: message='{}', {}", request.getAlert().joinMessages(), request.paramsToString());
+			
 		}
 		
 		request.setAttribute(Keys.REPORT, report);

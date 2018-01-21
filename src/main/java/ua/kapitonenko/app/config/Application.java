@@ -1,6 +1,7 @@
 package ua.kapitonenko.app.config;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
 import ua.kapitonenko.app.dao.connection.DataSourceConnectionWrapper;
@@ -15,9 +16,13 @@ import ua.kapitonenko.app.service.SettingsService;
 import ua.kapitonenko.app.service.impl.ServiceFactoryImpl;
 
 import javax.servlet.ServletContext;
+import java.lang.invoke.MethodHandles;
+import java.util.List;
+
+import static java.lang.System.lineSeparator;
 
 public class Application {
-	private static final Logger LOGGER = Logger.getLogger(Application.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final int RECORDS_PER_PAGE = 5;
 	
 	private static DAOFactory daoFactory = MysqlDaoFactory.getInstance();
@@ -27,7 +32,6 @@ public class Application {
 	private static boolean autoActivation = true;
 	
 	private Application() {
-	
 	}
 	
 	public static DAOFactory getDAOFactory() {
@@ -36,15 +40,16 @@ public class Application {
 	
 	public static void setDAOFactory(DAOFactory impl) {
 		daoFactory = impl;
+		logger.info("Configuration changed: DAOFactory={}", impl);
 	}
 	
 	public static ServiceFactory getServiceFactory() {
-		LOGGER.debug(serviceFactory);
 		return serviceFactory;
 	}
 	
 	public static void setServiceFactory(ServiceFactory impl) {
 		serviceFactory = impl;
+		logger.info("Configuration changed: ServiceFactory={}", impl);
 	}
 	
 	public static ModelFactory getModelFactory() {
@@ -53,10 +58,12 @@ public class Application {
 	
 	public static void setModelFactory(ModelFactory impl) {
 		modelFactory = impl;
+		logger.info("Configuration changed: ModelFactory={}", impl);
 	}
 	
 	public static <E extends ConnectionWrapper> void setConnectionClass(Class<E> className) {
 		connectionClass = className;
+		logger.info("Configuration changed: ConnectionWrapper={}", className);
 	}
 	
 	public static ConnectionWrapper getConnection() {
@@ -69,6 +76,7 @@ public class Application {
 	
 	public static void setAutoActivationMode(boolean enabled) {
 		autoActivation = enabled;
+		logger.info("Configuration changed: autoActivation={}", autoActivation);
 	}
 	
 	public static boolean isAutoActivationEnabled() {
@@ -76,13 +84,19 @@ public class Application {
 	}
 	
 	public static void init(ServletContext context) {
-		LOGGER.debug("application init");
+		logger.info("Application initialized with configuration:{}    DAOFactory={},{}    ServiceFactory={},{}    ModelFactory={},{}    autoActivation={}",
+				lineSeparator(), daoFactory.getClass(), lineSeparator(), serviceFactory.getClass(), lineSeparator(), modelFactory.getClass(), lineSeparator(), isAutoActivationEnabled());
 		SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 		Company company = settingsService.findCompany(Ids.COMPANY.getValue());
+		List<String> languages = settingsService.getSupportedLanguages();
+		String messages = Params.MESSAGE_BUNDLE.getValue();
 		
 		context.setAttribute(Keys.COMPANY, company);
-		context.setAttribute(Params.MESSAGE_BUNDLE.getValue(), Params.MESSAGE_BUNDLE.getValue());
-		context.setAttribute(Keys.LANGUAGES, settingsService.getSupportedLanguages());
+		context.setAttribute(messages, messages);
+		context.setAttribute(Keys.LANGUAGES, languages);
+		logger.info("Context attributes are set:{}    {},{}    message bundle={}, supported languages={}",
+				lineSeparator(), company, lineSeparator(), messages, languages);
+		
 	}
 	
 	public enum Ids {

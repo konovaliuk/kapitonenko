@@ -1,12 +1,10 @@
 package ua.kapitonenko.app.controller.helpers;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 
 public class PaginationHelper {
-	private static final Logger LOGGER = Logger.getLogger(PaginationHelper.class);
 	
 	public static final int DEFAULT_RECORDS_PER_PAGE = 5;
 	
@@ -18,7 +16,7 @@ public class PaginationHelper {
 		init(noOfRecords);
 	}
 	
-	public void init(long noOfRecords) {
+	private void init(long noOfRecords) {
 		int noOfPages = (int) Math.ceil((double) noOfRecords / getRecordsPerPage());
 		
 		String page = request.getParameter(Keys.PAGE);
@@ -31,9 +29,12 @@ public class PaginationHelper {
 				currentPage = noOfPages;
 			}
 			
+			if (currentPage < 1) {
+				currentPage = 1;
+			}
+			
 		} catch (Exception e) {
-			LOGGER.debug(e);
-			throw new NotFoundException(request.getUri());
+			throw new NotFoundException();
 		}
 		
 		request.setAttribute(Keys.CUR_PAGE, currentPage);
@@ -49,10 +50,5 @@ public class PaginationHelper {
 	public int getOffset() {
 		return (currentPage - 1) * getRecordsPerPage();
 	}
-	
-	public int getCurrentPage() {
-		return currentPage;
-	}
-	
 	
 }

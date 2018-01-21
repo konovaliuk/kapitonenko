@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.domain.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.records.*;
 import ua.kapitonenko.app.domain.Product;
@@ -10,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class ReceiptImpl implements Receipt {
-	private static final Logger LOGGER = Logger.getLogger(ReceiptImpl.class);
 	
 	private ReceiptRecord record;
 	private PaymentType paymentType;
@@ -23,11 +21,11 @@ public class ReceiptImpl implements Receipt {
 	private Map<TaxCategory, BigDecimal> costByCategory = new HashMap<>();
 	
 	
-	public ReceiptImpl(ReceiptRecord record) {
+	ReceiptImpl(ReceiptRecord record) {
 		this.record = record;
 	}
 	
-	public ReceiptImpl(Long cashboxId, Long paymentTypeId, Long receiptTypeId, boolean cancelled, Long createdBy) {
+	ReceiptImpl(Long cashboxId, Long paymentTypeId, Long receiptTypeId, boolean cancelled, Long createdBy) {
 		record = new ReceiptRecord(null, cashboxId, paymentTypeId, receiptTypeId, cancelled, createdBy);
 	}
 	
@@ -192,6 +190,14 @@ public class ReceiptImpl implements Receipt {
 	@Override
 	public Long getLocalId() {
 		return localId;
+	}
+	
+	@Override
+	public String toString() {
+		if (record != null) {
+			return record.toString();
+		}
+		return super.toString();
 	}
 	
 }

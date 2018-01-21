@@ -1,8 +1,6 @@
-<jsp:useBean id="newProduct" scope="request" class="ua.kapitonenko.app.domain.impl.ProductImpl"/>
-<%-- TODO replace useBean--%>
+<%--@elvariable id="newProduct" type="ua.kapitonenko.app.domain.Product"--%>
 <%--@elvariable id="receipt" type="ua.kapitonenko.app.domain.Receipt"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 

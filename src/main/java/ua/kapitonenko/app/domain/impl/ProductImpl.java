@@ -20,9 +20,8 @@ public class ProductImpl implements Product {
 	private List<ProductLocale> names = new ArrayList<>();
 	private TaxCategory taxCategory;
 	private Unit unit;
-	private BigDecimal cost;
 	
-	public ProductImpl(ProductRecord record) {
+	ProductImpl(ProductRecord record) {
 		this.record = record;
 	}
 	
@@ -53,8 +52,7 @@ public class ProductImpl implements Product {
 	
 	@Override
 	public BigDecimal getCost() {
-		this.cost = record.getPrice().multiply(record.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-		return this.cost;
+		return record.getPrice().multiply(record.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 	}
 	
 	@Override
@@ -147,6 +145,7 @@ public class ProductImpl implements Product {
 	@Override
 	public Long getId() {
 		return record.getId();
+		
 	}
 	
 	@Override
@@ -187,5 +186,13 @@ public class ProductImpl implements Product {
 		return new HashCodeBuilder(17, 37)
 				       .append(record)
 				       .toHashCode();
+	}
+	
+	@Override
+	public String toString() {
+		if (record != null) {
+			return record.toString();
+		}
+		return super.toString();
 	}
 }

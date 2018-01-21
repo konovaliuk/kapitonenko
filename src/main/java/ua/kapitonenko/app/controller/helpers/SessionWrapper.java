@@ -1,19 +1,24 @@
 package ua.kapitonenko.app.controller.helpers;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.records.Cashbox;
 import ua.kapitonenko.app.dao.records.User;
 
 import javax.servlet.http.HttpSession;
+import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.Locale;
+import java.util.stream.Collectors;
+
+import static java.lang.System.lineSeparator;
 
 public class SessionWrapper {
-	private static final Logger LOGGER = Logger.getLogger(SessionWrapper.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private HttpSession session;
-
+	
 	
 	public SessionWrapper(HttpSession session) {
 		this.session = session;
@@ -46,7 +51,7 @@ public class SessionWrapper {
 		return LocaleUtils.toLocale(getLocaleString());
 	}
 	
-	public void logout(){
+	public void logout() {
 		session.invalidate();
 	}
 	
@@ -62,7 +67,7 @@ public class SessionWrapper {
 		return session.getAttribute(Keys.USER) == null;
 	}
 	
-	public User getUser(){
+	public User getUser() {
 		return (User) session.getAttribute(Keys.USER);
 	}
 	
@@ -79,8 +84,19 @@ public class SessionWrapper {
 	}
 	
 	public void login(User user, Cashbox cashbox) {
-		LOGGER.debug(cashbox);
 		session.setAttribute(Keys.CASHBOX, cashbox);
 		session.setAttribute(Keys.USER, user);
+	}
+	
+	private String attributesToString() {
+		return Collections.list(session.getAttributeNames())
+				       .stream()
+				       .map(n -> "        " + n + "=" + session.getAttribute(n))
+				       .collect(Collectors.joining(lineSeparator(), "Session:" + lineSeparator(), ""));
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s", attributesToString());
 	}
 }

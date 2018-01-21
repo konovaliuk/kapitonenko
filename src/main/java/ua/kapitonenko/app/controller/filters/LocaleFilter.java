@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.controller.filters;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class LocaleFilter implements Filter {
-	private static final Logger LOGGER = Logger.getLogger(LocaleFilter.class);
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

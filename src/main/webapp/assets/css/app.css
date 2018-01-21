@@ -339,7 +339,7 @@ td p {
     padding: 12px 10.88px;
 }
 
-.report .table td, .table th {
+.report .table td, .report .table th {
     padding: 0.42rem .68rem;
 }
 

@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.domain.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.records.Cashbox;
@@ -14,7 +13,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReportImpl implements Report {
-	private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 	
 	private Long userId;
 	private Long cashboxId;
@@ -36,7 +34,7 @@ public class ReportImpl implements Report {
 	private BigDecimal deposit = new BigDecimal("0.00");
 	private BigDecimal withdrawal = new BigDecimal("0.00");
 	
-	public ReportImpl(Long userId) {
+	ReportImpl(Long userId) {
 		this.userId = userId;
 	}
 	
@@ -208,5 +206,11 @@ public class ReportImpl implements Report {
 		return cashboxId;
 	}
 	
-	
+	@Override
+	public String toString() {
+		if (record != null) {
+			return record.toString();
+		}
+		return super.toString();
+	}
 }

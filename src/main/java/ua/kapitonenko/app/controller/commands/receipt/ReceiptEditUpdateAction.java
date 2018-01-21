@@ -1,4 +1,4 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.receipt;
 
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;

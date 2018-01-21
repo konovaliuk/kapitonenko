@@ -1,10 +1,12 @@
-package ua.kapitonenko.app.controller.commands;
+package ua.kapitonenko.app.controller.commands.product;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.config.keys.Pages;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
@@ -16,11 +18,12 @@ import ua.kapitonenko.app.service.SettingsService;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductCreateAction implements ActionCommand {
-	private static final Logger LOGGER = Logger.getLogger(ProductCreateAction.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ProductService productService = Application.getServiceFactory().getProductService();
@@ -64,9 +67,11 @@ public class ProductCreateAction implements ActionCommand {
 			product.setCreatedBy(request.getSession().getUser().getId());
 			
 			if (validator.isValid()) {
-				productService.createProduct(product);
+				Product created = productService.createProduct(product);
+				logger.info("New product created: {}", created);
 				return request.redirect(Actions.PRODUCTS);
 			}
+			logger.warn("Product create validation error: message='{}', {}", request.getAlert().joinMessages(), request.paramsToString());
 		}
 		
 		request.setAttribute(Keys.PRODUCT, product);

@@ -19,9 +19,12 @@
         <hamcrest.version>1.3</hamcrest.version>
         <mockito.version>1.10.19</mockito.version>
         <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.8.0-beta0</slf4j.version>
         <flyway.version>5.0.5</flyway.version>
         <maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>2.20.1</maven.surefire.plugin.version>
+        <maven.war.plugin.version>2.2</maven.war.plugin.version>
+        <dir>${project.build.directory}</dir>
     </properties>
     <dependencies>
         <dependency>
@@ -82,6 +85,11 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>ROOT</finalName>
@@ -115,6 +123,14 @@
                     <excludes>
                         <exclude>**/*DAOTest.java</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven.war.plugin.version}</version>
+                <configuration>
+                    <outputDirectory>${dir}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

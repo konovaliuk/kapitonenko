@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.domain.impl;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.dao.records.PaymentType;
 import ua.kapitonenko.app.dao.records.TaxCategory;
@@ -15,14 +14,13 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class ReportSummaryImpl implements ReportSummary {
-	private static final Logger LOGGER = Logger.getLogger(ReportSummaryImpl.class);
 	
 	private List<Receipt> receiptList;
 	private List<TaxCategory> taxCats;
 	private List<PaymentType> paymentTypes;
 	private long noCancelled;
 	
-	public ReportSummaryImpl(List<Receipt> receiptList, List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
+	ReportSummaryImpl(List<Receipt> receiptList, List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
 		
 		noCancelled = receiptList.stream()
 				              .filter(receipt -> receipt.getRecord().isCancelled())
@@ -67,7 +65,6 @@ public class ReportSummaryImpl implements ReportSummary {
 			map.put(type, new BigDecimal("0.00"));
 		}
 		for (Receipt receipt : receiptList) {
-			LOGGER.debug(receipt.getPaymentType());
 			PaymentType type = receipt.getPaymentType();
 			map.put(type, map.get(type)
 					              .add(receipt.getTotalCost()));

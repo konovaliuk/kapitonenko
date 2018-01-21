@@ -1,19 +1,33 @@
 package ua.kapitonenko.app.controller.helpers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Actions;
-import ua.kapitonenko.app.controller.commands.*;
+import ua.kapitonenko.app.controller.commands.ActionCommand;
+import ua.kapitonenko.app.controller.commands.HomeAction;
+import ua.kapitonenko.app.controller.commands.LanguageAction;
+import ua.kapitonenko.app.controller.commands.product.ProductCreateAction;
+import ua.kapitonenko.app.controller.commands.product.ProductDeleteAction;
+import ua.kapitonenko.app.controller.commands.product.ProductListAction;
+import ua.kapitonenko.app.controller.commands.product.ProductUpdateAction;
+import ua.kapitonenko.app.controller.commands.receipt.*;
+import ua.kapitonenko.app.controller.commands.report.ReportCreateAction;
+import ua.kapitonenko.app.controller.commands.report.ReportListAction;
+import ua.kapitonenko.app.controller.commands.report.ReportViewAction;
+import ua.kapitonenko.app.controller.commands.user.LoginAction;
+import ua.kapitonenko.app.controller.commands.user.LogoutAction;
+import ua.kapitonenko.app.controller.commands.user.SignUpAction;
 import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.exceptions.ForbiddenException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 
 public class RequestHelper {
-	private static final Logger LOGGER = Logger.getLogger(RequestHelper.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static RequestHelper instance = new RequestHelper();
 	private HashMap<String, ActionCommand> commands = new HashMap<>();
 	
@@ -56,14 +70,10 @@ public class RequestHelper {
 	public ActionCommand getCommand(RequestWrapper request) throws IOException, ServletException {
 		String key = request.getUri();
 		
-		LOGGER.debug(request.getMethod() + ": " + key);
-		LOGGER.debug(request.paramsToString());
-		
 		ActionCommand command = commands.get(key);
 		
 		if (command == null) {
-			LOGGER.debug("command not found");
-			throw new NotFoundException(key);
+			throw new NotFoundException();
 		}
 		User user = request.getSession().getUser();
 		
@@ -72,7 +82,7 @@ public class RequestHelper {
 		}
 		
 		if (user != null && !AccessControl.allowed(user.getUserRoleId(), key)) {
-			throw new ForbiddenException(key);
+			throw new ForbiddenException();
 		}
 		
 		return command;

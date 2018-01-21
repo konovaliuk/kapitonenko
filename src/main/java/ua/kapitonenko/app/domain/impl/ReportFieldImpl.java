@@ -14,10 +14,8 @@ public class ReportFieldImpl implements ReportField {
 	private BigDecimal refundsValue;
 	private boolean showInList;
 	
-	public ReportFieldImpl() {
-	}
 	
-	public ReportFieldImpl(boolean showInList, String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
+	ReportFieldImpl(boolean showInList, String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
 		this.name = name;
 		this.salesValue = salesValue;
 		this.refundsValue = refundsValue;

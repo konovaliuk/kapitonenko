@@ -1,7 +1,8 @@
 package ua.kapitonenko.app.controller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.Application;
+import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
@@ -16,15 +17,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 
 public class Controller extends HttpServlet {
-	private static final Logger LOGGER = Logger.getLogger(Controller.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private RequestHelper requestHelper = RequestHelper.getInstance();
 	
 	@Override
 	public void init() throws ServletException {
 		Application.init(getServletContext());
-		
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,26 +42,34 @@ public class Controller extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestWrapper requestWrapper = new RequestWrapper(request);
+		logger.info("Request: {}", requestWrapper);
 		
 		try {
 			ActionCommand command = requestHelper.getCommand(requestWrapper);
+			logger.info("Executing the command: {}", command);
 			ResponseParams result = command.execute(requestWrapper);
 			
 			if (result.isRedirect()) {
+				logger.info("Redirecting to: {}", result.getUri());
 				response.sendRedirect(result.getUri());
 			} else {
+				logger.info("Forwarding to: {}", result.getUri());
 				dispatch(request, response, result.getUri());
 			}
 			
 		} catch (NotFoundException e) {
+			logger.error("Not found: {}", requestWrapper.getUri(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		} catch (MethodNotAllowedException e) {
+			logger.error("Method not allowed: {} {}", requestWrapper.getMethod(), requestWrapper.getUri(), e);
 			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, e.getMessage());
 		} catch (ForbiddenException e) {
+			logger.error("Forbidden: {} {} roleId={}",
+					requestWrapper.getMethod(), requestWrapper.getUri(), requestWrapper.getSession().getUser().getUserRoleId(), e);
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-		} catch (ServletException | IOException e) {
-			e.printStackTrace();
-			// TODO add exception handling
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Keys.ERROR_INTERNAL);
 		}
 	}
 	

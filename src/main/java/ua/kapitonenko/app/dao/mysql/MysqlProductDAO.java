@@ -1,6 +1,5 @@
 package ua.kapitonenko.app.dao.mysql;
 
-import org.apache.log4j.Logger;
 import ua.kapitonenko.app.config.keys.Keys;
 import ua.kapitonenko.app.dao.interfaces.ProductDAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
@@ -14,7 +13,6 @@ import java.sql.Connection;
 import java.util.List;
 
 public class MysqlProductDAO extends BaseDAO<ProductRecord> implements ProductDAO {
-	private static final Logger LOGGER = Logger.getLogger(MysqlProductDAO.class);
 	
 	private static final String UPDATE = "UPDATE " +
 			                                     ProductsTable.NAME + " SET " +
@@ -43,11 +41,11 @@ public class MysqlProductDAO extends BaseDAO<ProductRecord> implements ProductDA
 			                                                   ProductsTable.NAME + " JOIN " +
 			                                                   ProductLocaleTable.NAME + " ON " +
 			                                                   ProductsTable.ID + " = " +
-			                                                   ProductLocaleTable.PRODUCT_ID + " WHERE ( " +
+			                                                   ProductLocaleTable.PRODUCT_ID + " WHERE (( " +
 			                                                   ProductLocaleTable.PROP_NAME + " = ? AND " +
 			                                                   ProductLocaleTable.LOCALE + " = ? AND " +
 			                                                   ProductLocaleTable.PROP_VALUE + " = ? ) OR ( " +
-			                                                   ProductsTable.ID + " = ?)" +
+			                                                   ProductsTable.ID + " = ?))" +
 			                                                   AND_NOT_DELETED + " GROUP BY " +
 			                                                   ProductsTable.ID;
 	
@@ -144,7 +142,6 @@ public class MysqlProductDAO extends BaseDAO<ProductRecord> implements ProductDA
 	
 	@Override
 	public List<ProductRecord> findByIdOrName(Long localeId, Long productId, String name) {
-		LOGGER.debug(localeId + " " + productId + " " + name);
 		return getList(SELECT_BY_ID_OR_NAME, ps -> {
 			ps.setString(1, Keys.PRODUCT_NAME);
 			ps.setLong(2, localeId);

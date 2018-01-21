@@ -19,7 +19,7 @@ public class TestServiceFactory implements ServiceFactory {
 	}
 	
 	private void initServices() {
-		services.put(ServiceName.USER, null);
+		services.put(ServiceName.USER, new UserServiceStub());
 		services.put(ServiceName.PRODUCT, new ProductServiceStub());
 		services.put(ServiceName.SETTINGS, new SettingsServiceStub());
 		services.put(ServiceName.RECEIPT, new ReceiptServiceStub());

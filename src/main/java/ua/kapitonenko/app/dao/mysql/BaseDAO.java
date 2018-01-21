@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.dao.mysql;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.dao.interfaces.DAO;
 import ua.kapitonenko.app.dao.mysql.helpers.PreparedStatementSetter;
 import ua.kapitonenko.app.dao.mysql.helpers.ResultSetExtractor;
@@ -8,6 +8,7 @@ import ua.kapitonenko.app.dao.records.BaseEntity;
 import ua.kapitonenko.app.dao.tables.BaseTable;
 import ua.kapitonenko.app.exceptions.DAOException;
 
+import java.lang.invoke.MethodHandles;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
-	private static final Logger LOGGER = Logger.getLogger(BaseDAO.class);
-	
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	protected static final String WHERE_ID = " WHERE " + BaseTable.ID + "=? ";
 	protected static final String AND_NOT_DELETED = " AND " + BaseTable.DELETED_AT + " IS NULL";
@@ -32,7 +32,6 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 	protected abstract String getTableName();
 	
 	protected abstract ResultSetExtractor<E> getResultSetExtractor();
-	
 	
 	protected abstract String getInsertQuery();
 	
@@ -90,9 +89,9 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 			if (pss != null) {
 				pss.prepare(ps);
 			}
-			
-			LOGGER.debug(ps.toString());
 			ResultSet rs = ps.executeQuery();
+			logger.debug(statementToString(ps));
+			
 			List<E> list = new ArrayList<>();
 			while (rs.next()) {
 				list.add(rse.extract(rs));
@@ -113,6 +112,8 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 				pss.prepare(ps);
 			}
 			ResultSet rs = ps.executeQuery();
+			logger.debug(statementToString(ps));
+			
 			if (rs.next()) {
 				return rse.extract(rs);
 			}
@@ -128,6 +129,8 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 				pss.prepare(ps);
 			}
 			ResultSet rs = ps.executeQuery();
+			logger.debug(statementToString(ps));
+			
 			if (rs.next()) {
 				return rs.getLong(1);
 			}
@@ -142,8 +145,9 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 			if (pss != null) {
 				pss.prepare(ps);
 			}
-			
+			logger.debug(statementToString(ps));
 			return ps.executeUpdate();
+			
 		} catch (Exception e) {
 			throw new DAOException(e);
 		}
@@ -155,8 +159,8 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 				pss.prepare(ps);
 			}
 			
+			logger.debug(statementToString(ps));
 			ps.executeUpdate();
-			LOGGER.debug(ps.toString());
 			
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs != null && rs.next()) {
@@ -172,6 +176,7 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 		long result = 0;
 		try (Statement stmt = connection.createStatement()) {
 			ResultSet rs = stmt.executeQuery(getCountQuery());
+			logger.debug(getCountQuery());
 			while (rs.next()) {
 				result = rs.getLong("count");
 			}
@@ -185,6 +190,11 @@ public abstract class BaseDAO<E extends BaseEntity> implements DAO<E> {
 	public List<E> findAllByQuery(String query, PreparedStatementSetter pss) {
 		String sql = getSelectAllQuery() + " " + query;
 		return getList(sql, pss, getResultSetExtractor());
+	}
+	
+	public static String statementToString(PreparedStatement ps) {
+		String[] pss = ps.toString().split(": ");
+		return pss[1];
 	}
 	
 	
