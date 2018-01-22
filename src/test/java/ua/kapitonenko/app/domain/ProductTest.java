@@ -8,10 +8,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.records.LocaleRecord;
-import ua.kapitonenko.app.dao.records.ProductLocale;
-import ua.kapitonenko.app.dao.records.ProductRecord;
-import ua.kapitonenko.app.dao.records.TaxCategory;
+import ua.kapitonenko.app.persistence.records.LocaleRecord;
+import ua.kapitonenko.app.persistence.records.ProductLocale;
+import ua.kapitonenko.app.persistence.records.ProductRecord;
+import ua.kapitonenko.app.persistence.records.TaxCategory;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

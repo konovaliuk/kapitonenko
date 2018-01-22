@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.records.Cashbox;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.Cashbox;
+import ua.kapitonenko.app.persistence.records.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

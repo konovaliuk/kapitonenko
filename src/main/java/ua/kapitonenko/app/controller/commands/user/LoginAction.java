@@ -9,8 +9,8 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.dao.records.Cashbox;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.Cashbox;
+import ua.kapitonenko.app.persistence.records.User;
 import ua.kapitonenko.app.service.SettingsService;
 import ua.kapitonenko.app.service.UserService;
 
@@ -18,6 +18,10 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
+
+/**
+ *
+ */
 public class LoginAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	

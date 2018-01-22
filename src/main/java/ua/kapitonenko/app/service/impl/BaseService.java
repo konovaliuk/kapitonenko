@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.service.impl;
 
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.domain.ModelFactory;
+import ua.kapitonenko.app.persistence.dao.DAOFactory;
 import ua.kapitonenko.app.service.ServiceFactory;
 
 public class BaseService {

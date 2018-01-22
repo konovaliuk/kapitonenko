@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.domain;
 
-import ua.kapitonenko.app.dao.records.*;
+import ua.kapitonenko.app.persistence.records.*;
 
 import java.math.BigDecimal;
 import java.util.Date;

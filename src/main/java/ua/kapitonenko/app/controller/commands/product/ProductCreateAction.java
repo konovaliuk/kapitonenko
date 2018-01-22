@@ -10,9 +10,9 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.dao.records.TaxCategory;
-import ua.kapitonenko.app.dao.records.Unit;
 import ua.kapitonenko.app.domain.Product;
+import ua.kapitonenko.app.persistence.records.TaxCategory;
+import ua.kapitonenko.app.persistence.records.Unit;
 import ua.kapitonenko.app.service.ProductService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -57,7 +57,8 @@ public class ProductCreateAction implements ActionCommand {
 					.idInList(unitId, units, Keys.PRODUCT_UNIT)
 					.idInList(taxId, taxes, Keys.PRODUCT_TAX)
 					.ifValid()
-					.notLess(quantityValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, Keys.PRODUCT_QUANTITY);
+					.notLess(quantityValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, Keys.PRODUCT_QUANTITY)
+					.notLess(priceValue, BigDecimal.ZERO, Keys.ERROR_LESS_ZERO, Keys.PRODUCT_PRICE);
 			
 			product.setQuantity(quantityValue);
 			product.setPrice(priceValue);

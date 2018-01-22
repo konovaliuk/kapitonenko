@@ -9,8 +9,8 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.PaginationHelper;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
-import ua.kapitonenko.app.dao.records.Cashbox;
 import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.persistence.records.Cashbox;
 import ua.kapitonenko.app.service.ReceiptService;
 
 import javax.servlet.ServletException;

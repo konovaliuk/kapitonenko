@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.service;
 
-import ua.kapitonenko.app.dao.records.*;
+import ua.kapitonenko.app.persistence.records.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +28,6 @@ public interface SettingsService extends Service {
 	List<PaymentType> getPaymentTypes();
 	
 	List<Cashbox> getCashboxList();
+	
+	PaymentType findPaymentType(Long paymentId);
 }

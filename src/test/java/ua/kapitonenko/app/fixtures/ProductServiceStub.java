@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.fixtures;
 
-import ua.kapitonenko.app.dao.interfaces.DAOFactory;
 import ua.kapitonenko.app.domain.Product;
+import ua.kapitonenko.app.persistence.dao.DAOFactory;
 import ua.kapitonenko.app.service.ProductService;
 
 import java.util.List;

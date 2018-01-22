@@ -3,8 +3,8 @@ package ua.kapitonenko.app.controller.helpers;
 import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.LoggerFactory;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.records.Cashbox;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.Cashbox;
+import ua.kapitonenko.app.persistence.records.User;
 
 import javax.servlet.http.HttpSession;
 import java.lang.invoke.MethodHandles;

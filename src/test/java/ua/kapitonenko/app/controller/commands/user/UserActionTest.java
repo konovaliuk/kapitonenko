@@ -6,9 +6,9 @@ import org.junit.BeforeClass;
 import org.mockito.Mock;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.controller.helpers.*;
-import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.fixtures.AnswerWithSelf;
 import ua.kapitonenko.app.fixtures.TestServiceFactory;
+import ua.kapitonenko.app.persistence.records.User;
 import ua.kapitonenko.app.service.ServiceFactory;
 import ua.kapitonenko.app.service.UserService;
 

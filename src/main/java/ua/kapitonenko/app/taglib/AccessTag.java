@@ -2,7 +2,7 @@ package ua.kapitonenko.app.taglib;
 
 import ua.kapitonenko.app.config.AccessControl;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.User;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;

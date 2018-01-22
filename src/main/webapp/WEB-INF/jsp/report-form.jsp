@@ -1,6 +1,5 @@
 <%--@elvariable id="report" type="ua.kapitonenko.app.domain.Report"--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="ua.kapitonenko.app.config.keys.Keys" %>
 <!DOCTYPE html>
 <html>
 
@@ -20,7 +19,7 @@
                             <label><fmt:message key="${Keys.CASHBOX}" bundle="${msg}"/></label>
                             <select class="form-control" name="report.cashbox">
                                 <option></option>
-                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.app.dao.records.Cashbox>"--%>
+                                <%--@elvariable id="cashboxList" type="java.util.List<ua.kapitonenko.app.persistence.records.Cashbox>"--%>
                                 <c:forEach items="${cashboxList}" var="option">
                                     <option value="${option.id}" ${report.cashbox.id.equals(option.id) ? "selected" : ""}>
                                             ${option.id}

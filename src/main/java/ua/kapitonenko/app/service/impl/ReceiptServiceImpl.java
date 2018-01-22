@@ -1,13 +1,13 @@
 package ua.kapitonenko.app.service.impl;
 
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.*;
-import ua.kapitonenko.app.dao.records.ProductRecord;
-import ua.kapitonenko.app.dao.records.ReceiptProduct;
-import ua.kapitonenko.app.dao.records.ReceiptRecord;
 import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.*;
+import ua.kapitonenko.app.persistence.records.ProductRecord;
+import ua.kapitonenko.app.persistence.records.ReceiptProduct;
+import ua.kapitonenko.app.persistence.records.ReceiptRecord;
 import ua.kapitonenko.app.service.ProductService;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
@@ -26,18 +26,7 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 		SettingsService settingsService = getServiceFactory().getSettingsService();
 		receipt.setCategories(settingsService.getTaxCatList());
 		
-		try (ConnectionWrapper connection = getDaoFactory().getConnection()) {
-			ReceiptDAO receiptDAO = getDaoFactory().getReceiptDAO(connection.open());
-			
-			ReceiptRecord record = receipt.getRecord();
-			if (receiptDAO.insert(record)) {
-				ReceiptRecord created = receiptDAO.findOne(record.getId());
-				receipt.setRecord(created);
-				setReferences(receipt, created, connection.open());
-				return true;
-			}
-			return false;
-		}
+		return insert(receipt, receipt.getRecord(), receipt.getRecord());
 	}
 	
 	@Override
@@ -50,8 +39,22 @@ public class ReceiptServiceImpl extends BaseService implements ReceiptService {
 				                                         true,
 				                                         existing.getCreatedBy());
 		receipt.setRecord(updated);
-		return create(receipt);
 		
+		return insert(receipt, updated, existing);
+	}
+	
+	private boolean insert(Receipt receipt, ReceiptRecord record, ReceiptRecord refSource) {
+		try (ConnectionWrapper connection = getDaoFactory().getConnection()) {
+			ReceiptDAO receiptDAO = getDaoFactory().getReceiptDAO(connection.open());
+			
+			if (receiptDAO.insert(record)) {
+				ReceiptRecord inserted = receiptDAO.findOne(record.getId());
+				receipt.setRecord(inserted);
+				setReferences(receipt, refSource, connection.open());
+				return true;
+			}
+			return false;
+		}
 	}
 	
 	@Override

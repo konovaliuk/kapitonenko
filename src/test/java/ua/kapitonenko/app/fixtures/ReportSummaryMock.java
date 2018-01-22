@@ -1,9 +1,9 @@
 package ua.kapitonenko.app.fixtures;
 
-import ua.kapitonenko.app.dao.records.PaymentType;
-import ua.kapitonenko.app.dao.records.TaxCategory;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.ReportSummary;
+import ua.kapitonenko.app.persistence.records.PaymentType;
+import ua.kapitonenko.app.persistence.records.TaxCategory;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

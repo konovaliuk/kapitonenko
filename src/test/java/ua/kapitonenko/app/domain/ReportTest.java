@@ -9,10 +9,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.records.ZReport;
 import ua.kapitonenko.app.fixtures.ModelUtils;
 import ua.kapitonenko.app.fixtures.ReportSummaryMock;
 import ua.kapitonenko.app.fixtures.TestModelFactory;
+import ua.kapitonenko.app.persistence.records.ZReport;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;

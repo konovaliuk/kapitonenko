@@ -17,9 +17,9 @@ import ua.kapitonenko.app.controller.commands.report.ReportViewAction;
 import ua.kapitonenko.app.controller.commands.user.LoginAction;
 import ua.kapitonenko.app.controller.commands.user.LogoutAction;
 import ua.kapitonenko.app.controller.commands.user.SignUpAction;
-import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.exceptions.ForbiddenException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
+import ua.kapitonenko.app.persistence.records.User;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

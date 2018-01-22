@@ -2,8 +2,8 @@ package ua.kapitonenko.app.fixtures;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import ua.kapitonenko.app.dao.records.*;
 import ua.kapitonenko.app.domain.Product;
+import ua.kapitonenko.app.persistence.records.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

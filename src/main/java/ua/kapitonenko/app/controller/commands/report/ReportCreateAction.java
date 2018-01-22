@@ -10,9 +10,9 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.dao.records.Cashbox;
 import ua.kapitonenko.app.domain.Report;
 import ua.kapitonenko.app.domain.ReportType;
+import ua.kapitonenko.app.persistence.records.Cashbox;
 import ua.kapitonenko.app.service.ReportService;
 import ua.kapitonenko.app.service.SettingsService;
 

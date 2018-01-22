@@ -6,12 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.records.PaymentType;
-import ua.kapitonenko.app.dao.records.TaxCategory;
 import ua.kapitonenko.app.fixtures.ModelUtils;
 import ua.kapitonenko.app.fixtures.ProductMock;
 import ua.kapitonenko.app.fixtures.ReceiptStub;
 import ua.kapitonenko.app.fixtures.TestModelFactory;
+import ua.kapitonenko.app.persistence.records.PaymentType;
+import ua.kapitonenko.app.persistence.records.TaxCategory;
 
 import java.math.BigDecimal;
 import java.util.Collections;

@@ -1,9 +1,9 @@
 package ua.kapitonenko.app.domain;
 
-import ua.kapitonenko.app.dao.records.Cashbox;
-import ua.kapitonenko.app.dao.records.PaymentType;
-import ua.kapitonenko.app.dao.records.TaxCategory;
-import ua.kapitonenko.app.dao.records.ZReport;
+import ua.kapitonenko.app.persistence.records.Cashbox;
+import ua.kapitonenko.app.persistence.records.PaymentType;
+import ua.kapitonenko.app.persistence.records.TaxCategory;
+import ua.kapitonenko.app.persistence.records.ZReport;
 
 import java.math.BigDecimal;
 import java.util.Date;

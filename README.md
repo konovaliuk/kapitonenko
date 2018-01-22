@@ -55,7 +55,7 @@ Open [http://localhost:8080](http://localhost:8080)
 DAO tests are disabled by default.  
 In order tu run them, run test database migration first:
 ```
-> mvn -Dflyway.url=jdbc:mysql://localhost:3306 -Dflyway.user=root -Dflyway.password=root -Dflyway.schemas=cashregister_test  flyway:migrate
+> mvn -Dflyway.url=jdbc:mysql://localhost:3306 -Dflyway.user=root -Dflyway.password=root -Dflyway.schemas=cashregister_test flyway:migrate
 ```
 Run tests:
 ```

@@ -1,8 +1,8 @@
 package ua.kapitonenko.app.service.impl;
 
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.*;
-import ua.kapitonenko.app.dao.records.*;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.*;
+import ua.kapitonenko.app.persistence.records.*;
 import ua.kapitonenko.app.service.SettingsService;
 
 import java.util.HashMap;
@@ -135,5 +135,13 @@ public class SettingsServiceImpl extends BaseService implements SettingsService 
 			}
 		}
 		return (List<Cashbox>) cache.get(CASHBOX_LIST);
+	}
+	
+	@Override
+	public PaymentType findPaymentType(Long paymentId) {
+		try (ConnectionWrapper connection = getDaoFactory().getConnection()) {
+			PaymentTypeDAO paymentTypeDAO = getDaoFactory().getPaymentTypeDAO(connection.open());
+			return paymentTypeDAO.findOne(paymentId);
+		}
 	}
 }

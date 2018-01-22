@@ -9,7 +9,7 @@ import ua.kapitonenko.app.config.Application;
 import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.SessionWrapper;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.User;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

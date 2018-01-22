@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.DAOFactory;
-import ua.kapitonenko.app.dao.interfaces.UserDAO;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.DAOFactory;
+import ua.kapitonenko.app.persistence.dao.UserDAO;
+import ua.kapitonenko.app.persistence.records.User;
 
 import java.sql.Connection;
 

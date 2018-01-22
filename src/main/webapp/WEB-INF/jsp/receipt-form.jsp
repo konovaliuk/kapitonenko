@@ -148,16 +148,16 @@
                             <div class="card-footer">
                                 <dl class="row" id="total">
                                     <c:forEach var="taxCatEntry" items="${receipt.taxByCategory.entrySet()}">
-                                        <dt class="col-2 offset-8 col-md-2 offset-md-8">
+                                        <dt class="col-3 offset-7 col-md-3 offset-md-7">
                                             <fmt:message key="${taxCatEntry.key.bundleKey}" bundle="${taxBundle}"/></dt>
                                         <dd class="col-2 col-md-2">${taxCatEntry.value}</dd>
                                     </c:forEach>
 
-                                    <dt class="col-2 offset-8 col-md-2 offset-md-8">
+                                    <dt class="col-3 offset-7 col-md-3 offset-md-7">
                                         <fmt:message key="${Keys.TAX_AMOUNT}" bundle="${msg}"/></dt>
                                     <dd class="col-2 col-md-2">${receipt.taxAmount}</dd>
 
-                                    <dt class="col-2 offset-8 col-md-2 offset-md-8 total">
+                                    <dt class="col-3 offset-7 col-md-3 offset-md-7 total">
                                         <fmt:message key="${Keys.RECEIPT_TOTAL}" bundle="${msg}"/></dt>
                                     <dd class="col-2 col-md-2 total">${receipt.totalCost}</dd>
                                 </dl>

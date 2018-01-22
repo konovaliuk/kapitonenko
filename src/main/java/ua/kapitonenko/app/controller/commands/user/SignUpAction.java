@@ -9,8 +9,8 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.dao.records.User;
-import ua.kapitonenko.app.dao.records.UserRole;
+import ua.kapitonenko.app.persistence.records.User;
+import ua.kapitonenko.app.persistence.records.UserRole;
 import ua.kapitonenko.app.service.SettingsService;
 import ua.kapitonenko.app.service.UserService;
 

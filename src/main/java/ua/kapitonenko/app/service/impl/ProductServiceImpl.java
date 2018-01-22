@@ -1,13 +1,13 @@
 package ua.kapitonenko.app.service.impl;
 
 import ua.kapitonenko.app.config.keys.Keys;
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.*;
-import ua.kapitonenko.app.dao.records.LocaleRecord;
-import ua.kapitonenko.app.dao.records.ProductLocale;
-import ua.kapitonenko.app.dao.records.ProductRecord;
-import ua.kapitonenko.app.dao.tables.ProductsTable;
 import ua.kapitonenko.app.domain.Product;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.*;
+import ua.kapitonenko.app.persistence.records.LocaleRecord;
+import ua.kapitonenko.app.persistence.records.ProductLocale;
+import ua.kapitonenko.app.persistence.records.ProductRecord;
+import ua.kapitonenko.app.persistence.tables.ProductsTable;
 import ua.kapitonenko.app.service.ProductService;
 import ua.kapitonenko.app.service.SettingsService;
 

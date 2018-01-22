@@ -10,9 +10,9 @@ import ua.kapitonenko.app.config.keys.Actions;
 import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.commands.HomeAction;
 import ua.kapitonenko.app.controller.commands.report.ReportListAction;
-import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.exceptions.ForbiddenException;
 import ua.kapitonenko.app.exceptions.NotFoundException;
+import ua.kapitonenko.app.persistence.records.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

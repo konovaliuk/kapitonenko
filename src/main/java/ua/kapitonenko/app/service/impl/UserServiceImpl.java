@@ -1,9 +1,9 @@
 package ua.kapitonenko.app.service.impl;
 
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.UserDAO;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.UserDAO;
+import ua.kapitonenko.app.persistence.records.User;
 import ua.kapitonenko.app.service.UserService;
 
 public class UserServiceImpl extends BaseService implements UserService {

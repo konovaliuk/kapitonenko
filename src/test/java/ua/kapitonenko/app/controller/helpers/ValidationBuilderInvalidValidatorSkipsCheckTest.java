@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.User;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

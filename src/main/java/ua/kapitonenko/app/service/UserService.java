@@ -1,6 +1,6 @@
 package ua.kapitonenko.app.service;
 
-import ua.kapitonenko.app.dao.records.User;
+import ua.kapitonenko.app.persistence.records.User;
 
 public interface UserService extends Service {
 	

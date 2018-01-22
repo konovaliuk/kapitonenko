@@ -1,12 +1,14 @@
 package ua.kapitonenko.app.domain.impl;
 
 import ua.kapitonenko.app.config.Application;
-import ua.kapitonenko.app.dao.records.*;
 import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.persistence.records.*;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static java.lang.System.lineSeparator;
 
 public class ReceiptImpl implements Receipt {
 	
@@ -180,6 +182,7 @@ public class ReceiptImpl implements Receipt {
 	@Override
 	public void setPaymentType(PaymentType type) {
 		paymentType = type;
+		record.setPaymentTypeId(type.getId());
 	}
 	
 	@Override
@@ -194,10 +197,16 @@ public class ReceiptImpl implements Receipt {
 	
 	@Override
 	public String toString() {
-		if (record != null) {
-			return record.toString();
-		}
-		return super.toString();
+		return new StringBuilder("ReceiptImpl{")
+				       .append("record=").append(record).append(lineSeparator())
+				       .append("            paymentType=").append(paymentType).append(lineSeparator())
+				       .append("            receiptType=").append(receiptType).append(lineSeparator())
+				       .append("            cashbox=").append(cashbox).append(lineSeparator())
+				       .append("            products=").append(products).append(lineSeparator())
+				       .append("            localId=").append(localId).append(lineSeparator())
+				       .append("            taxByCategory=").append(getTaxByCategory()).append(lineSeparator())
+				       .append("            costByCategory=").append(getCostByCategory())
+				       .append("}")
+				       .toString();
 	}
-	
 }

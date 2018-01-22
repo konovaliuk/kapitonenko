@@ -1,7 +1,7 @@
 package ua.kapitonenko.app.fixtures;
 
-import ua.kapitonenko.app.dao.interfaces.DAOFactory;
-import ua.kapitonenko.app.dao.records.*;
+import ua.kapitonenko.app.persistence.dao.DAOFactory;
+import ua.kapitonenko.app.persistence.records.*;
 import ua.kapitonenko.app.service.SettingsService;
 
 import java.util.Arrays;
@@ -67,6 +67,11 @@ public class SettingsServiceStub implements SettingsService {
 	
 	@Override
 	public List<Cashbox> getCashboxList() {
+		return null;
+	}
+	
+	@Override
+	public PaymentType findPaymentType(Long paymentId) {
 		return null;
 	}
 	

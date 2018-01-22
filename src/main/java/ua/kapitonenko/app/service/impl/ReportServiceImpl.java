@@ -1,13 +1,13 @@
 package ua.kapitonenko.app.service.impl;
 
 import org.slf4j.LoggerFactory;
-import ua.kapitonenko.app.dao.connection.ConnectionWrapper;
-import ua.kapitonenko.app.dao.interfaces.ZReportDAO;
-import ua.kapitonenko.app.dao.records.ZReport;
-import ua.kapitonenko.app.dao.tables.ZReportsTable;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.domain.Report;
 import ua.kapitonenko.app.domain.ReportType;
+import ua.kapitonenko.app.persistence.connection.ConnectionWrapper;
+import ua.kapitonenko.app.persistence.dao.ZReportDAO;
+import ua.kapitonenko.app.persistence.records.ZReport;
+import ua.kapitonenko.app.persistence.tables.ZReportsTable;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.ReportService;
 import ua.kapitonenko.app.service.SettingsService;
@@ -70,11 +70,11 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 	
 	@Override
 	public void create(Report report) {
+		setReferences(report);
+		
 		if (report.getType() == ReportType.Z_REPORT) {
 			createZReport(report);
 		}
-		
-		setReferences(report);
 	}
 	
 	private void setReferences(Report report) {

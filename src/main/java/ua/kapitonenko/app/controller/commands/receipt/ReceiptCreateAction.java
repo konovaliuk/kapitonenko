@@ -10,10 +10,10 @@ import ua.kapitonenko.app.controller.commands.ActionCommand;
 import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
-import ua.kapitonenko.app.dao.records.Cashbox;
-import ua.kapitonenko.app.dao.records.User;
 import ua.kapitonenko.app.domain.Receipt;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
+import ua.kapitonenko.app.persistence.records.Cashbox;
+import ua.kapitonenko.app.persistence.records.User;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -61,7 +61,7 @@ public class ReceiptCreateAction implements ActionCommand {
 		Long paymentId = ValidationBuilder.parseId(payment);
 		
 		if (paymentId != null) {
-			receipt.getRecord().setPaymentTypeId(paymentId);
+			receipt.setPaymentType(settingsService.findPaymentType(paymentId));
 		}
 	}
 	
