@@ -1,15 +1,21 @@
 package ua.kapitonenko.app.exceptions;
 
+/**
+ * The root exception of application. Unchecked.
+ * Separates application specific exceptions from platform exceptions.
+ */
 public class AppException extends RuntimeException {
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public AppException(String message) {
 		super(message);
 	}
 	
-	public AppException(String message, Throwable cause) {
-		super(message, cause);
-	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	public AppException(Throwable cause) {
 		super(cause);
 	}

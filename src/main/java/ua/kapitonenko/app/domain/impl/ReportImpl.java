@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@code Report} interface.
+ */
 public class ReportImpl implements Report {
 	
 	private Long userId;
@@ -34,20 +37,35 @@ public class ReportImpl implements Report {
 	private BigDecimal deposit = new BigDecimal("0.00");
 	private BigDecimal withdrawal = new BigDecimal("0.00");
 	
+	/**
+	 * Constructor instantiate the {@code Report} with the given {@code User} record id.
+	 * Is used only by {@link ua.kapitonenko.app.domain.ModelFactory}.
+	 */
 	ReportImpl(Long userId) {
 		this.userId = userId;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setType(ReportType type) {
 		this.type = type;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCashbox(Cashbox cashbox) {
 		this.cashbox = cashbox;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * Creates {@code ReportSummary} on sales and refunds operations.
+	 * Initializes {@link ReportField} list.
+	 */
 	@Override
 	public void initSummary(List<Receipt> receipts,
 	                        List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
@@ -116,6 +134,9 @@ public class ReportImpl implements Report {
 				null, 2));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Date getCreatedAt() {
 		if (type == ReportType.Z_REPORT && record != null) {
@@ -124,11 +145,18 @@ public class ReportImpl implements Report {
 		return createdAt;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getCashBalance() {
 		return salesFigures.getCashAmount().subtract(refundsFigures.getCashAmount());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * Returns label if ReportType.Z_REPORT, otherwise null.
+	 */
 	@Override
 	public String getDocType() {
 		if (type == ReportType.Z_REPORT) {
@@ -138,74 +166,114 @@ public class ReportImpl implements Report {
 		return null;
 	}
 	
-	public ModelFactory getModelFactory() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<ReportField> getFields() {
+		return fields;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Long getUserId() {
+		return userId;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ReportSummary getSalesFigures() {
+		return salesFigures;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ReportSummary getRefundsFigures() {
+		return refundsFigures;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ReportType getType() {
+		return type;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Cashbox getCashbox() {
+		return cashbox;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * Currently returns zero.
+	 */
+	@Override
+	public BigDecimal getDeposit() {
+		return deposit;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * Currently returns zero.
+	 */
+	@Override
+	public BigDecimal getWithdrawal() {
+		return withdrawal;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ZReport getRecord() {
+		return record;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setRecord(ZReport record) {
+		this.record = record;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setCashboxId(Long cashboxId) {
+		this.cashboxId = cashboxId;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Long getCashboxId() {
+		return cashboxId;
+	}
+	
+	private ModelFactory getModelFactory() {
 		if (modelFactory == null) {
 			modelFactory = Application.getModelFactory();
 		}
 		return modelFactory;
 	}
 	
-	@Override
-	public List<ReportField> getFields() {
-		return fields;
-	}
-	
-	@Override
-	public Long getUserId() {
-		return userId;
-	}
-	
-	@Override
-	public ReportSummary getSalesFigures() {
-		return salesFigures;
-	}
-	
-	@Override
-	public ReportSummary getRefundsFigures() {
-		return refundsFigures;
-	}
-	
-	@Override
-	public ReportType getType() {
-		return type;
-	}
-	
-	@Override
-	public Cashbox getCashbox() {
-		return cashbox;
-	}
-	
-	
-	@Override
-	public BigDecimal getDeposit() {
-		return deposit;
-	}
-	
-	@Override
-	public BigDecimal getWithdrawal() {
-		return withdrawal;
-	}
-	
-	@Override
-	public ZReport getRecord() {
-		return record;
-	}
-	
-	@Override
-	public void setRecord(ZReport record) {
-		this.record = record;
-	}
-	
-	@Override
-	public void setCashboxId(Long cashboxId) {
-		this.cashboxId = cashboxId;
-	}
-	
-	@Override
-	public Long getCashboxId() {
-		return cashboxId;
-	}
-	
+	/**
+	 * Returns result of {@code Z-Report} record toString() method.
+	 */
 	@Override
 	public String toString() {
 		if (record != null) {

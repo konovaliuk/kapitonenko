@@ -2,22 +2,40 @@ package ua.kapitonenko.app.domain;
 
 import java.math.BigDecimal;
 
+/**
+ * {@code ReportField} interface defines methods for grouping information
+ * on one specific aspect of report both for sales and refunds. Is used by {@code Report}.
+ */
 public interface ReportField extends Model {
+	
+	/**
+	 * Returns the name of resource bundle that stores the field label.
+	 */
 	String getBundle();
 	
+	/**
+	 * Returns the bundle key for field label.
+	 */
 	String getName();
 	
-	void setName(String name);
-	
+	/**
+	 * Returns sales value.
+	 */
 	BigDecimal getSalesValue();
 	
-	void setSalesValue(BigDecimal salesValue);
 	
+	/**
+	 * Returns refunds value.
+	 */
 	BigDecimal getRefundsValue();
 	
-	void setRefundsValue(BigDecimal refundsValue);
-	
+	/**
+	 * Returns number of fractional digits for formatting values.
+	 */
 	int getFractionalDigits();
 	
+	/**
+	 * Indicates whether field can be rendered in report list view.
+	 */
 	boolean isShowInList();
 }

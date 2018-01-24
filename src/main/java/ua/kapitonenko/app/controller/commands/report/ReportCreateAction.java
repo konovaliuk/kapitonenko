@@ -21,12 +21,22 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Prepares report form, validates and process request from form.
+ * Creates new report and writes it to session.
+ */
 public class ReportCreateAction implements ActionCommand {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReportService reportService = Application.getServiceFactory().getReportService();
 	
+	/**
+	 * Prepares report form, validates and process request from form.
+	 * Creates new report and writes it to session.
+	 * Returns the URI of report form view or redirects to report list.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		ReportType[] types = ReportType.values();

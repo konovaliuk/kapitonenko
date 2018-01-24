@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@code Product} interface.
+ */
 public class ProductImpl implements Product {
 	
 	private ProductRecord record;
@@ -21,10 +24,17 @@ public class ProductImpl implements Product {
 	private TaxCategory taxCategory;
 	private Unit unit;
 	
+	/**
+	 * Constructor instantiate the {@code Product} with the given {@code ProductRecord}.
+	 * Is used only by {@link ua.kapitonenko.app.domain.ModelFactory}.
+	 */
 	ProductImpl(ProductRecord record) {
 		this.record = record;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void initNames(List<LocaleRecord> locales) {
 		for (LocaleRecord locale : locales) {
@@ -32,6 +42,9 @@ public class ProductImpl implements Product {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		if (this.name == null && names != null && !names.isEmpty()) {
@@ -42,6 +55,9 @@ public class ProductImpl implements Product {
 		return name;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void fillNames(String[] lang) {
 		for (int i = 0; i < names.size(); i++) {
@@ -50,11 +66,19 @@ public class ProductImpl implements Product {
 		}
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getCost() {
 		return record.getPrice().multiply(record.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getTax() {
 		return getCost().movePointLeft(2)
@@ -62,114 +86,184 @@ public class ProductImpl implements Product {
 				       .setScale(2, BigDecimal.ROUND_HALF_EVEN);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addQuantity(BigDecimal q) {
 		record.setQuantity(getQuantity().add(q));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getTaxCategoryId() {
 		return null;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTaxCategoryId(Long taxCategoryId) {
 		record.setTaxCategoryId(taxCategoryId);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getQuantity() {
 		return record.getQuantity();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setQuantity(BigDecimal quantity) {
 		record.setQuantity(quantity);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCreatedBy(Long createdBy) {
 		record.setCreatedBy(createdBy);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ProductLocale> getNames() {
 		return names;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setNames(List<ProductLocale> names) {
 		this.names = names;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ProductRecord getRecord() {
 		return record;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setRecord(ProductRecord created) {
 	
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public TaxCategory getTaxCategory() {
 		return taxCategory;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTaxCategory(TaxCategory taxCategory) {
 		this.taxCategory = taxCategory;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Unit getUnit() {
 		return unit;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getUnitId() {
 		return record.getUnitId();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setUnitId(Long unitId) {
 		record.setUnitId(unitId);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getId() {
 		return record.getId();
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getLocaleId() {
 		return localeId;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setLocaleId(Long localeId) {
 		this.localeId = localeId;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getPrice() {
 		return record.getPrice();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setPrice(BigDecimal price) {
 		record.setPrice(price);
 	}
 	
+	/**
+	 * Products are equal if ProductRecords are equal.
+	 */
 	@Override
 	public boolean equals(Object o) {
+		if (record == null) {
+			return super.equals(o);
+		}
+		
 		if (this == o) return true;
 		
 		if (o == null || getClass() != o.getClass()) return false;
@@ -181,13 +275,22 @@ public class ProductImpl implements Product {
 				       .isEquals();
 	}
 	
+	/**
+	 * Calculates hashCode based on ProductRecord.
+	 */
 	@Override
 	public int hashCode() {
+		if (record == null) {
+			return super.hashCode();
+		}
 		return new HashCodeBuilder(17, 37)
 				       .append(record)
 				       .toHashCode();
 	}
 	
+	/**
+	 * Returns result of {@code ProductRecord} toString() method.
+	 */
 	@Override
 	public String toString() {
 		if (record != null) {

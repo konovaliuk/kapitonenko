@@ -15,10 +15,18 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Gets the list of {@link Product}s from {@link ProductService} and displays them in list view.
+ */
 public class ProductListAction implements ActionCommand {
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
+	/**
+	 * Gets the list of all {@link Product}s from {@link ProductService} and displays them in list view with pagination.
+	 * Returns the URI of list view.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		long noOfRecords = productService.getCount();

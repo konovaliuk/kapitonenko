@@ -9,7 +9,15 @@ import java.util.Map;
 
 import static ua.kapitonenko.app.config.Application.Ids.*;
 
+/**
+ * {@code AccessControl} provides information on user's permissions to perform actions
+ * base on their role.
+ */
 public class AccessControl {
+	
+	private AccessControl() {
+	}
+	
 	private static Map<Long, List<String>> access = new HashMap<>();
 	
 	static {
@@ -66,10 +74,22 @@ public class AccessControl {
 						Actions.HOME));
 	}
 	
+	/**
+	 * Performs check if user has permission to perform action associated with provided URI.
+	 *
+	 * @param roleId Long id of user's {@link ua.kapitonenko.app.persistence.records.UserRole} record id
+	 * @param action String URI
+	 * @return true if action is allowed, otherwise false
+	 */
 	public static boolean allowed(Long roleId, String action) {
 		return access.get(roleId).contains(action);
 	}
 	
+	/**
+	 * Performs check if guest has permission to perform action associated with provided URI.
+	 * @param action String URI
+	 * @return true if guest has permissions, otherwise false
+	 */
 	public static boolean guestAllowed(String action) {
 		return access.get(ROLE_GUEST.getValue()).contains(action);
 	}

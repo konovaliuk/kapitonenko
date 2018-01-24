@@ -19,25 +19,47 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
+/**
+ * {@code Controller} is an implementation of {@code HttpServlet} interface.
+ * Performs the Controller role in MVC Pattern implementation.
+ */
 public class Controller extends HttpServlet {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private RequestHelper requestHelper = RequestHelper.getInstance();
 	
+	/**
+	 * Initializes the application.
+	 *
+	 * @throws ServletException
+	 */
 	@Override
 	public void init() throws ServletException {
 		Application.init(getServletContext());
 	}
 	
+	/**
+	 * Delegates request processing to processRequest method.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		processRequest(request, response);
 	}
 	
+	/**
+	 * Delegates request processing to processRequest method.
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		processRequest(request, response);
 	}
 	
+	/**
+	 * Wraps {@code HttpServletRequest} in {@link RequestWrapper} object.
+	 * Uses {@link RequestHelper} object to map request URI to {@link ActionCommand} implementation instance.
+	 * Using information from executing command selects request destination
+	 * or sends a temporary redirect response to the client.
+	 * On exceptions sends an error response to the client.
+	 */
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		

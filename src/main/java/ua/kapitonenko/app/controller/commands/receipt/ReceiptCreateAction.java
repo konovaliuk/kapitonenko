@@ -22,12 +22,24 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.stream.Stream;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Creates new Fiscal receipt.
+ * Receives requests from receipt form, redirects request to other actions based on received command param.
+ */
 public class ReceiptCreateAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
+	/**
+	 * Create new receipt only if request is POST.
+	 * Saves receipt in session.
+	 * Changes the payment type of receipt.
+	 * Throws {@link MethodNotAllowedException} if request is not POST.
+	 * Returns the URI of receipt form view or redirects to receipt processing actions.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		
@@ -82,7 +94,7 @@ public class ReceiptCreateAction implements ActionCommand {
 			if (!request.isPost()) {
 				throw new MethodNotAllowedException();
 			}
-
+			
 			Cashbox cashbox = (Cashbox) request.getSession().get(Keys.CASHBOX);
 			User user = request.getSession().getUser();
 			

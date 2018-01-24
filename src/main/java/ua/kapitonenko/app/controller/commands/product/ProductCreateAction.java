@@ -22,12 +22,22 @@ import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Prepares product form, validates and process request from form.
+ * Creates new product and saves it to the storage with the help of {@link ProductService}.
+ */
 public class ProductCreateAction implements ActionCommand {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
+	/**
+	 * Prepares product form, validates and process request from form.
+	 * Creates new product and saves it to the storage.
+	 * Returns the URI of product form or redirects to product list on successful product creation.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		List<TaxCategory> taxes = settingsService.getTaxCatList();

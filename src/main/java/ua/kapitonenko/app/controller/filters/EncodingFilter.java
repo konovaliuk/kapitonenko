@@ -7,6 +7,9 @@ import javax.servlet.*;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
+/**
+ * {@code EncodingFilter} overrides the name of the character encoding used in the body of each request.
+ */
 public class EncodingFilter implements Filter {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	

@@ -19,12 +19,21 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Prepares sign up form. Performs validation of user's credentials.
+ * Creates new {@link User} record and writes it to database with the help of {@link UserService}.
+ */
 public class SignUpAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
+	
 	private UserService userService = Application.getServiceFactory().getUserService();
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	
+	/**
+	 * Returns the URI of sign up form on GET
+	 * or redirects user to login action after successful registration on POST.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		
@@ -73,13 +82,13 @@ public class SignUpAction implements ActionCommand {
 		
 		ValidationBuilder validator = request.getValidator();
 		boolean valid = validator
-				       .required(username, Keys.USERNAME)
-				       .required(password, Keys.PASSWORD)
-				       .required(confirm, Keys.CONFIRM_PASS)
-				       .identical(password, Keys.PASSWORD, confirm, Keys.CONFIRM_PASS)
-				       .idInList(roleId, (List<UserRole>) request.getAttribute(Keys.ROLE_LIST), Keys.ROLE)
-				       .unique(userService.findByUsername(user), Keys.USERNAME)
-				       .isValid();
+				                .required(username, Keys.USERNAME)
+				                .required(password, Keys.PASSWORD)
+				                .required(confirm, Keys.CONFIRM_PASS)
+				                .identical(password, Keys.PASSWORD, confirm, Keys.CONFIRM_PASS)
+				                .idInList(roleId, (List<UserRole>) request.getAttribute(Keys.ROLE_LIST), Keys.ROLE)
+				                .unique(userService.findByUsername(user), Keys.USERNAME)
+				                .isValid();
 		
 		if (!valid) {
 			logger.warn("SignUp validation error: message='{}', {}", request.getAlert().joinMessages(), request.paramsToString());

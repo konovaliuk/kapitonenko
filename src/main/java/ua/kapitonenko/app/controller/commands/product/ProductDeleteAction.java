@@ -15,11 +15,21 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Deletes the product from storage.
+ */
 public class ProductDeleteAction implements ActionCommand {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
+	/**
+	 * Deletes the product from storage.
+	 * Can only handle POST requests.
+	 * Throws {@link MethodNotAllowedException} if request is not POST
+	 * Throws {@link NotFoundException} if record with the given id was not found.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (!request.isPost()) {

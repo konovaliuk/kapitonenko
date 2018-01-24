@@ -12,8 +12,16 @@ import ua.kapitonenko.app.exceptions.NotFoundException;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Gets the {@link Report} from session and displays it in report view.
+ */
 public class ReportViewAction implements ActionCommand {
 	
+	/**
+	 * Gets the {@link Report} from session and displays it in report view.
+	 * Returns the URI of report view.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		

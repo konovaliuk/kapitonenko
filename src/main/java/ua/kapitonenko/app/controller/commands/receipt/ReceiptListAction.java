@@ -17,10 +17,20 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Gets the list of {@link Receipt} from {@link ReceiptService} and displays them in list view.
+ */
 public class ReceiptListAction implements ActionCommand {
+	
 	
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
+	/**
+	 * For users with the role Senior Cashier displays list of all receipts with pagination.
+	 * For other roles displays only current shift receipts.
+	 * Returns the URI of list view.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		long noOfRecords = receiptService.getCount();

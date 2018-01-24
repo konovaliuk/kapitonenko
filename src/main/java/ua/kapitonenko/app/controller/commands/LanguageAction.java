@@ -15,12 +15,21 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
-
+/**
+ * Implementation of {@code ActionCommand}.
+ * Changes the language of the system.
+ */
 public class LanguageAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	
+	/**
+	 * Validate received language param and changes the language of the system.
+	 * Redirects back to previous action.
+	 * Only processes POST requests.
+	 * Throws {@link MethodNotAllowedException} if request not POST
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (!request.isPost()) {
@@ -34,7 +43,7 @@ public class LanguageAction implements ActionCommand {
 			logger.warn("Param language:{} Supported languages: {}", lang, supported);
 			throw new NotFoundException();
 		}
-
+		
 		LocaleRecord localeRecord = settingsService.getSupportedLocales().get(lang);
 		logger.info("Changing locale from {} to {}", request.getSession().get(Keys.LOCALE), localeRecord.getName());
 		request.getSession().set(Keys.LOCALE, localeRecord.getName());

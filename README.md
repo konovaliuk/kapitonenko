@@ -17,7 +17,7 @@ The **Merchandiser** can:
 - create products;
 - specify quantity in the warehouse.
 
-##Installation
+## Installation
 Clone repository:
 ```
 > git clone https://github.com/marisabell/CashRegister.git CashRegister
@@ -39,7 +39,7 @@ ex. on Windows
 > mvn clean package -Ddir="C:\Program Files\Apache Software Foundation\Tomcat 8.0\webapps"
 ```
 
-##Launching 
+## Launching 
 Run Tomcat:
 ```
 > path-to-tomcat-bin/catalina run
@@ -51,9 +51,8 @@ ex. on Windows
 
 Open [http://localhost:8080](http://localhost:8080)
 
-###Testing
-DAO tests are disabled by default.  
-In order tu run them, run test database migration first:
+## Testing
+DAO tests are disabled by default. Run test database migration first in order to run them:
 ```
 > mvn -Dflyway.url=jdbc:mysql://localhost:3306 -Dflyway.user=root -Dflyway.password=root -Dflyway.schemas=cashregister_test flyway:migrate
 ```

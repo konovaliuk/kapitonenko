@@ -18,9 +18,10 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
-
 /**
- *
+ * Implementation of {@code ActionCommand}.
+ * Prepares login form. Performs validation of user's credentials.
+ * Writes valid user and cashbox in session.
  */
 public class LoginAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -28,6 +29,10 @@ public class LoginAction implements ActionCommand {
 	private UserService userService = Application.getServiceFactory().getUserService();
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	
+	/**
+	 * Returns the URI of login form on GET
+	 * or redirects home after successful authentication on POST.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		

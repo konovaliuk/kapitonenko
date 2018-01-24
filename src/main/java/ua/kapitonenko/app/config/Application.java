@@ -21,6 +21,13 @@ import java.util.List;
 
 import static java.lang.System.lineSeparator;
 
+/**
+ * {@code Application} is a global application configuration object.
+ * Contains default configuration information on concrete implementations of factories,
+ * settings params and ids of settings records on which the application logic is based
+ * (later can be rewritten to read settings from properties files or database).
+ * Provides methods to change default values.
+ */
 public class Application {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final int RECORDS_PER_PAGE = 5;
@@ -34,38 +41,62 @@ public class Application {
 	private Application() {
 	}
 	
+	/**
+	 * Returns concrete implementation of {@code DAOFactory}.
+	 */
 	public static DAOFactory getDAOFactory() {
 		return daoFactory;
 	}
 	
+	/**
+	 * Sets concrete implementation of {@code DAOFactory}.
+	 */
 	public static void setDAOFactory(DAOFactory impl) {
 		daoFactory = impl;
 		logger.info("Configuration changed: DAOFactory={}", impl);
 	}
 	
+	/**
+	 * Returns concrete implementation of {@code ServiceFactory}.
+	 */
 	public static ServiceFactory getServiceFactory() {
 		return serviceFactory;
 	}
 	
+	/**
+	 * Sets concrete implementation of {@code ServiceFactory}.
+	 */
 	public static void setServiceFactory(ServiceFactory impl) {
 		serviceFactory = impl;
 		logger.info("Configuration changed: ServiceFactory={}", impl);
 	}
 	
+	/**
+	 * Returns concrete implementation of {@code ModelFactory}.
+	 */
 	public static ModelFactory getModelFactory() {
 		return modelFactory;
 	}
 	
+	/**
+	 * Sets concrete implementation of {@code ModelFactory}.
+	 */
 	public static void setModelFactory(ModelFactory impl) {
 		modelFactory = impl;
 		logger.info("Configuration changed: ModelFactory={}", impl);
 	}
 	
+	/**
+	 * Sets the name of the class that implements {@code ConnectionWrapper}.
+	 */
 	public static <E extends ConnectionWrapper> void setConnectionClass(Class<E> className) {
 		connectionClass = className;
 		logger.info("Configuration changed: ConnectionWrapper={}", className);
 	}
 	
+	/**
+	 * Returns new instance of {@code ConnectionWrapper} implementation.
+	 */
 	public static ConnectionWrapper getConnection() {
 		try {
 			return connectionClass.newInstance();
@@ -74,15 +105,30 @@ public class Application {
 		}
 	}
 	
+	/**
+	 * Sets the value of AutoActivationMode.
+	 */
 	public static void setAutoActivationMode(boolean enabled) {
 		autoActivation = enabled;
 		logger.info("Configuration changed: autoActivation={}", autoActivation);
 	}
 	
+	/**
+	 * Gets the value of AutoActivationMode.
+	 * It is used by {@link ua.kapitonenko.app.service.UserService} during creation of new user account.
+	 * If true, service sets the {@link ua.kapitonenko.app.persistence.records.User} property "active" to true,
+	 * otherwise to false.
+	 * Can be used to provide control on registration. For example, admin panel can be implemented later,
+	 * where admin can approve or decline new users.
+	 *
+	 */
 	public static boolean isAutoActivationEnabled() {
 		return autoActivation;
 	}
 	
+	/**
+	 * Saves basic application information used by jsp-pages in context attributes.
+	 */
 	public static void init(ServletContext context) {
 		logger.info("Application initialized with configuration:{}    DAOFactory={},{}    ServiceFactory={},{}    ModelFactory={},{}    autoActivation={}",
 				lineSeparator(), daoFactory.getClass(), lineSeparator(), serviceFactory.getClass(), lineSeparator(), modelFactory.getClass(), lineSeparator(), isAutoActivationEnabled());
@@ -99,6 +145,9 @@ public class Application {
 		
 	}
 	
+	/**
+	 * Enumerates ids of settings records on which the application logic is based.
+	 */
 	public enum Ids {
 		RECEIPT_TYPE_FISCAL(1L),
 		RECEIPT_TYPE_RETURN(2L),
@@ -122,6 +171,10 @@ public class Application {
 		}
 	}
 	
+	/**
+	 * Returns default number of records per page
+	 * used by {@link ua.kapitonenko.app.controller.helpers.PaginationHelper}.
+	 */
 	public static int recordsPerPage() {
 		return RECORDS_PER_PAGE;
 	}

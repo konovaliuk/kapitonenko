@@ -6,6 +6,9 @@ import ua.kapitonenko.app.domain.ReportField;
 
 import java.math.BigDecimal;
 
+/**
+ * Implementation of {@code ReportField} interface.
+ */
 public class ReportFieldImpl implements ReportField {
 	private String name;
 	private String bundle = Application.Params.MESSAGE_BUNDLE.getValue();
@@ -14,7 +17,9 @@ public class ReportFieldImpl implements ReportField {
 	private BigDecimal refundsValue;
 	private boolean showInList;
 	
-	
+	/**
+	 * Constructor initializes all instance fields with given arguments.
+	 */
 	ReportFieldImpl(boolean showInList, String name, BigDecimal salesValue, BigDecimal refundsValue, String bundle, int fractionalDigits) {
 		this.name = name;
 		this.salesValue = salesValue;
@@ -27,46 +32,49 @@ public class ReportFieldImpl implements ReportField {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getBundle() {
 		return bundle;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 	
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getSalesValue() {
 		return salesValue;
 	}
 	
-	@Override
-	public void setSalesValue(BigDecimal salesValue) {
-		this.salesValue = salesValue;
-	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getRefundsValue() {
 		return refundsValue;
 	}
 	
-	@Override
-	public void setRefundsValue(BigDecimal refundsValue) {
-		this.refundsValue = refundsValue;
-	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getFractionalDigits() {
 		return fractionalDigits;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isShowInList() {
 		return showInList;

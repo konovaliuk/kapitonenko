@@ -10,6 +10,7 @@ import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.app.domain.Product;
 import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
+import ua.kapitonenko.app.exceptions.NotFoundException;
 import ua.kapitonenko.app.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -17,11 +18,22 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Updates the quantity of products in stock.
+ */
 public class ProductUpdateAction implements ActionCommand {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
+	/**
+	 * Updates the quantity of products in storage.
+	 * Can only handle POST requests.
+	 * Throws {@link MethodNotAllowedException} if request is not POST
+	 * Throws {@link NotFoundException} if record with the given id was not found.
+	 * Redirects back to previous action.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (!request.isPost()) {

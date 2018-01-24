@@ -12,11 +12,20 @@ import ua.kapitonenko.app.service.ReceiptService;
 
 import java.lang.invoke.MethodHandles;
 
+/**
+ * Concrete implementation of {@code ActionCommand} used by {@code ReceiptEditAction}.
+ * Cancels current {@link Receipt}.
+ */
 public class ReceiptEditCancelAction extends ReceiptEditAction {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
+	/**
+	 * Cancels current receipt.
+	 * Returns URI of receipt list on success.
+	 * Returns null on failure in order to redirect to previous action.
+	 */
 	@Override
 	protected String process(Receipt receipt, RequestWrapper request, ValidationBuilder validator) {
 		if (receiptService.update(receipt)) {

@@ -14,11 +14,21 @@ import ua.kapitonenko.app.service.ReceiptService;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+/**
+ * Concrete implementation of {@code ActionCommand} used by {@code ReceiptEditAction}.
+ * Saves current {@link Receipt} in storage and cancels receipt creation session.
+ */
 public class ReceiptEditSaveAction extends ReceiptEditAction {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
+	/**
+	 * Validates request params, saves current receipt in storage.
+	 * Removes receipt from session.
+	 * Returns URI of receipt list on success.
+	 * Returns null on failure in order to redirect to previous action.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	protected String process(Receipt receipt, RequestWrapper request, ValidationBuilder validator) {

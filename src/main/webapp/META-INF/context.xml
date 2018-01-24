@@ -13,6 +13,6 @@
               username="root"
               password="root"
               driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3366/cashregister?autoReconnect=true&amp;useSSL=false"
+              url="jdbc:mysql://localhost:3306/cashregister?autoReconnect=true&amp;useSSL=false"
     />
 </Context>

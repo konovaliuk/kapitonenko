@@ -11,10 +11,18 @@ import ua.kapitonenko.app.service.ProductService;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Concrete implementation of {@code ActionCommand} used by {@code ReceiptEditAction}.
+ * Adds products to {@link Receipt}.
+ */
 public class ReceiptEditAddAction extends ReceiptEditAction {
 	
 	private ProductService productService = Application.getServiceFactory().getProductService();
 	
+	/**
+	 * Validates request params, searches products and add them to {@code Receipt}.
+	 * Returns null in order to redirect to previous action.
+	 */
 	@Override
 	protected String process(Receipt receipt, RequestWrapper request, ValidationBuilder validator) {
 		String quantity = request.getParameter(Keys.NEW_PRODUCT_QUANTITY);

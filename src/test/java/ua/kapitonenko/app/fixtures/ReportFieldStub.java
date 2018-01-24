@@ -21,28 +21,13 @@ public class ReportFieldStub implements ReportField {
 	}
 	
 	@Override
-	public void setName(String name) {
-	
-	}
-	
-	@Override
 	public BigDecimal getSalesValue() {
 		return null;
 	}
 	
 	@Override
-	public void setSalesValue(BigDecimal salesValue) {
-	
-	}
-	
-	@Override
 	public BigDecimal getRefundsValue() {
 		return null;
-	}
-	
-	@Override
-	public void setRefundsValue(BigDecimal refundsValue) {
-	
 	}
 	
 	@Override

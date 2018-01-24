@@ -10,6 +10,9 @@ import java.util.*;
 
 import static java.lang.System.lineSeparator;
 
+/**
+ * Implementation of {@code Receipt} interface.
+ */
 public class ReceiptImpl implements Receipt {
 	
 	private ReceiptRecord record;
@@ -22,20 +25,33 @@ public class ReceiptImpl implements Receipt {
 	private Map<TaxCategory, BigDecimal> taxByCategory = new HashMap<>();
 	private Map<TaxCategory, BigDecimal> costByCategory = new HashMap<>();
 	
-	
+	/**
+	 * Constructor instantiate the {@code Receipt} with the given {@code ReceiptRecord}.
+	 * Is used only by {@link ua.kapitonenko.app.domain.ModelFactory}.
+	 */
 	ReceiptImpl(ReceiptRecord record) {
 		this.record = record;
 	}
 	
+	/**
+	 * Constructor instantiate the {@code Receipt} and {@code ReceiptRecord} with the given attributes.
+	 * Is used only by {@link ua.kapitonenko.app.domain.ModelFactory}.
+	 */
 	ReceiptImpl(Long cashboxId, Long paymentTypeId, Long receiptTypeId, boolean cancelled, Long createdBy) {
 		record = new ReceiptRecord(null, cashboxId, paymentTypeId, receiptTypeId, cancelled, createdBy);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getTypeId() {
 		return record.getReceiptTypeId();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setLocalId(Long localId) {
 		this.localId = localId;
@@ -44,6 +60,11 @@ public class ReceiptImpl implements Receipt {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * Changes the quantity if list contains the product.
+	 * Otherwise adds product to the list and sets product locale id to active locale.
+	 */
 	@Override
 	public void addProduct(Product product) {
 		if (products.contains(product)) {
@@ -55,6 +76,9 @@ public class ReceiptImpl implements Receipt {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void remove(Long productId) {
 		Product found = null;
@@ -66,6 +90,10 @@ public class ReceiptImpl implements Receipt {
 		products.remove(found);
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<TaxCategory, BigDecimal> getTaxByCategory() {
 		for (TaxCategory cat : categories) {
@@ -79,6 +107,10 @@ public class ReceiptImpl implements Receipt {
 		return taxByCategory;
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<TaxCategory, BigDecimal> getCostByCategory() {
 		for (TaxCategory cat : categories) {
@@ -92,7 +124,10 @@ public class ReceiptImpl implements Receipt {
 		return costByCategory;
 	}
 	
-	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getTotalCost() {
 		return products.stream()
@@ -100,6 +135,10 @@ public class ReceiptImpl implements Receipt {
 				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getTaxAmount() {
 		return products.stream()
@@ -107,89 +146,143 @@ public class ReceiptImpl implements Receipt {
 				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * Only cash fiscal receipts can be returned.
+	 */
 	@Override
 	public boolean isReturnAllowed() {
 		return !record.getReceiptTypeId().equals(Application.Ids.RECEIPT_TYPE_RETURN.getValue())
 				       && record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_CASH.getValue());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * PaymentType has to be defined and list of products has to contain items.
+	 */
 	@Override
 	public boolean isPrintAllowed() {
 		return !record.getPaymentTypeId().equals(Application.Ids.PAYMENT_TYPE_UNDEFINED.getValue())
 				       && !products.isEmpty();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Date getCreatedAt() {
 		return record.getCreatedAt();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getId() {
 		return record.getId();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isCancelled() {
 		return record.isCancelled();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setReceiptType(ReceiptType type) {
 		this.receiptType = type;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ReceiptType getReceiptType() {
 		return receiptType;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCashbox(Cashbox cashbox) {
 		this.cashbox = cashbox;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Cashbox getCashbox() {
 		return cashbox;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCategories(List<TaxCategory> taxCats) {
 		this.categories = taxCats;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Product> getProducts() {
 		return products;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ReceiptRecord getRecord() {
 		return record;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PaymentType getPaymentType() {
 		return paymentType;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * for {@code Receipt} and {@code ReceiptRecord}.
+	 */
 	@Override
 	public void setPaymentType(PaymentType type) {
 		paymentType = type;
 		record.setPaymentTypeId(type.getId());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setRecord(ReceiptRecord record) {
 		this.record = record;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Long getLocalId() {
 		return localId;

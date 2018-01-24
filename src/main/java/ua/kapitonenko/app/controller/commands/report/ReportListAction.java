@@ -17,11 +17,19 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Gets the list of {@link Report} from {@link ReportService} and displays them in list view.
+ */
 public class ReportListAction implements ActionCommand {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private ReportService reportService = Application.getServiceFactory().getReportService();
 	
+	/**
+	 * Gets the list of all {@link Report}s from {@link ReportService} and displays them in list view with pagination.
+	 * Returns the URI of list view.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		long noOfRecords = reportService.getCount();

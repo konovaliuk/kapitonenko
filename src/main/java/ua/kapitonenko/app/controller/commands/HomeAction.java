@@ -8,8 +8,14 @@ import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+/**
+ * Implementation of {@code ActionCommand}. Processes the default route of controller.
+ */
 public class HomeAction implements ActionCommand {
 	
+	/**
+	 * Redirects the request to other commands, depending on the user's role.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		if (request.getSession().userIsGuest()) {

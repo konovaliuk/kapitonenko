@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+/**
+ * The implementation of {@code ReportSummary} interface. Calculates and returns totals.
+ */
 public class ReportSummaryImpl implements ReportSummary {
 	
 	private List<Receipt> receiptList;
@@ -20,6 +23,9 @@ public class ReportSummaryImpl implements ReportSummary {
 	private List<PaymentType> paymentTypes;
 	private long noCancelled;
 	
+	/**
+	 * Constructor initializes all fields, required for making calculations.
+	 */
 	ReportSummaryImpl(List<Receipt> receiptList, List<TaxCategory> taxCats, List<PaymentType> paymentTypes) {
 		
 		noCancelled = receiptList.stream()
@@ -49,6 +55,10 @@ public class ReportSummaryImpl implements ReportSummary {
 		return noCancelled;
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public long getNoArticles() {
 		return receiptList.stream()
@@ -58,6 +68,10 @@ public class ReportSummaryImpl implements ReportSummary {
 				       .size();
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<PaymentType, BigDecimal> costPerPayType() {
 		Map<PaymentType, BigDecimal> map = new TreeMap<>();
@@ -72,6 +86,10 @@ public class ReportSummaryImpl implements ReportSummary {
 		return map;
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<TaxCategory, BigDecimal> costPerTaxCat() {
 		Map<TaxCategory, BigDecimal> map = new TreeMap<>();
@@ -88,6 +106,10 @@ public class ReportSummaryImpl implements ReportSummary {
 		return map;
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<TaxCategory, BigDecimal> taxPerTaxCat() {
 		Map<TaxCategory, BigDecimal> map = new TreeMap<>();
@@ -104,6 +126,10 @@ public class ReportSummaryImpl implements ReportSummary {
 		return map;
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getTaxAmount() {
 		return receiptList.stream()
@@ -111,6 +137,10 @@ public class ReportSummaryImpl implements ReportSummary {
 				       .reduce(new BigDecimal("0.00"), BigDecimal::add);
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getTotalCost() {
 		return receiptList.stream()
@@ -119,6 +149,10 @@ public class ReportSummaryImpl implements ReportSummary {
 		
 	}
 	
+	/**
+	 * Calculates and
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getCashAmount() {
 		PaymentType cash = paymentTypes.stream()

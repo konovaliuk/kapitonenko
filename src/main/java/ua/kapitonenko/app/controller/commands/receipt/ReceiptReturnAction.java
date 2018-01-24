@@ -12,6 +12,7 @@ import ua.kapitonenko.app.controller.helpers.RequestWrapper;
 import ua.kapitonenko.app.controller.helpers.ResponseParams;
 import ua.kapitonenko.app.controller.helpers.ValidationBuilder;
 import ua.kapitonenko.app.domain.Receipt;
+import ua.kapitonenko.app.exceptions.MethodNotAllowedException;
 import ua.kapitonenko.app.service.ReceiptService;
 import ua.kapitonenko.app.service.SettingsService;
 
@@ -20,12 +21,24 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.stream.Stream;
 
+/**
+ * Implementation of {@code ActionCommand}.
+ * Creates new Return receipt.
+ * Receives requests from receipt form, redirects request to other actions based on received command param.
+ */
 public class ReceiptReturnAction implements ActionCommand {
 	private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	private SettingsService settingsService = Application.getServiceFactory().getSettingsService();
 	private ReceiptService receiptService = Application.getServiceFactory().getReceiptService();
 	
+	/**
+	 * Create new receipt only if request is POST.
+	 * Saves receipt in session.
+	 * Changes the payment type of receipt.
+	 * Throws {@link MethodNotAllowedException} if request is not POST.
+	 * Returns the URI of receipt form view or redirects to receipt processing actions.
+	 */
 	@Override
 	public ResponseParams execute(RequestWrapper request) throws ServletException, IOException {
 		
@@ -66,6 +79,10 @@ public class ReceiptReturnAction implements ActionCommand {
 		Receipt receipt = (Receipt) request.getSession().get(Keys.RECEIPT);
 		
 		if (receipt == null) {
+			if (!request.isPost()) {
+				throw new MethodNotAllowedException();
+			}
+			
 			String id = request.getParameter("id");
 			Long receiptId = ValidationBuilder.parseId(id);
 			
